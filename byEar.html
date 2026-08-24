@@ -3,150 +3,234 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dépiquage libre de droits</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<title>By Ear — Train Your Ear On The Repertoire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=Archivo:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
-  --ground:#F2F5F2; --surface:#FBFCFB; --sunk:#E9EEEB; --line:#D3DBD6; --line-soft:#E3E9E5;
-  --ink:#151A18; --ink-2:#404A46; --ink-3:#6B7772;
-  --acc:#0F6B60; --acc-deep:#073B35; --acc-soft:#DCEAE6;
-  --ok:#0F6B60; --bad:#9C3D24; --bad-soft:#F2E2DC;
-  --key-w:#FFFFFF; --key-b:#1B2321;
+  --ground:#EFECE6; --surface:#F9F7F3; --sunk:#E6E2DA; --line:rgba(23,20,28,.14); --line-soft:rgba(23,20,28,.075);
+  --ink:#17141C; --ink-2:#4C4657; --ink-3:#7E7788;
+  --acc:#4B2E86; --acc-deep:#3A2168; --acc-2:#6A46BE; --acc-soft:rgba(75,46,134,.10); --acc-glow:rgba(75,46,134,.28);
+  --on-acc:#FCFBF9;
+  --ok:#4B2E86; --bad:#9C3D24; --bad-soft:#F3E3DD;
+  --warn-ink:#7E5410; --warn-bg:rgba(150,104,18,.10); --warn-line:rgba(150,104,18,.28);
+  --key-w:#FCFBF9; --key-w-edge:rgba(23,20,28,.22); --key-b:#1D1926;
+  --shadow-s:0 1px 2px rgba(23,20,28,.05),0 8px 22px -14px rgba(23,20,28,.35);
+  --shadow-btn:0 1px 2px rgba(23,20,28,.12),0 10px 20px -12px rgba(75,46,134,.65);
+  --r:14px;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --ground:#0D1211; --surface:#141A19; --sunk:#0A0E0E; --line:#2A3432; --line-soft:#1E2726;
-    --ink:#E6ECE9; --ink-2:#AEBAB5; --ink-3:#7C8985;
-    --acc:#4FBFAE; --acc-deep:#8FD9CC; --acc-soft:#16302C;
-    --ok:#4FBFAE; --bad:#E08A6A; --bad-soft:#33201A;
-    --key-w:#AFBCB7; --key-b:#0A0E0E;
+    --ground:#131017; --surface:#1B1723; --sunk:#0F0D14; --line:rgba(241,238,246,.16); --line-soft:rgba(241,238,246,.08);
+    --ink:#F1EEF6; --ink-2:#B9B2C6; --ink-3:#8A8399;
+    --acc:#A78CF5; --acc-deep:#C3AEFF; --acc-2:#C3AEFF; --acc-soft:rgba(167,140,245,.16); --acc-glow:rgba(167,140,245,.4);
+    --on-acc:#120F18;
+    --ok:#A78CF5; --bad:#E08A6A; --bad-soft:#33201A;
+  --warn-ink:#E0B473; --warn-bg:rgba(224,180,115,.12); --warn-line:rgba(224,180,115,.30);
+    --warn-ink:#E0B473; --warn-bg:rgba(224,180,115,.12); --warn-line:rgba(224,180,115,.30);
+    --key-w:#DCD7E4; --key-w-edge:rgba(13,11,17,.55); --key-b:#0B0910;
+    --shadow-s:0 1px 2px rgba(0,0,0,.45),0 10px 26px -16px rgba(0,0,0,.9);
+    --shadow-btn:0 1px 2px rgba(0,0,0,.5),0 12px 24px -14px rgba(167,140,245,.5);
   }
 }
 :root[data-theme="dark"]{
-  --ground:#0D1211; --surface:#141A19; --sunk:#0A0E0E; --line:#2A3432; --line-soft:#1E2726;
-  --ink:#E6ECE9; --ink-2:#AEBAB5; --ink-3:#7C8985;
-  --acc:#4FBFAE; --acc-deep:#8FD9CC; --acc-soft:#16302C;
-  --ok:#4FBFAE; --bad:#E08A6A; --bad-soft:#33201A;
-  --key-w:#AFBCB7; --key-b:#0A0E0E;
+  --ground:#131017; --surface:#1B1723; --sunk:#0F0D14; --line:rgba(241,238,246,.16); --line-soft:rgba(241,238,246,.08);
+  --ink:#F1EEF6; --ink-2:#B9B2C6; --ink-3:#8A8399;
+  --acc:#A78CF5; --acc-deep:#C3AEFF; --acc-2:#C3AEFF; --acc-soft:rgba(167,140,245,.16); --acc-glow:rgba(167,140,245,.4);
+  --on-acc:#120F18;
+  --ok:#A78CF5; --bad:#E08A6A; --bad-soft:#33201A;
+  --key-w:#DCD7E4; --key-w-edge:rgba(13,11,17,.55); --key-b:#0B0910;
+  --shadow-s:0 1px 2px rgba(0,0,0,.45),0 10px 26px -16px rgba(0,0,0,.9);
+  --shadow-btn:0 1px 2px rgba(0,0,0,.5),0 12px 24px -14px rgba(167,140,245,.5);
 }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{
   background:var(--ground); color:var(--ink);
-  font-family:"Source Serif 4",Georgia,serif; font-size:16px; line-height:1.55;
-  padding:0 1rem 3rem; -webkit-font-smoothing:antialiased;
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif; font-size:16px; line-height:1.55;
+  padding:0 1.15rem 4rem; -webkit-font-smoothing:antialiased;
 }
+::selection{background:var(--acc-soft)}
 .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
 .sans{font-family:Archivo,"Helvetica Neue",sans-serif}
-.lab{font-family:Archivo,sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin:0}
-.wrap{max-width:1120px;margin:0 auto}
+.lab{font-family:"IBM Plex Mono",monospace;font-size:.63rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);margin:0}
+.wrap{max-width:1160px;margin:0 auto}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
 
-/* header */
-header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 2rem;padding:1.5rem 0 1rem;border-bottom:1px solid var(--line)}
-h1{font-family:Archivo,sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.02em;margin:0;line-height:1}
-h1 span{color:var(--acc)}
-.tag{font-size:.85rem;color:var(--ink-3);margin:.25rem 0 0}
-.meter-box{flex:1 1 320px;min-width:240px;display:flex;flex-direction:column;gap:.3rem}
+/* ---------- header ---------- */
+header{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 2.2rem;padding:.75rem 0 1rem;border-bottom:1px solid var(--line-soft)}
+.brandline{display:flex;align-items:center;gap:.7rem}
+.brand-mark{display:flex;gap:2px;align-items:flex-end;height:26px}
+.brand-mark i{display:block;width:4px;height:26px;background:var(--ink);border-radius:0 0 1px 1px}
+.brand-mark i:nth-child(2),.brand-mark i:nth-child(4){height:15px;background:var(--acc)}
+h1{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-size:1.85rem;font-weight:400;letter-spacing:-.015em;margin:0;line-height:1}
+h1 span{color:var(--acc);font-style:italic}
+.tag{font-size:.78rem;color:var(--ink-3);margin:.28rem 0 0;letter-spacing:.01em}
+.meter-box{flex:1 1 340px;min-width:250px;display:flex;flex-direction:column;gap:.42rem}
 .meter-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;font-size:.76rem}
-.meter-top b{font-family:"IBM Plex Mono",monospace;font-size:.95rem;font-weight:600;color:var(--acc)}
-.meter{position:relative;height:12px;background:var(--sunk);border-radius:2px;overflow:hidden;border:1px solid var(--line-soft)}
+.meter-top b{font-family:"IBM Plex Mono",monospace;font-size:.95rem;font-weight:500;color:var(--acc);font-variant-numeric:tabular-nums}
+.meter{position:relative;height:10px;background:var(--sunk);border-radius:100px;overflow:hidden;border:1px solid var(--line-soft)}
 .meter .ceil{position:absolute;inset:0 auto 0 0;background:var(--acc-soft)}
-.meter .tgt{position:absolute;inset:0 auto 0 0;background:var(--acc);transition:width .5s cubic-bezier(.2,.7,.3,1)}
-.meter .mark{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);opacity:.55;transition:left .5s cubic-bezier(.2,.7,.3,1)}
+.meter .tgt{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--acc),var(--acc-2));border-radius:100px;transition:width .5s cubic-bezier(.2,.7,.3,1)}
+.meter .mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.5;transition:left .5s cubic-bezier(.2,.7,.3,1)}
 .meter-sub{display:flex;justify-content:space-between;font-size:.7rem;color:var(--ink-3)}
 
-/* layout */
-main{display:grid;grid-template-columns:minmax(0,1fr) 268px;gap:1.5rem;padding-top:1.5rem;align-items:start}
-@media (max-width:860px){main{grid-template-columns:1fr}}
-.card{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:1rem 1.1rem}
-.stack{display:flex;flex-direction:column;gap:1rem}
+/* ---------- layout ---------- */
+main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.4rem;padding-top:1.15rem;align-items:start}
+main>*{min-width:0}
+@media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r);padding:1.25rem 1.35rem;box-shadow:var(--shadow-s)}
+.stack{display:flex;flex-direction:column;gap:1.1rem}
 
-/* stage */
-.now{display:flex;flex-wrap:wrap;gap:.15rem .7rem;align-items:baseline;padding-bottom:.75rem;margin-bottom:.85rem;border-bottom:1px solid var(--line-soft)}
-.now-title{font-family:Archivo,sans-serif;font-weight:600;font-size:1.02rem;letter-spacing:-.01em;text-wrap:balance}
-.now-src{font-size:.78rem;color:var(--ink-3)}
-.stage-head{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;align-items:baseline;margin-bottom:.9rem}
-.stage-head .k{font-size:.68rem;color:var(--ink-3);font-family:Archivo,sans-serif;text-transform:uppercase;letter-spacing:.08em}
-.stage-head .v{font-family:"IBM Plex Mono",monospace;font-size:.95rem;font-weight:500}
-.slots{display:flex;flex-wrap:wrap;gap:6px;min-height:56px;align-content:flex-start}
-.slot{width:52px;height:52px;border-radius:5px;background:var(--sunk);border:1px solid var(--line-soft);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
-  font-family:"IBM Plex Mono",monospace;font-size:.85rem;font-weight:500;color:var(--ink-3);
-  transition:background .18s,border-color .18s,color .18s,transform .18s}
-.slot .oct{font-size:.6rem;opacity:.6}
-.slot.got{background:var(--acc-soft);border-color:var(--acc);color:var(--acc-deep);transform:translateY(-2px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .slot.got{color:var(--acc-deep)}}
+/* ---------- stage ---------- */
+.card.stage{background-image:radial-gradient(120% 62% at 50% -28%,var(--acc-soft),transparent 60%)}
+.now{display:flex;flex-wrap:wrap;gap:.15rem .8rem;align-items:baseline;padding-bottom:.85rem;margin-bottom:.95rem;border-bottom:1px solid var(--line-soft)}
+.now-title{font-family:"Bodoni Moda",Didot,serif;font-weight:400;font-size:1.5rem;letter-spacing:-.01em;line-height:1.15;text-wrap:balance}
+.now-src{font-size:.75rem;color:var(--ink-3);font-family:"IBM Plex Mono",monospace}
+.stage-head{display:flex;flex-wrap:wrap;gap:.5rem 1.9rem;align-items:baseline;margin-bottom:1rem}
+.stage-head .k{font-family:"IBM Plex Mono",monospace;font-size:.62rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.18em}
+.stage-head .v{font-family:"IBM Plex Mono",monospace;font-size:1.05rem;font-weight:500;font-variant-numeric:tabular-nums;margin-top:.15rem}
 
-.score{overflow-x:auto;min-height:56px;padding:.2rem 0 .1rem}
+/* ---------- score ---------- */
+.score{overflow-x:auto;margin-top:.35rem;padding:.15rem .3rem;
+  background:var(--sunk);border:1px solid var(--line-soft);border-radius:10px}
+.score svg{transition:opacity .35s ease}
+.score.idle svg{opacity:.42}
 .score svg{display:block}
-.st-line{stroke:var(--ink-3);stroke-width:1;opacity:.55}
+.st-line{stroke:var(--ink-3);stroke-width:1;opacity:.5}
 .st-clef{fill:var(--ink-2);font-family:"Bravura","Noto Music","Segoe UI Symbol",serif}
 .st-head{fill:var(--acc)}
 .st-hollow{fill:none;stroke:var(--acc);stroke-width:1.8}
 .st-stem{stroke:var(--acc);stroke-width:1.6}
 .st-flag{fill:var(--acc)}
-.st-tri{font-family:"Source Serif 4",serif;font-style:italic;font-size:10px;fill:var(--ink-2);text-anchor:middle}
-.st-alt{font-size:15px;fill:var(--acc-deep);text-anchor:middle;font-family:"Noto Music",serif}
+.st-tri{font-family:"Bodoni Moda",serif;font-style:italic;font-size:10px;fill:var(--ink-2);text-anchor:middle}
+.st-alt{font-size:15px;fill:var(--acc);text-anchor:middle;font-family:"Noto Music",serif}
 .st-name{font-family:"IBM Plex Mono",monospace;font-size:11px;fill:var(--ink-2);text-anchor:middle}
 .st-oct{font-family:"IBM Plex Mono",monospace;font-size:9px;fill:var(--ink-3);text-anchor:middle}
-.controls{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
-button.dev{margin-left:auto;opacity:.5;font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.04em}
+.score-idle{display:flex;align-items:center;gap:.5rem;font-family:"IBM Plex Mono",monospace;font-size:.62rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);padding:.1rem .35rem .4rem}
+.score-idle::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acc);opacity:.5}
+
+/* ---------- buttons ---------- */
+.controls{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.15rem;align-items:center}
+button{font-family:Archivo,sans-serif;font-size:.86rem;font-weight:500;letter-spacing:.005em;
+  padding:.62rem 1.15rem;border-radius:100px;border:1px solid var(--line);background:var(--surface);
+  color:var(--ink);cursor:pointer;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease,box-shadow .16s ease}
+button:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-soft);transform:translateY(-1px)}
+button:active{transform:translateY(0)}
+button:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+button.primary{background:var(--acc);border-color:var(--acc);color:var(--on-acc);
+  padding:.72rem 1.5rem;font-size:.92rem;font-weight:600;box-shadow:var(--shadow-btn)}
+button.primary:hover{background:var(--acc-2);border-color:var(--acc-2);color:var(--on-acc);transform:translateY(-2px)}
+button.primary::before{content:"▶";font-size:.7em;margin-right:.55em;display:inline-block;transform:translateY(-.05em)}
+button.primary:disabled{opacity:.45;box-shadow:none;transform:none}
+button:disabled{opacity:.4;cursor:default;transform:none}
+button:disabled:hover{background:var(--surface);border-color:var(--line);color:var(--ink);transform:none}
+button.dev{margin-left:auto;opacity:.5;font-family:"IBM Plex Mono",monospace;font-size:.75rem;letter-spacing:.04em}
 button.dev:hover{opacity:1}
-button{font-family:Archivo,sans-serif;font-size:.83rem;font-weight:600;letter-spacing:.01em;
-  padding:.5rem .95rem;border-radius:5px;border:1px solid var(--line);background:var(--surface);
-  color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
-button:hover{border-color:var(--acc);color:var(--acc)}
-button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-button.primary{background:var(--acc);border-color:var(--acc);color:var(--surface)}
-button.primary:hover{background:var(--acc-deep);border-color:var(--acc-deep);color:var(--surface)}
-button:disabled{opacity:.4;cursor:default}
-.msg{margin-top:.9rem;font-size:.9rem;color:var(--ink-2);min-height:1.5em}
+#bSkip::before{content:"→";margin-right:.5em;opacity:.7}
+#bRef::before,#bReveal::before{content:"";display:inline-block;width:1.05em;height:1.05em;
+  margin-right:.55em;vertical-align:-.17em;background-color:currentColor;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;
+  -webkit-mask-size:contain;mask-size:contain;opacity:.85;transition:opacity .15s ease}
+button:hover::before{opacity:1}
+#bRef::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M7%202.5v9.5a5%205%200%200%200%2010%200V2.5'/%3E%3Cpath%20d='M12%2017v4.5'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M7%202.5v9.5a5%205%200%200%200%2010%200V2.5'/%3E%3Cpath%20d='M12%2017v4.5'/%3E%3C/svg%3E");width:1.2em;height:1.2em;vertical-align:-.24em}
+#bReveal::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.1'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M1.8%2012S5.4%205.2%2012%205.2%2022.2%2012%2022.2%2012%2018.6%2018.8%2012%2018.8%201.8%2012%201.8%2012Z'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='3.1'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.1'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M1.8%2012S5.4%205.2%2012%205.2%2022.2%2012%2022.2%2012%2018.6%2018.8%2012%2018.8%201.8%2012%201.8%2012Z'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='3.1'/%3E%3C/svg%3E")}
+.msg{margin:1.05rem 0 .7rem;font-size:.92rem;color:var(--ink-2);min-height:1.5em;line-height:1.5}
 .msg .reveal{color:var(--acc);font-weight:600}
 
-/* keyboard */
-.kb-wrap{overflow-x:auto;padding:.55rem .55rem .35rem;background:var(--sunk);border:1px solid var(--line-soft);border-radius:5px}
-.kb{position:relative;height:130px;display:flex;min-width:520px;user-select:none}
-.wk{position:relative;flex:1 0 auto;width:38px;background:var(--key-w);border:1px solid var(--ink-3);
-  border-radius:0 0 4px 4px;margin-right:-1px;cursor:pointer;display:flex;align-items:flex-end;
-  justify-content:center;padding-bottom:6px;font-family:"IBM Plex Mono",monospace;font-size:.6rem;color:var(--ink-3)}
-.bk{position:absolute;top:0;width:26px;height:76px;background:var(--key-b);border-radius:0 0 3px 3px;
-  cursor:pointer;z-index:2;border:1px solid var(--key-b)}
-.wk.on,.bk.on{background:var(--acc)}
-.kb-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:.5rem;font-size:.72rem;color:var(--ink-3)}
+/* ---------- keyboard ---------- */
+.kb-wrap{overflow-x:auto;padding:.7rem .7rem .5rem;background:var(--sunk);border:1px solid var(--line-soft);border-radius:10px}
+.kb{position:relative;height:136px;display:flex;min-width:520px;user-select:none}
+.wk{position:relative;flex:1 0 auto;width:38px;background:var(--key-w);border:1px solid var(--key-w-edge);border-top:none;
+  border-radius:0 0 6px 6px;margin-right:-1px;cursor:pointer;display:flex;align-items:flex-end;
+  justify-content:center;padding-bottom:8px;font-family:"IBM Plex Mono",monospace;font-size:.58rem;color:var(--ink-3);
+  transition:background .1s ease,box-shadow .1s ease}
+.bk{position:absolute;top:0;width:26px;height:80px;background:var(--key-b);border-radius:0 0 4px 4px;
+  cursor:pointer;z-index:2;border:1px solid var(--key-b);box-shadow:0 3px 7px rgba(0,0,0,.4);
+  transition:background .1s ease,box-shadow .1s ease}
+.wk:hover{background:color-mix(in srgb,var(--acc) 8%,var(--key-w))}
+.wk.on{background:color-mix(in srgb,var(--acc) 30%,var(--key-w));box-shadow:0 0 0 1px var(--acc),0 0 20px var(--acc-glow)}
+.bk.on{background:var(--acc);box-shadow:0 0 20px var(--acc-glow)}
+.kb-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:.6rem;font-size:.72rem;color:var(--ink-3)}
 
-/* side */
-.side h2{font-family:Archivo,sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .6rem}
-.rows{display:flex;flex-direction:column;gap:.35rem;font-size:.82rem}
+/* ---------- side panels ---------- */
+.side{gap:.85rem;align-items:flex-end}
+.panel{width:300px;background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r);
+  box-shadow:var(--shadow-s);overflow:hidden;transition:width .28s cubic-bezier(.2,.7,.2,1)}
+.panel>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.6rem;
+  padding:.85rem 1.1rem;font-family:"IBM Plex Mono",monospace;font-size:.66rem;font-weight:500;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap;
+  transition:color .15s ease,background .15s ease}
+.panel>summary::-webkit-details-marker{display:none}
+.panel>summary::marker{content:""}
+.panel>summary:hover{color:var(--acc);background:var(--acc-soft)}
+.panel>summary .dot{width:6px;height:6px;border-radius:50%;background:var(--acc);opacity:.6;flex:none}
+.panel>summary .chev{margin-inline-start:auto;flex:none;font-size:1.05rem;line-height:1;
+  transition:transform .25s ease;transform:rotate(0deg)}
+.panel>summary .chev::before{content:"\203A"}
+.panel[open]>summary{border-bottom:1px solid var(--line-soft)}
+.panel .body{padding:1rem 1.1rem 1.15rem;width:300px}
+
+/* replié : rail vertical, titre toujours lisible */
+.panel:not([open]){width:46px}
+.panel:not([open])>summary{writing-mode:vertical-rl;padding:1.05rem .55rem 1.1rem;gap:.75rem;color:var(--ink-3)}
+.panel:not([open])>summary .chev{writing-mode:horizontal-tb;transform:rotate(180deg)}
+@media (max-width:900px){
+  .panel,.panel .body,.panel:not([open]){width:100%}
+  .panel:not([open])>summary{writing-mode:horizontal-tb;padding:.85rem 1.1rem}
+  .panel:not([open])>summary .chev{transform:rotate(90deg)}
+}
+
+.rows{display:flex;flex-direction:column;gap:.5rem;font-size:.82rem}
 .row{display:flex;justify-content:space-between;gap:.6rem;align-items:baseline}
 .row span{color:var(--ink-3)}
-.row b{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:.88rem}
-.spark{display:flex;align-items:flex-end;gap:2px;height:38px;margin-top:.5rem}
-.spark i{flex:1;background:var(--acc);border-radius:1px;min-height:2px;opacity:.75}
+.row b{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:.9rem;font-variant-numeric:tabular-nums}
+.spark{display:flex;align-items:flex-end;gap:2px;height:40px;margin-top:.85rem}
+.spark i{flex:1;background:var(--acc);border-radius:2px 2px 0 0;min-height:2px;opacity:.75}
 .spark i.low{background:var(--bad)}
-select,label.opt{font-family:Archivo,sans-serif;font-size:.78rem}
-select{width:100%;padding:.4rem .5rem;border-radius:4px;border:1px solid var(--line);background:var(--surface);color:var(--ink);margin-top:.3rem}
-label.opt{display:flex;align-items:center;gap:.45rem;color:var(--ink-2);margin-top:.5rem;cursor:pointer}
-.status{font-size:.75rem;color:var(--ink-3);margin-top:.5rem;line-height:1.4}
-.status.warn{color:var(--bad)}
-.mini{font-size:.72rem;color:var(--ink-3);line-height:1.45;margin:.5rem 0 0}
-kbd{font-family:"IBM Plex Mono",monospace;font-size:.72em;background:var(--sunk);border:1px solid var(--line-soft);border-radius:3px;padding:.05em .3em}
+select,label.opt{font-family:Archivo,sans-serif;font-size:.8rem}
+.langsel{width:auto;min-width:9.5rem;align-self:center;margin-top:0;padding:.5rem .7rem;font-size:.8rem;border-radius:100px}
+select{width:100%;padding:.5rem .65rem;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);margin-top:.3rem;cursor:pointer}
+select:hover{border-color:var(--acc)}
+label.opt{display:flex;align-items:center;gap:.5rem;color:var(--ink-2);margin-top:.7rem;cursor:pointer}
+label.opt input{accent-color:var(--acc);width:15px;height:15px}
+.status{font-size:.74rem;color:var(--ink-3);margin-top:.6rem;line-height:1.45}
+.status.warn{display:flex;gap:.5rem;align-items:flex-start;color:var(--warn-ink);
+  background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:9px;
+  padding:.5rem .6rem;margin-top:.65rem;line-height:1.4}
+.status.warn::before{content:"!";flex:none;width:14px;height:14px;margin-top:.5px;border-radius:50%;
+  border:1px solid currentColor;font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;
+  line-height:12px;text-align:center;opacity:.9}
+.mini{font-size:.71rem;color:var(--ink-3);line-height:1.45;margin:.6rem 0 0}
+kbd{font-family:"IBM Plex Mono",monospace;font-size:.72em;background:var(--sunk);border:1px solid var(--line-soft);border-radius:4px;padding:.1em .35em}
+#bReset{width:100%;margin-top:.9rem;font-size:.8rem}
+#bReset:hover{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
 .hidden{display:none !important}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms !important;animation-duration:.001ms !important}}
 </style>
 </head>
 <body>
 
 
+
 <div class="wrap">
 <header>
-  <div>
-    <h1>Dépiquage <span>libre</span></h1>
-    <p class="tag">Aucun retour pendant que tu joues. Répertoire vérifié libre de droits, France et États-Unis.</p>
+  <div class="brandline">
+    <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+    <div>
+      <h1>By <span>Ear</span></h1>
+      <p class="tag">Train Your Ear On The Repertoire</p>
+    </div>
   </div>
   <div class="meter-box">
-    <div class="meter-top"><span class="lab">Difficulté</span><b id="dLabel">0 %</b></div>
+    <div class="meter-top"><span class="lab" data-t="difficulty">Difficulty</span><b id="dLabel">0 %</b></div>
     <div class="meter"><div class="ceil" id="mCeil"></div><div class="tgt" id="mTgt"></div><div class="mark" id="mMark"></div></div>
     <div class="meter-sub"><span id="lvlName">—</span><span id="ceilLabel"></span></div>
   </div>
+  <select id="langSel" class="langsel" aria-label="Language"></select>
 </header>
 
 <main>
@@ -157,55 +241,50 @@ kbd{font-family:"IBM Plex Mono",monospace;font-size:.72em;background:var(--sunk)
         <span class="now-src" id="mSrc"></span>
       </div>
       <div class="stage-head">
-        <div><div class="k">Mélodie</div><div class="v" id="sCount">1</div></div>
-        <div><div class="k">Notes</div><div class="v" id="sNotes">—</div></div>
-        <div><div class="k">Jouées</div><div class="v" id="sPlayed">0</div></div>
-        <div><div class="k">Écoutes</div><div class="v" id="sPlays">0</div></div>
-        <div><div class="k">Départs</div><div class="v" id="sRuns">—</div></div>
+        <div><div class="k" data-t="melody">Melody</div><div class="v" id="sCount">1</div></div>
+        <div><div class="k" data-t="notes">Notes</div><div class="v" id="sNotes">—</div></div>
+        <div><div class="k" data-t="played">Played</div><div class="v" id="sPlayed">0</div></div>
+        <div><div class="k" data-t="listens">Listens</div><div class="v" id="sPlays">0</div></div>
       </div>
-      <div class="slots" id="slots"></div>
-      <div class="score hidden" id="score"></div>
+      <div class="score" id="score"></div>
       <div class="controls">
-        <button class="primary" id="bPlay">Écouter</button>
-        <button id="bRef">Do de repère</button>
-        <button id="bSkip">Passer</button>
-        <button id="bReveal">Montrer</button>
-        <button id="bGG" class="dev" title="Simule une réussite parfaite du premier coup">gg</button>
+        <button class="primary" id="bPlay" data-t="listen">Listen</button>
+        <button id="bRef" data-t="refDo">Reference C</button>
+        <button id="bReveal" data-t="reveal">Reveal</button>
       </div>
       <p class="msg" id="msg">Branche ton clavier MIDI, puis appuie sur Écouter. Tu ne sauras que tu as réussi qu'à la dernière note.</p>
-    </div>
-
-    <div class="card">
       <div class="kb-wrap"><div class="kb" id="kb"></div></div>
       <div class="kb-foot">
-        <span>Clavier d'ordinateur : <kbd>q s d f g h j k</kbd> blanches, <kbd>z e t y u</kbd> noires, <kbd>←</kbd> <kbd>→</kbd> octave</span>
+        <span id="kbOctLabel"></span>
         <span class="mono" id="kbOct">do3 – do5</span>
       </div>
     </div>
   </div>
 
   <div class="stack side">
-    <div class="card">
-      <h2>Entrée MIDI</h2>
-      <select id="midiSel"><option>Recherche…</option></select>
-      <p class="status" id="midiStatus">Initialisation…</p>
-      <label class="opt"><input type="checkbox" id="optSound" checked> Son quand je joue</label>
-    </div>
-    <div class="card">
-      <h2>Séance</h2>
+    <details class="panel" id="panelMidi">
+      <summary><span class="dot" aria-hidden="true"></span><span data-t="midiIn">MIDI input</span><span class="chev" aria-hidden="true"></span></summary>
+      <div class="body">
+        <select id="midiSel"><option>Recherche…</option></select>
+        <p class="status" id="midiStatus">Initialisation…</p>
+        <label class="opt"><input type="checkbox" id="optSound" checked> <span data-t="soundOn">Sound as I play</span></label>
+      </div>
+    </details>
+    <details class="panel" id="panelSession">
+      <summary><span class="dot" aria-hidden="true"></span><span data-t="session">Session</span><span class="chev" aria-hidden="true"></span></summary>
+      <div class="body">
       <div class="rows">
-        <div class="row"><span>Mélodies réussies</span><b id="stDone">0</b></div>
-        <div class="row"><span>Aisance moyenne</span><b id="stEase">—</b></div>
-        <div class="row"><span>Progression</span><b id="stGain">—</b></div>
-        <div class="row"><span>Palier atteint</span><b id="stLvl">1</b></div>
+        <div class="row"><span data-t="doneN">Melodies solved</span><b id="stDone">0</b></div>
+        <div class="row"><span data-t="avgEase">Average ease</span><b id="stEase">—</b></div>
+        <div class="row"><span data-t="progress">Progress</span><b id="stGain">—</b></div>
+        <div class="row"><span data-t="levelReached">Level reached</span><b id="stLvl">1</b></div>
+        <div class="row"><span data-t="weakest">Interval to work on</span><b id="stWeak">—</b></div>
       </div>
       <div class="spark" id="spark"></div>
-      <p class="mini">Chaque barre est l'aisance d'une mélodie : nombre de notes de la mélodie divisé par le nombre de notes que tu as jouées. 100 % = sortie d'un seul trait.</p>
-    </div>
-    <div class="card">
-      <h2>Réglage</h2>
-      <button id="bReset" style="margin-top:.7rem;width:100%">Effacer ma progression</button>
-    </div>
+      <p class="mini" data-t="sparkNote"></p>
+      <button id="bReset" data-t="reset">Erase my progress</button>
+      </div>
+    </details>
   </div>
 </main>
 </div>
@@ -215,37 +294,50 @@ const CORPUS_RAW = "@BC|303|p|Vrolijke kermis|0.00000|1|7||1\n@BC|525|p|Katyusha
 </script>
 <script>
 'use strict';
+/* ---------- traductions ---------- */
+const LANGS = [{"c": "fr", "f": "🇫🇷", "n": "Français", "notes": "fr"}, {"c": "en", "f": "🇬🇧", "n": "English", "notes": "let"}, {"c": "de", "f": "🇩🇪", "n": "Deutsch", "notes": "de"}, {"c": "es", "f": "🇪🇸", "n": "Español", "notes": "sol"}, {"c": "it", "f": "🇮🇹", "n": "Italiano", "notes": "sol"}, {"c": "pt", "f": "🇵🇹", "n": "Português", "notes": "sol"}, {"c": "nl", "f": "🇳🇱", "n": "Nederlands", "notes": "let"}, {"c": "ja", "f": "🇯🇵", "n": "日本語", "notes": "let"}, {"c": "ko", "f": "🇰🇷", "n": "한국어", "notes": "let"}, {"c": "zh", "f": "🇨🇳", "n": "简体中文", "notes": "let"}, {"c": "cs", "f": "🇨🇿", "n": "Čeština", "notes": "de"}, {"c": "hu", "f": "🇭🇺", "n": "Magyar", "notes": "de"}, {"c": "ro", "f": "🇷🇴", "n": "Română", "notes": "sol"}, {"c": "tr", "f": "🇹🇷", "n": "Türkçe", "notes": "sol"}];
+const NOTE_SETS = {
+  fr:  ['do','do♯','ré','mi♭','mi','fa','fa♯','sol','la♭','la','si♭','si'],
+  sol: ['do','do♯','re','mi♭','mi','fa','fa♯','sol','la♭','la','si♭','si'],
+  let: ['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'],
+  de:  ['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B','H']
+};
+const TR = {"fr": {"weakest": "Intervalle à travailler","difficulty": "Difficulté","warmup": "Amorce","warmupN": "Amorce · {n} notes","levelN": "Palier {n} · {name}","beforeL1": "avant le palier 1","ceiling": "plafond {v} %","melody": "Mélodie","notes": "Notes","played": "Jouées","listens": "Écoutes","starts": "Départs","listen": "Écouter","listenAgain": "Réécouter","refDo": "Do de repère","skip": "Passer","reveal": "Montrer","msgStart": "Branche ton clavier MIDI, puis appuie sur Écouter.","msgClick": "Clique n’importe où pour lancer la séance.","msgThisIsC": "Ceci est un do.","msgKeepIt": "Tu ne l’entendras plus de la séance : garde-le en tête.","msgNew": "Nouvelle mélodie, {n} notes. Écoute-la puis rejoue-la d’un trait.","msgYourTurn": "À toi. Il faut la jouer entière, sans faute, d’un seul trait.","v1": "D’un seul trait, du premier coup.","v2": "Passée au deuxième essai.","vN": "Passée après {n} départs.","easeDiff": "Aisance {e} % · difficulté {d} pt","revealed": "La voilà, en clair.","skipped": "Passée.","warmFound": "Trouvée en {n} notes · aisance {e} %","warmProg": "{k} sur {t} sans faute","warmProgFail": "sans faute : toujours {k} sur {t}","warmDone": "Amorce terminée.","warmDone2": "On passe au vrai répertoire.","drillOk": "{iv} est acquis.","drillOk2": "On repart sur les mélodies.","drillRight": "Juste.","drillWrong": "Raté, on refait.","drillCount": "{k} sur {t} · ces exercices ne comptent pas","midiIn": "Entrée MIDI","searching": "Recherche…","noDevice": "Aucun appareil","notAvail": "Non disponible","denied": "Refusé","connected": "Connecté : {name}","midiNone": "Aucun clavier détecté. Branche-le puis recharge, ou joue au clavier d’ordinateur.","midiNoApi": "Web MIDI n’est pas disponible ici. Ouvre le fichier dans Chrome, ou joue à la souris.","midiDenied": "Accès MIDI refusé ou bloqué dans cette page.","midiWait": "En attente de l’autorisation MIDI du navigateur.","soundOn": "Son quand je joue","session": "Séance","doneN": "Mélodies réussies","avgEase": "Aisance moyenne","progress": "Progression","levelReached": "Palier atteint","sparkNote": "Chaque barre est l’aisance d’une mélodie : nombre de notes divisé par le nombre de notes jouées.","reset": "Effacer ma progression","kbHint": "Clavier d’ordinateur : {w} blanches, {b} noires, ← → octave","newIv": "Nouvel intervalle","up": "montant","down": "descendant","after": "après {iv}","afterDown": "après {iv}, vers le bas","alone": "seul, {dir}","theC": "Le do","warmTitle": "Amorce, {n} notes","levels": ["Par degrés, très court","Par degrés, court","Premiers sauts, court","Par degrés, phrase entière","Petits sauts, phrase entière","Sauts jusqu’à la sixte","Par degrés, phrase longue","Sauts moyens, phrase longue","Sauts larges, court","Phrases très longues","Sauts larges, phrase longue","Très disjoint"],"ivs": {"2": "la seconde","3": "la tierce mineure","4": "la tierce majeure","5": "la quarte","6": "le triton","7": "la quinte","8": "la sixte mineure","9": "la sixte majeure","10": "la septième mineure","11": "la septième majeure","12": "l’octave"}},"en": {"weakest": "Interval to work on","difficulty": "Difficulty","warmup": "Warm-up","warmupN": "Warm-up · {n} notes","levelN": "Level {n} · {name}","beforeL1": "before level 1","ceiling": "ceiling {v} %","melody": "Melody","notes": "Notes","played": "Played","listens": "Listens","starts": "Restarts","listen": "Listen","listenAgain": "Listen again","refDo": "Reference C","skip": "Skip","reveal": "Reveal","msgStart": "Plug in your MIDI keyboard, then press Listen.","msgClick": "Click anywhere to start the session.","msgThisIsC": "This is a C.","msgKeepIt": "You won’t hear it again this session — keep it in mind.","msgNew": "New melody, {n} notes. Listen, then play it back in one go.","msgYourTurn": "Your turn. Play it whole, faultless, in one run.","v1": "One clean run, first try.","v2": "Got it on the second attempt.","vN": "Got it after {n} restarts.","easeDiff": "Ease {e} % · difficulty {d} pt","revealed": "Here it is.","skipped": "Skipped.","warmFound": "Found in {n} notes · ease {e} %","warmProg": "{k} of {t} faultless","warmProgFail": "faultless: still {k} of {t}","warmDone": "Warm-up complete.","warmDone2": "On to the real repertoire.","drillOk": "{iv} is learned.","drillOk2": "Back to the melodies.","drillRight": "Right.","drillWrong": "Missed, again.","drillCount": "{k} of {t} · these don’t count towards your score","midiIn": "MIDI input","searching": "Searching…","noDevice": "No device","notAvail": "Unavailable","denied": "Denied","connected": "Connected: {name}","midiNone": "No keyboard found. Plug one in and reload, or use the computer keyboard.","midiNoApi": "Web MIDI isn’t available here. Open the file in Chrome, or play with the mouse.","midiDenied": "MIDI access denied or blocked on this page.","midiWait": "Waiting for the browser’s MIDI permission.","soundOn": "Sound as I play","session": "Session","doneN": "Melodies solved","avgEase": "Average ease","progress": "Progress","levelReached": "Level reached","sparkNote": "Each bar is one melody’s ease: notes in the melody divided by notes you played.","reset": "Erase my progress","kbHint": "Computer keyboard: {w} white, {b} black, ← → octave","newIv": "New interval","up": "ascending","down": "descending","after": "after {iv}","afterDown": "after {iv}, downwards","alone": "alone, {dir}","theC": "The C","warmTitle": "Warm-up, {n} notes","levels": ["Stepwise, very short","Stepwise, short","First leaps, short","Stepwise, full phrase","Small leaps, full phrase","Leaps up to a sixth","Stepwise, long phrase","Medium leaps, long phrase","Wide leaps, short","Very long phrases","Wide leaps, long phrase","Highly disjunct"],"ivs": {"2": "the second","3": "the minor third","4": "the major third","5": "the fourth","6": "the tritone","7": "the fifth","8": "the minor sixth","9": "the major sixth","10": "the minor seventh","11": "the major seventh","12": "the octave"}},"de": {"weakest": "Zu übendes Intervall","difficulty": "Schwierigkeit","warmup": "Einstieg","warmupN": "Einstieg · {n} Töne","levelN": "Stufe {n} · {name}","beforeL1": "vor Stufe 1","ceiling": "Obergrenze {v} %","melody": "Melodie","notes": "Töne","played": "Gespielt","listens": "Anhören","starts": "Neustarts","listen": "Anhören","listenAgain": "Nochmal hören","refDo": "Referenz-C","skip": "Überspringen","reveal": "Zeigen","msgStart": "MIDI-Keyboard anschließen, dann auf Anhören drücken.","msgClick": "Irgendwohin klicken, um zu beginnen.","msgThisIsC": "Das ist ein C.","msgKeepIt": "Du hörst es in dieser Sitzung nicht wieder — merk es dir.","msgNew": "Neue Melodie, {n} Töne. Anhören, dann in einem Zug nachspielen.","msgYourTurn": "Du bist dran. Ganz, fehlerfrei, in einem Zug.","v1": "In einem Zug, beim ersten Versuch.","v2": "Beim zweiten Versuch geschafft.","vN": "Nach {n} Neustarts geschafft.","easeDiff": "Leichtigkeit {e} % · Schwierigkeit {d} Pkt","revealed": "Hier ist sie.","skipped": "Übersprungen.","warmFound": "Gefunden in {n} Tönen · Leichtigkeit {e} %","warmProg": "{k} von {t} fehlerfrei","warmProgFail": "fehlerfrei: weiterhin {k} von {t}","warmDone": "Einstieg abgeschlossen.","warmDone2": "Weiter zum echten Repertoire.","drillOk": "{iv} sitzt.","drillOk2": "Zurück zu den Melodien.","drillRight": "Richtig.","drillWrong": "Daneben, nochmal.","drillCount": "{k} von {t} · zählt nicht für die Wertung","midiIn": "MIDI-Eingang","searching": "Suche…","noDevice": "Kein Gerät","notAvail": "Nicht verfügbar","denied": "Abgelehnt","connected": "Verbunden: {name}","midiNone": "Kein Keyboard gefunden. Anschließen und neu laden, oder die Computertastatur nutzen.","midiNoApi": "Web MIDI ist hier nicht verfügbar. Datei in Chrome öffnen oder mit der Maus spielen.","midiDenied": "MIDI-Zugriff verweigert oder auf dieser Seite blockiert.","midiWait": "Warte auf die MIDI-Freigabe des Browsers.","soundOn": "Ton beim Spielen","session": "Sitzung","doneN": "Gelöste Melodien","avgEase": "Durchschnittliche Leichtigkeit","progress": "Fortschritt","levelReached": "Erreichte Stufe","sparkNote": "Jeder Balken ist die Leichtigkeit einer Melodie: Töne der Melodie geteilt durch gespielte Töne.","reset": "Fortschritt löschen","kbHint": "Computertastatur: {w} weiß, {b} schwarz, ← → Oktave","newIv": "Neues Intervall","up": "aufwärts","down": "abwärts","after": "nach {iv}","afterDown": "nach {iv}, abwärts","alone": "allein, {dir}","theC": "Das C","warmTitle": "Einstieg, {n} Töne","levels": ["Schrittweise, sehr kurz","Schrittweise, kurz","Erste Sprünge, kurz","Schrittweise, ganze Phrase","Kleine Sprünge, ganze Phrase","Sprünge bis zur Sexte","Schrittweise, lange Phrase","Mittlere Sprünge, lange Phrase","Weite Sprünge, kurz","Sehr lange Phrasen","Weite Sprünge, lange Phrase","Stark disjunkt"],"ivs": {"2": "die Sekunde","3": "die kleine Terz","4": "die große Terz","5": "die Quarte","6": "der Tritonus","7": "die Quinte","8": "die kleine Sexte","9": "die große Sexte","10": "die kleine Septime","11": "die große Septime","12": "die Oktave"}},"es": {"weakest": "Intervalo a trabajar","difficulty": "Dificultad","warmup": "Inicio","warmupN": "Inicio · {n} notas","levelN": "Nivel {n} · {name}","beforeL1": "antes del nivel 1","ceiling": "techo {v} %","melody": "Melodía","notes": "Notas","played": "Tocadas","listens": "Escuchas","starts": "Reinicios","listen": "Escuchar","listenAgain": "Volver a escuchar","refDo": "Do de referencia","skip": "Saltar","reveal": "Mostrar","msgStart": "Conecta tu teclado MIDI y pulsa Escuchar.","msgClick": "Haz clic en cualquier sitio para empezar.","msgThisIsC": "Esto es un do.","msgKeepIt": "No volverás a oírlo en la sesión: tenlo en mente.","msgNew": "Nueva melodía, {n} notas. Escúchala y tócala de una sola vez.","msgYourTurn": "Te toca. Entera, sin fallos, de una sola vez.","v1": "De una sola vez, a la primera.","v2": "Conseguida al segundo intento.","vN": "Conseguida tras {n} reinicios.","easeDiff": "Soltura {e} % · dificultad {d} pt","revealed": "Aquí está.","skipped": "Saltada.","warmFound": "Encontrada en {n} notas · soltura {e} %","warmProg": "{k} de {t} sin fallos","warmProgFail": "sin fallos: sigues en {k} de {t}","warmDone": "Inicio completado.","warmDone2": "Pasamos al repertorio real.","drillOk": "{iv} está adquirida.","drillOk2": "Volvemos a las melodías.","drillRight": "Correcto.","drillWrong": "Fallo, otra vez.","drillCount": "{k} de {t} · esto no cuenta para la puntuación","midiIn": "Entrada MIDI","searching": "Buscando…","noDevice": "Ningún dispositivo","notAvail": "No disponible","denied": "Denegado","connected": "Conectado: {name}","midiNone": "No se detecta ningún teclado. Conéctalo y recarga, o usa el teclado del ordenador.","midiNoApi": "Web MIDI no está disponible aquí. Abre el archivo en Chrome o toca con el ratón.","midiDenied": "Acceso MIDI denegado o bloqueado en esta página.","midiWait": "Esperando el permiso MIDI del navegador.","soundOn": "Sonido al tocar","session": "Sesión","doneN": "Melodías resueltas","avgEase": "Soltura media","progress": "Progreso","levelReached": "Nivel alcanzado","sparkNote": "Cada barra es la soltura de una melodía: notas de la melodía divididas por notas tocadas.","reset": "Borrar mi progreso","kbHint": "Teclado del ordenador: {w} blancas, {b} negras, ← → octava","newIv": "Nuevo intervalo","up": "ascendente","down": "descendente","after": "tras {iv}","afterDown": "tras {iv}, hacia abajo","alone": "solo, {dir}","theC": "El do","warmTitle": "Inicio, {n} notas","levels": ["Por grados, muy corta","Por grados, corta","Primeros saltos, corta","Por grados, frase entera","Saltos pequeños, frase entera","Saltos hasta la sexta","Por grados, frase larga","Saltos medios, frase larga","Saltos amplios, corta","Frases muy largas","Saltos amplios, frase larga","Muy disjunta"],"ivs": {"2": "la segunda","3": "la tercera menor","4": "la tercera mayor","5": "la cuarta","6": "el tritono","7": "la quinta","8": "la sexta menor","9": "la sexta mayor","10": "la séptima menor","11": "la séptima mayor","12": "la octava"}},"it": {"weakest": "Intervallo da lavorare","difficulty": "Difficoltà","warmup": "Avvio","warmupN": "Avvio · {n} note","levelN": "Livello {n} · {name}","beforeL1": "prima del livello 1","ceiling": "soglia {v} %","melody": "Melodia","notes": "Note","played": "Suonate","listens": "Ascolti","starts": "Ripartenze","listen": "Ascolta","listenAgain": "Riascolta","refDo": "Do di riferimento","skip": "Salta","reveal": "Mostra","msgStart": "Collega la tastiera MIDI, poi premi Ascolta.","msgClick": "Clicca ovunque per iniziare la sessione.","msgThisIsC": "Questo è un do.","msgKeepIt": "Non lo sentirai più in questa sessione: tienilo a mente.","msgNew": "Nuova melodia, {n} note. Ascoltala e risuonala di seguito.","msgYourTurn": "Tocca a te. Intera, senza errori, di seguito.","v1": "Di seguito, al primo colpo.","v2": "Presa al secondo tentativo.","vN": "Presa dopo {n} ripartenze.","easeDiff": "Scioltezza {e} % · difficoltà {d} pt","revealed": "Eccola.","skipped": "Saltata.","warmFound": "Trovata in {n} note · scioltezza {e} %","warmProg": "{k} su {t} senza errori","warmProgFail": "senza errori: ancora {k} su {t}","warmDone": "Avvio completato.","warmDone2": "Si passa al repertorio vero.","drillOk": "{iv} è acquisito.","drillOk2": "Torniamo alle melodie.","drillRight": "Giusto.","drillWrong": "Sbagliato, si rifà.","drillCount": "{k} su {t} · non contano per il punteggio","midiIn": "Ingresso MIDI","searching": "Ricerca…","noDevice": "Nessun dispositivo","notAvail": "Non disponibile","denied": "Negato","connected": "Collegato: {name}","midiNone": "Nessuna tastiera rilevata. Collegala e ricarica, oppure usa la tastiera del computer.","midiNoApi": "Web MIDI non è disponibile qui. Apri il file in Chrome o suona col mouse.","midiDenied": "Accesso MIDI negato o bloccato in questa pagina.","midiWait": "In attesa dell’autorizzazione MIDI del browser.","soundOn": "Suono mentre suono","session": "Sessione","doneN": "Melodie risolte","avgEase": "Scioltezza media","progress": "Progresso","levelReached": "Livello raggiunto","sparkNote": "Ogni barra è la scioltezza di una melodia: note della melodia divise per note suonate.","reset": "Cancella i progressi","kbHint": "Tastiera del computer: {w} bianchi, {b} neri, ← → ottava","newIv": "Nuovo intervallo","up": "ascendente","down": "discendente","after": "dopo {iv}","afterDown": "dopo {iv}, verso il basso","alone": "solo, {dir}","theC": "Il do","warmTitle": "Avvio, {n} note","levels": ["Per gradi, molto breve","Per gradi, breve","Primi salti, breve","Per gradi, frase intera","Salti piccoli, frase intera","Salti fino alla sesta","Per gradi, frase lunga","Salti medi, frase lunga","Salti ampi, breve","Frasi molto lunghe","Salti ampi, frase lunga","Molto disgiunta"],"ivs": {"2": "la seconda","3": "la terza minore","4": "la terza maggiore","5": "la quarta","6": "il tritono","7": "la quinta","8": "la sesta minore","9": "la sesta maggiore","10": "la settima minore","11": "la settima maggiore","12": "l’ottava"}},"pt": {"weakest": "Intervalo a trabalhar","difficulty": "Dificuldade","warmup": "Início","warmupN": "Início · {n} notas","levelN": "Nível {n} · {name}","beforeL1": "antes do nível 1","ceiling": "teto {v} %","melody": "Melodia","notes": "Notas","played": "Tocadas","listens": "Escutas","starts": "Recomeços","listen": "Ouvir","listenAgain": "Ouvir de novo","refDo": "Dó de referência","skip": "Passar","reveal": "Mostrar","msgStart": "Liga o teu teclado MIDI e carrega em Ouvir.","msgClick": "Clica em qualquer sítio para começar.","msgThisIsC": "Isto é um dó.","msgKeepIt": "Não o voltas a ouvir nesta sessão: guarda-o de cabeça.","msgNew": "Nova melodia, {n} notas. Ouve e toca de uma vez.","msgYourTurn": "É a tua vez. Inteira, sem falhas, de uma só vez.","v1": "De uma só vez, à primeira.","v2": "Conseguida à segunda tentativa.","vN": "Conseguida após {n} recomeços.","easeDiff": "Desenvoltura {e} % · dificuldade {d} pt","revealed": "Aqui está.","skipped": "Passada.","warmFound": "Encontrada em {n} notas · desenvoltura {e} %","warmProg": "{k} de {t} sem falhas","warmProgFail": "sem falhas: ainda {k} de {t}","warmDone": "Início concluído.","warmDone2": "Passamos ao repertório a sério.","drillOk": "{iv} está adquirido.","drillOk2": "Voltamos às melodias.","drillRight": "Certo.","drillWrong": "Falhou, repete.","drillCount": "{k} de {t} · não contam para a pontuação","midiIn": "Entrada MIDI","searching": "A procurar…","noDevice": "Nenhum dispositivo","notAvail": "Indisponível","denied": "Recusado","connected": "Ligado: {name}","midiNone": "Nenhum teclado detetado. Liga-o e recarrega, ou usa o teclado do computador.","midiNoApi": "Web MIDI não está disponível aqui. Abre o ficheiro no Chrome ou toca com o rato.","midiDenied": "Acesso MIDI recusado ou bloqueado nesta página.","midiWait": "À espera da autorização MIDI do navegador.","soundOn": "Som ao tocar","session": "Sessão","doneN": "Melodias resolvidas","avgEase": "Desenvoltura média","progress": "Progresso","levelReached": "Nível atingido","sparkNote": "Cada barra é a desenvoltura de uma melodia: notas da melodia a dividir pelas notas tocadas.","reset": "Apagar o meu progresso","kbHint": "Teclado do computador: {w} brancas, {b} pretas, ← → oitava","newIv": "Novo intervalo","up": "ascendente","down": "descendente","after": "após {iv}","afterDown": "após {iv}, para baixo","alone": "sozinho, {dir}","theC": "O dó","warmTitle": "Início, {n} notas","levels": ["Por graus, muito curta","Por graus, curta","Primeiros saltos, curta","Por graus, frase inteira","Saltos pequenos, frase inteira","Saltos até à sexta","Por graus, frase longa","Saltos médios, frase longa","Saltos largos, curta","Frases muito longas","Saltos largos, frase longa","Muito disjunta"],"ivs": {"2": "a segunda","3": "a terceira menor","4": "a terceira maior","5": "a quarta","6": "o trítono","7": "a quinta","8": "a sexta menor","9": "a sexta maior","10": "a sétima menor","11": "a sétima maior","12": "a oitava"}},"nl": {"weakest": "Interval om te oefenen","difficulty": "Moeilijkheid","warmup": "Opstart","warmupN": "Opstart · {n} noten","levelN": "Niveau {n} · {name}","beforeL1": "voor niveau 1","ceiling": "plafond {v} %","melody": "Melodie","notes": "Noten","played": "Gespeeld","listens": "Beluisterd","starts": "Herstarts","listen": "Luisteren","listenAgain": "Opnieuw luisteren","refDo": "Referentie-C","skip": "Overslaan","reveal": "Tonen","msgStart": "Sluit je MIDI-keyboard aan en druk op Luisteren.","msgClick": "Klik ergens om de sessie te starten.","msgThisIsC": "Dit is een C.","msgKeepIt": "Je hoort hem deze sessie niet meer — onthoud hem.","msgNew": "Nieuwe melodie, {n} noten. Luister en speel hem in één keer na.","msgYourTurn": "Jouw beurt. Helemaal, foutloos, in één keer.","v1": "In één keer, meteen goed.","v2": "Bij de tweede poging gelukt.","vN": "Gelukt na {n} herstarts.","easeDiff": "Gemak {e} % · moeilijkheid {d} pt","revealed": "Hier is hij.","skipped": "Overgeslagen.","warmFound": "Gevonden in {n} noten · gemak {e} %","warmProg": "{k} van {t} foutloos","warmProgFail": "foutloos: nog steeds {k} van {t}","warmDone": "Opstart voltooid.","warmDone2": "Door naar het echte repertoire.","drillOk": "{iv} zit erin.","drillOk2": "Terug naar de melodieën.","drillRight": "Goed.","drillWrong": "Mis, opnieuw.","drillCount": "{k} van {t} · deze tellen niet mee","midiIn": "MIDI-ingang","searching": "Zoeken…","noDevice": "Geen apparaat","notAvail": "Niet beschikbaar","denied": "Geweigerd","connected": "Verbonden: {name}","midiNone": "Geen keyboard gevonden. Sluit er een aan en herlaad, of gebruik het computertoetsenbord.","midiNoApi": "Web MIDI is hier niet beschikbaar. Open het bestand in Chrome of speel met de muis.","midiDenied": "MIDI-toegang geweigerd of geblokkeerd op deze pagina.","midiWait": "Wachten op MIDI-toestemming van de browser.","soundOn": "Geluid tijdens spelen","session": "Sessie","doneN": "Opgeloste melodieën","avgEase": "Gemiddeld gemak","progress": "Voortgang","levelReached": "Bereikt niveau","sparkNote": "Elke balk is het gemak van één melodie: noten van de melodie gedeeld door gespeelde noten.","reset": "Voortgang wissen","kbHint": "Computertoetsenbord: {w} wit, {b} zwart, ← → octaaf","newIv": "Nieuw interval","up": "stijgend","down": "dalend","after": "na {iv}","afterDown": "na {iv}, omlaag","alone": "alleen, {dir}","theC": "De C","warmTitle": "Opstart, {n} noten","levels": ["Trapsgewijs, zeer kort","Trapsgewijs, kort","Eerste sprongen, kort","Trapsgewijs, hele frase","Kleine sprongen, hele frase","Sprongen tot de sext","Trapsgewijs, lange frase","Middelgrote sprongen, lange frase","Wijde sprongen, kort","Zeer lange frases","Wijde sprongen, lange frase","Sterk disjunct"],"ivs": {"2": "de secunde","3": "de kleine terts","4": "de grote terts","5": "de kwart","6": "de tritonus","7": "de kwint","8": "de kleine sext","9": "de grote sext","10": "de kleine septiem","11": "de grote septiem","12": "het octaaf"}},"ja": {"weakest": "重点的に練習する音程","difficulty": "難易度","warmup": "ウォームアップ","warmupN": "ウォームアップ · {n} 音","levelN": "レベル {n} · {name}","beforeL1": "レベル1の前","ceiling": "上限 {v} %","melody": "メロディ","notes": "音数","played": "弾いた数","listens": "再生回数","starts": "やり直し","listen": "聴く","listenAgain": "もう一度聴く","refDo": "基準のド","skip": "スキップ","reveal": "答えを見る","msgStart": "MIDIキーボードを接続して「聴く」を押してください。","msgClick": "どこかをクリックしてセッションを開始してください。","msgThisIsC": "これがドです。","msgKeepIt": "このセッションでは二度と鳴りません。覚えておいてください。","msgNew": "新しいメロディ、{n} 音。聴いてから一息で弾いてください。","msgYourTurn": "どうぞ。最後まで、間違えずに、一息で。","v1": "一息で、一発正解。","v2": "二回目で正解。","vN": "{n} 回のやり直しの後に正解。","easeDiff": "余裕度 {e} % · 難易度 {d} pt","revealed": "これが答えです。","skipped": "スキップしました。","warmFound": "{n} 音で正解 · 余裕度 {e} %","warmProg": "ノーミス {k} / {t}","warmProgFail": "ノーミス：まだ {k} / {t}","warmDone": "ウォームアップ終了。","warmDone2": "本物のレパートリーへ。","drillOk": "{iv} を習得しました。","drillOk2": "メロディに戻ります。","drillRight": "正解。","drillWrong": "ミス、もう一度。","drillCount": "{k} / {t} · この練習はスコアに入りません","midiIn": "MIDI入力","searching": "検索中…","noDevice": "デバイスなし","notAvail": "利用できません","denied": "拒否されました","connected": "接続済み：{name}","midiNone": "キーボードが見つかりません。接続して再読み込みするか、パソコンのキーボードで弾いてください。","midiNoApi": "ここではWeb MIDIが使えません。Chromeでファイルを開くか、マウスで弾いてください。","midiDenied": "このページでMIDIアクセスが拒否またはブロックされています。","midiWait": "ブラウザのMIDI許可を待っています。","soundOn": "弾いた音を鳴らす","session": "セッション","doneN": "正解したメロディ","avgEase": "平均余裕度","progress": "進み具合","levelReached": "到達レベル","sparkNote": "各バーは一曲の余裕度です。メロディの音数を、弾いた音数で割った値。","reset": "進捗を消去","kbHint": "パソコンのキーボード：{w} 白鍵、{b} 黒鍵、← → オクターブ","newIv": "新しい音程","up": "上行","down": "下行","after": "{iv} のあと","afterDown": "{iv} のあと、下行で","alone": "単独、{dir}","theC": "ド","warmTitle": "ウォームアップ、{n} 音","levels": ["順次進行、とても短い","順次進行、短い","最初の跳躍、短い","順次進行、フレーズ全体","小さい跳躍、フレーズ全体","6度までの跳躍","順次進行、長いフレーズ","中くらいの跳躍、長いフレーズ","大きい跳躍、短い","とても長いフレーズ","大きい跳躍、長いフレーズ","跳躍が非常に多い"],"ivs": {"2": "2度","3": "短3度","4": "長3度","5": "4度","6": "三全音","7": "5度","8": "短6度","9": "長6度","10": "短7度","11": "長7度","12": "オクターブ"}},"ko": {"weakest": "연습할 음정","difficulty": "난이도","warmup": "워밍업","warmupN": "워밍업 · {n}음","levelN": "레벨 {n} · {name}","beforeL1": "레벨 1 이전","ceiling": "상한 {v}%","melody": "멜로디","notes": "음 수","played": "친 음","listens": "들은 횟수","starts": "다시 시작","listen": "듣기","listenAgain": "다시 듣기","refDo": "기준 도","skip": "넘기기","reveal": "정답 보기","msgStart": "MIDI 키보드를 연결한 뒤 듣기를 누르세요.","msgClick": "아무 곳이나 클릭해 세션을 시작하세요.","msgThisIsC": "이것이 도입니다.","msgKeepIt": "이번 세션에서는 다시 들려주지 않습니다. 기억해 두세요.","msgNew": "새 멜로디, {n}음. 듣고 나서 한 번에 쳐 보세요.","msgYourTurn": "당신 차례입니다. 끝까지, 틀리지 않고, 한 번에.","v1": "한 번에, 첫 시도로 성공.","v2": "두 번째 시도에 성공.","vN": "{n}번 다시 시작한 뒤 성공.","easeDiff": "여유도 {e}% · 난이도 {d}pt","revealed": "정답입니다.","skipped": "넘겼습니다.","warmFound": "{n}음 만에 성공 · 여유도 {e}%","warmProg": "무실수 {k} / {t}","warmProgFail": "무실수: 아직 {k} / {t}","warmDone": "워밍업 완료.","warmDone2": "본 레퍼토리로 넘어갑니다.","drillOk": "{iv} 습득 완료.","drillOk2": "멜로디로 돌아갑니다.","drillRight": "정답.","drillWrong": "틀렸습니다, 다시.","drillCount": "{k} / {t} · 이 연습은 점수에 반영되지 않습니다","midiIn": "MIDI 입력","searching": "검색 중…","noDevice": "장치 없음","notAvail": "사용 불가","denied": "거부됨","connected": "연결됨: {name}","midiNone": "키보드를 찾을 수 없습니다. 연결 후 새로고침하거나 컴퓨터 자판으로 연주하세요.","midiNoApi": "여기서는 Web MIDI를 쓸 수 없습니다. Chrome에서 파일을 열거나 마우스로 연주하세요.","midiDenied": "이 페이지에서 MIDI 접근이 거부되었거나 차단되었습니다.","midiWait": "브라우저의 MIDI 권한을 기다리는 중입니다.","soundOn": "연주할 때 소리 내기","session": "세션","doneN": "맞힌 멜로디","avgEase": "평균 여유도","progress": "진행","levelReached": "도달 레벨","sparkNote": "각 막대는 한 멜로디의 여유도입니다. 멜로디의 음 수를 친 음 수로 나눈 값.","reset": "진행 기록 지우기","kbHint": "컴퓨터 자판: {w} 흰건반, {b} 검은건반, ← → 옥타브","newIv": "새 음정","up": "상행","down": "하행","after": "{iv} 다음","afterDown": "{iv} 다음, 하행으로","alone": "단독, {dir}","theC": "도","warmTitle": "워밍업, {n}음","levels": ["순차진행, 아주 짧게","순차진행, 짧게","첫 도약, 짧게","순차진행, 한 악구","작은 도약, 한 악구","6도까지의 도약","순차진행, 긴 악구","중간 도약, 긴 악구","넓은 도약, 짧게","아주 긴 악구","넓은 도약, 긴 악구","도약이 매우 많음"],"ivs": {"2": "2도","3": "단3도","4": "장3도","5": "4도","6": "트라이톤","7": "5도","8": "단6도","9": "장6도","10": "단7도","11": "장7도","12": "옥타브"}},"zh": {"weakest": "需要练习的音程","difficulty": "难度","warmup": "热身","warmupN": "热身 · {n} 个音","levelN": "第 {n} 级 · {name}","beforeL1": "第 1 级之前","ceiling": "上限 {v}%","melody": "旋律","notes": "音数","played": "已弹","listens": "试听","starts": "重来","listen": "听","listenAgain": "再听一次","refDo": "基准音 C","skip": "跳过","reveal": "显示答案","msgStart": "接上 MIDI 键盘，然后按「听」。","msgClick": "点击任意位置开始本次练习。","msgThisIsC": "这是 C。","msgKeepIt": "本次练习不会再响起，请记住它。","msgNew": "新旋律，{n} 个音。听完后一口气弹出来。","msgYourTurn": "到你了。完整、无错、一次弹完。","v1": "一次弹完，第一次就对。","v2": "第二次尝试成功。","vN": "重来 {n} 次后成功。","easeDiff": "从容度 {e}% · 难度 {d} 点","revealed": "答案在此。","skipped": "已跳过。","warmFound": "{n} 个音就找到了 · 从容度 {e}%","warmProg": "无错 {k} / {t}","warmProgFail": "无错：仍是 {k} / {t}","warmDone": "热身完成。","warmDone2": "进入正式曲目。","drillOk": "{iv} 已掌握。","drillOk2": "回到旋律。","drillRight": "正确。","drillWrong": "错了，再来。","drillCount": "{k} / {t} · 这些练习不计入成绩","midiIn": "MIDI 输入","searching": "搜索中…","noDevice": "没有设备","notAvail": "不可用","denied": "被拒绝","connected": "已连接：{name}","midiNone": "未检测到键盘。接上后重新加载，或用电脑键盘弹奏。","midiNoApi": "此处无法使用 Web MIDI。请在 Chrome 中打开文件，或用鼠标弹奏。","midiDenied": "本页面的 MIDI 访问被拒绝或阻止。","midiWait": "正在等待浏览器授予 MIDI 权限。","soundOn": "弹奏时发声","session": "本次练习","doneN": "完成的旋律","avgEase": "平均从容度","progress": "进展","levelReached": "已达级别","sparkNote": "每根柱子代表一条旋律的从容度：旋律音数除以你弹的音数。","reset": "清除我的进度","kbHint": "电脑键盘：{w} 白键，{b} 黑键，← → 八度","newIv": "新音程","up": "上行","down": "下行","after": "在{iv}之后","afterDown": "在{iv}之后，下行","alone": "单独，{dir}","theC": "C","warmTitle": "热身，{n} 个音","levels": ["级进，很短","级进，短","初次跳进，短","级进，完整乐句","小跳进，完整乐句","不超过六度的跳进","级进，长乐句","中等跳进，长乐句","大跳进，短","很长的乐句","大跳进，长乐句","跳进极多"],"ivs": {"2": "二度","3": "小三度","4": "大三度","5": "四度","6": "三全音","7": "五度","8": "小六度","9": "大六度","10": "小七度","11": "大七度","12": "八度"}},"cs": {"weakest": "Interval k procvičení","difficulty": "Obtížnost","warmup": "Rozehrání","warmupN": "Rozehrání · {n} tónů","levelN": "Úroveň {n} · {name}","beforeL1": "před úrovní 1","ceiling": "strop {v} %","melody": "Melodie","notes": "Tónů","played": "Zahráno","listens": "Přehrání","starts": "Restartů","listen": "Poslech","listenAgain": "Poslechnout znovu","refDo": "Referenční C","skip": "Přeskočit","reveal": "Ukázat","msgStart": "Připoj MIDI klávesy a stiskni Poslech.","msgClick": "Klikni kamkoli a sezení začne.","msgThisIsC": "Toto je C.","msgKeepIt": "V tomto sezení ho už neuslyšíš — zapamatuj si ho.","msgNew": "Nová melodie, {n} tónů. Poslechni si ji a zahraj ji vcelku.","msgYourTurn": "Teď ty. Celou, bez chyby, na jeden zátah.","v1": "Na jeden zátah, hned napoprvé.","v2": "Podařilo se na druhý pokus.","vN": "Podařilo se po {n} restartech.","easeDiff": "Lehkost {e} % · obtížnost {d} b","revealed": "Tady je.","skipped": "Přeskočeno.","warmFound": "Nalezena za {n} tónů · lehkost {e} %","warmProg": "{k} z {t} bez chyby","warmProgFail": "bez chyby: stále {k} z {t}","warmDone": "Rozehrání hotovo.","warmDone2": "Jdeme na skutečný repertoár.","drillOk": "{iv} je zvládnuta.","drillOk2": "Zpět k melodiím.","drillRight": "Správně.","drillWrong": "Chyba, znovu.","drillCount": "{k} z {t} · tato cvičení se nepočítají","midiIn": "MIDI vstup","searching": "Hledám…","noDevice": "Žádné zařízení","notAvail": "Nedostupné","denied": "Odmítnuto","connected": "Připojeno: {name}","midiNone": "Klávesy nenalezeny. Připoj je a načti stránku znovu, nebo hraj na počítačové klávesnici.","midiNoApi": "Web MIDI zde není dostupné. Otevři soubor v Chrome, nebo hraj myší.","midiDenied": "Přístup k MIDI byl na této stránce odmítnut nebo blokován.","midiWait": "Čekám na povolení MIDI od prohlížeče.","soundOn": "Zvuk při hraní","session": "Sezení","doneN": "Zvládnuté melodie","avgEase": "Průměrná lehkost","progress": "Postup","levelReached": "Dosažená úroveň","sparkNote": "Každý sloupec je lehkost jedné melodie: počet tónů melodie dělený počtem zahraných tónů.","reset": "Smazat můj postup","kbHint": "Počítačová klávesnice: {w} bílé, {b} černé, ← → oktáva","newIv": "Nový interval","up": "vzestupně","down": "sestupně","after": "po {iv}","afterDown": "po {iv}, dolů","alone": "samostatně, {dir}","theC": "C","warmTitle": "Rozehrání, {n} tónů","levels": ["Po stupních, velmi krátké","Po stupních, krátké","První skoky, krátké","Po stupních, celá fráze","Malé skoky, celá fráze","Skoky do sexty","Po stupních, dlouhá fráze","Střední skoky, dlouhá fráze","Široké skoky, krátké","Velmi dlouhé fráze","Široké skoky, dlouhá fráze","Velmi nesouvislé"],"ivs": {"2": "sekunda","3": "malá tercie","4": "velká tercie","5": "kvarta","6": "tritonus","7": "kvinta","8": "malá sexta","9": "velká sexta","10": "malá septima","11": "velká septima","12": "oktáva"}},"hu": {"weakest": "Gyakorlandó hangköz","difficulty": "Nehézség","warmup": "Bemelegítés","warmupN": "Bemelegítés · {n} hang","levelN": "{n}. szint · {name}","beforeL1": "az 1. szint előtt","ceiling": "plafon {v} %","melody": "Dallam","notes": "Hangok","played": "Lejátszva","listens": "Meghallgatás","starts": "Újrakezdés","listen": "Meghallgatás","listenAgain": "Újra meghallgatom","refDo": "Referencia C","skip": "Kihagyás","reveal": "Megmutat","msgStart": "Csatlakoztasd a MIDI-billentyűzetet, majd nyomd meg a Meghallgatás gombot.","msgClick": "Kattints bárhová az indításhoz.","msgThisIsC": "Ez egy C.","msgKeepIt": "Ebben a menetben többé nem hallod — tartsd fejben.","msgNew": "Új dallam, {n} hang. Hallgasd meg, majd játszd le egy menetben.","msgYourTurn": "Te jössz. Végig, hibátlanul, egyetlen menetben.","v1": "Egy menetben, elsőre.","v2": "Másodszorra sikerült.","vN": "{n} újrakezdés után sikerült.","easeDiff": "Könnyedség {e} % · nehézség {d} pt","revealed": "Íme.","skipped": "Kihagyva.","warmFound": "{n} hangból megvan · könnyedség {e} %","warmProg": "{k} / {t} hibátlan","warmProgFail": "hibátlan: még mindig {k} / {t}","warmDone": "Bemelegítés kész.","warmDone2": "Jöhet az igazi repertoár.","drillOk": "{iv} megvan.","drillOk2": "Vissza a dallamokhoz.","drillRight": "Helyes.","drillWrong": "Hiba, újra.","drillCount": "{k} / {t} · ezek nem számítanak a pontszámba","midiIn": "MIDI bemenet","searching": "Keresés…","noDevice": "Nincs eszköz","notAvail": "Nem elérhető","denied": "Elutasítva","connected": "Csatlakoztatva: {name}","midiNone": "Nem található billentyűzet. Csatlakoztasd és tölts újra, vagy játssz a számítógép billentyűzetén.","midiNoApi": "A Web MIDI itt nem érhető el. Nyisd meg a fájlt Chrome-ban, vagy játssz egérrel.","midiDenied": "A MIDI-hozzáférés ezen az oldalon elutasítva vagy letiltva.","midiWait": "Várakozás a böngésző MIDI-engedélyére.","soundOn": "Hang játék közben","session": "Menet","doneN": "Megoldott dallamok","avgEase": "Átlagos könnyedség","progress": "Haladás","levelReached": "Elért szint","sparkNote": "Minden oszlop egy dallam könnyedsége: a dallam hangjainak száma osztva a lejátszott hangokkal.","reset": "Haladás törlése","kbHint": "Számítógép-billentyűzet: {w} fehér, {b} fekete, ← → oktáv","newIv": "Új hangköz","up": "felfelé","down": "lefelé","after": "{iv} után","afterDown": "{iv} után, lefelé","alone": "önmagában, {dir}","theC": "A C","warmTitle": "Bemelegítés, {n} hang","levels": ["Lépésenként, nagyon rövid","Lépésenként, rövid","Első ugrások, rövid","Lépésenként, teljes frázis","Kis ugrások, teljes frázis","Ugrások szextig","Lépésenként, hosszú frázis","Közepes ugrások, hosszú frázis","Nagy ugrások, rövid","Nagyon hosszú frázisok","Nagy ugrások, hosszú frázis","Erősen ugráló"],"ivs": {"2": "a szekund","3": "a kis terc","4": "a nagy terc","5": "a kvart","6": "a tritonusz","7": "a kvint","8": "a kis szext","9": "a nagy szext","10": "a kis szeptim","11": "a nagy szeptim","12": "az oktáv"}},"ro": {"weakest": "Interval de exersat","difficulty": "Dificultate","warmup": "Încălzire","warmupN": "Încălzire · {n} note","levelN": "Nivelul {n} · {name}","beforeL1": "înainte de nivelul 1","ceiling": "plafon {v} %","melody": "Melodie","notes": "Note","played": "Cântate","listens": "Ascultări","starts": "Reluări","listen": "Ascultă","listenAgain": "Ascultă din nou","refDo": "Do de referință","skip": "Sari peste","reveal": "Arată","msgStart": "Conectează claviatura MIDI și apasă Ascultă.","msgClick": "Dă clic oriunde pentru a începe sesiunea.","msgThisIsC": "Acesta este un do.","msgKeepIt": "Nu îl vei mai auzi în această sesiune — ține-l minte.","msgNew": "Melodie nouă, {n} note. Ascult-o, apoi cânt-o dintr-o suflare.","msgYourTurn": "E rândul tău. Întreagă, fără greșeală, dintr-o suflare.","v1": "Dintr-o suflare, din prima.","v2": "Reușită la a doua încercare.","vN": "Reușită după {n} reluări.","easeDiff": "Ușurință {e} % · dificultate {d} pt","revealed": "Iat-o.","skipped": "Sărită.","warmFound": "Găsită în {n} note · ușurință {e} %","warmProg": "{k} din {t} fără greșeală","warmProgFail": "fără greșeală: tot {k} din {t}","warmDone": "Încălzire terminată.","warmDone2": "Trecem la repertoriul propriu-zis.","drillOk": "{iv} este însușită.","drillOk2": "Înapoi la melodii.","drillRight": "Corect.","drillWrong": "Greșit, o luăm de la capăt.","drillCount": "{k} din {t} · aceste exerciții nu contează la punctaj","midiIn": "Intrare MIDI","searching": "Se caută…","noDevice": "Niciun dispozitiv","notAvail": "Indisponibil","denied": "Refuzat","connected": "Conectat: {name}","midiNone": "Nicio claviatură detectată. Conectează una și reîncarcă, sau cântă de la tastatură.","midiNoApi": "Web MIDI nu este disponibil aici. Deschide fișierul în Chrome sau cântă cu mouse-ul.","midiDenied": "Accesul MIDI a fost refuzat sau blocat pe această pagină.","midiWait": "Se așteaptă permisiunea MIDI a browserului.","soundOn": "Sunet când cânt","session": "Sesiune","doneN": "Melodii rezolvate","avgEase": "Ușurință medie","progress": "Progres","levelReached": "Nivel atins","sparkNote": "Fiecare bară este ușurința unei melodii: numărul de note împărțit la notele cântate.","reset": "Șterge progresul","kbHint": "Tastatura calculatorului: {w} albe, {b} negre, ← → octavă","newIv": "Interval nou","up": "ascendent","down": "descendent","after": "după {iv}","afterDown": "după {iv}, în jos","alone": "singur, {dir}","theC": "Do-ul","warmTitle": "Încălzire, {n} note","levels": ["Prin trepte, foarte scurtă","Prin trepte, scurtă","Primele salturi, scurtă","Prin trepte, frază întreagă","Salturi mici, frază întreagă","Salturi până la sextă","Prin trepte, frază lungă","Salturi medii, frază lungă","Salturi mari, scurtă","Fraze foarte lungi","Salturi mari, frază lungă","Foarte disjunctă"],"ivs": {"2": "secunda","3": "terța mică","4": "terța mare","5": "cvarta","6": "tritonul","7": "cvinta","8": "sexta mică","9": "sexta mare","10": "septima mică","11": "septima mare","12": "octava"}},"tr": {"weakest": "Çalışılacak aralık","difficulty": "Zorluk","warmup": "Isınma","warmupN": "Isınma · {n} nota","levelN": "Seviye {n} · {name}","beforeL1": "1. seviyeden önce","ceiling": "tavan %{v}","melody": "Ezgi","notes": "Nota","played": "Çalınan","listens": "Dinleme","starts": "Yeniden başlama","listen": "Dinle","listenAgain": "Tekrar dinle","refDo": "Referans do","skip": "Atla","reveal": "Göster","msgStart": "MIDI klavyeni bağla, sonra Dinle'ye bas.","msgClick": "Oturumu başlatmak için herhangi bir yere tıkla.","msgThisIsC": "Bu bir do.","msgKeepIt": "Bu oturumda bir daha duymayacaksın — aklında tut.","msgNew": "Yeni ezgi, {n} nota. Dinle, sonra tek seferde çal.","msgYourTurn": "Sıra sende. Baştan sona, hatasız, tek seferde.","v1": "Tek seferde, ilk denemede.","v2": "İkinci denemede oldu.","vN": "{n} yeniden başlamadan sonra oldu.","easeDiff": "Rahatlık %{e} · zorluk {d} p","revealed": "İşte bu.","skipped": "Atlandı.","warmFound": "{n} notada bulundu · rahatlık %{e}","warmProg": "{t} taneden {k} hatasız","warmProgFail": "hatasız: hâlâ {t} taneden {k}","warmDone": "Isınma tamam.","warmDone2": "Asıl dağarcığa geçiyoruz.","drillOk": "{iv} öğrenildi.","drillOk2": "Ezgilere dönüyoruz.","drillRight": "Doğru.","drillWrong": "Hata, tekrar.","drillCount": "{t} taneden {k} · bu alıştırmalar puana katılmaz","midiIn": "MIDI girişi","searching": "Aranıyor…","noDevice": "Cihaz yok","notAvail": "Kullanılamıyor","denied": "Reddedildi","connected": "Bağlandı: {name}","midiNone": "Klavye bulunamadı. Bağlayıp sayfayı yenile ya da bilgisayar klavyesiyle çal.","midiNoApi": "Web MIDI burada kullanılamıyor. Dosyayı Chrome'da aç veya fareyle çal.","midiDenied": "Bu sayfada MIDI erişimi reddedildi veya engellendi.","midiWait": "Tarayıcının MIDI iznini bekliyor.","soundOn": "Çalarken ses","session": "Oturum","doneN": "Çözülen ezgiler","avgEase": "Ortalama rahatlık","progress": "İlerleme","levelReached": "Ulaşılan seviye","sparkNote": "Her çubuk bir ezginin rahatlığıdır: ezginin nota sayısı bölü çaldığın nota sayısı.","reset": "İlerlememi sil","kbHint": "Bilgisayar klavyesi: {w} beyaz, {b} siyah, ← → oktav","newIv": "Yeni aralık","up": "çıkıcı","down": "inici","after": "{iv} sonrası","afterDown": "{iv} sonrası, aşağı","alone": "tek başına, {dir}","theC": "Do","warmTitle": "Isınma, {n} nota","levels": ["Komşu seslerle, çok kısa","Komşu seslerle, kısa","İlk sıçramalar, kısa","Komşu seslerle, tam cümle","Küçük sıçramalar, tam cümle","Altılıya kadar sıçrama","Komşu seslerle, uzun cümle","Orta sıçramalar, uzun cümle","Geniş sıçramalar, kısa","Çok uzun cümleler","Geniş sıçramalar, uzun cümle","Çok sıçramalı"],"ivs": {"2": "ikili","3": "küçük üçlü","4": "büyük üçlü","5": "dörtlü","6": "triton","7": "beşli","8": "küçük altılı","9": "büyük altılı","10": "küçük yedili","11": "büyük yedili","12": "oktav"}}};
+
+let LANG = 'en';
+function t(k, v) {
+  let x = (TR[LANG] && TR[LANG][k] !== undefined) ? TR[LANG][k] : TR.en[k];
+  if (typeof x === 'string' && v) for (const p in v) x = x.split('{' + p + '}').join(v[p]);
+  return x;
+}
+function langDef() {
+  for (let i = 0; i < LANGS.length; i++) if (LANGS[i].c === LANG) return LANGS[i];
+  return LANGS[1];
+}
+function noteName(m) { return NOTE_SETS[langDef().notes][((m % 12) + 12) % 12]; }
+function noteOct(m) { return Math.floor(m / 12) - 1; }
+
+
 /* ---------- corpus ---------- */
 const DURS = [0.25, 0.3333, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0];
-const SRCNAME = { e: 'Essen (chant populaire)', n: 'Nottingham (trad)', b: 'Choral de Bach', g: 'Motif généré', w: 'Amorce',
+const SRCNAME_UNUSED = { e: 'Essen (chant populaire)', n: 'Nottingham (trad)', b: 'Choral de Bach', g: 'Motif généré', w: 'Amorce',
   j: 'Scott Joplin, ragtime', f: 'Stephen Foster', c: 'Ballade (Child)',
   r: 'Folk atlantique (Creighton)', w: 'Gershwin (avant 1931)',
   p: 'Domaine public' };
-const LEVELS = [
-  "Par degrés, très court",
-  "Par degrés, court",
-  "Premiers sauts, court",
-  "Par degrés, phrase entière",
-  "Petits sauts, phrase entière",
-  "Sauts jusqu'à la sixte",
-  "Par degrés, phrase longue",
-  "Sauts moyens, phrase longue",
-  "Sauts larges, court",
-  "Phrases très longues",
-  "Sauts larges, phrase longue",
-  "Très disjoint"
-];
-const NOTE_FR = ['do','do♯','ré','mi♭','mi','fa','fa♯','sol','la♭','la','si♭','si'];
 
 const CORPUS = CORPUS_RAW.split('\n').map(function (line) {
   const f = line.split('|');
   const p = []; for (let i = 0; i < f[0].length; i++) p.push(f[0].charCodeAt(i));
   const d = []; for (let i = 0; i < f[1].length; i++) d.push(DURS[+f[1][i]]);
-  var mx = 0;
-  for (var q = 1; q < p.length; q++) mx = Math.max(mx, Math.abs(p[q] - p[q - 1]));
+  var mx = 0, mask = 0;
+  for (var q = 1; q < p.length; q++) {
+    var dd = Math.abs(p[q] - p[q - 1]);
+    mx = Math.max(mx, dd);
+    if (dd >= 1 && dd <= 12) mask |= (1 << dd);
+  }
   var home = +f[6];
   return { p: p, d: d, src: f[2], title: f[3], D: parseFloat(f[4]), lvl: +f[5],
-           home: home, date: (f[7] || '').trim(), cut: f[8] === '1', mxIv: mx,
+           home: home, date: (f[7] || '').trim(), cut: f[8] === '1', mxIv: mx, ivMask: mask,
            doStart: (((p[0] - home) % 12) + 12) % 12 === 0 };
 });
 
@@ -256,7 +348,7 @@ const START_CEIL = 0.006, MARGIN = 0.035;
 function margin(c) { return Math.min(MARGIN, c * 0.5); }
 const S = {
   ceiling: START_CEIL, done: 0, eases: [], recent: [],
-  warm: 1, warmHold: 0, warmClean: 0, known: 2, drillIv: 0, drillOk: 0, consolIv: 0, consolLeft: 0, corpusDone: 0, pending: 0, since: 99, drillLastDown: false, lastNote: 60, cur: null, cursor: 0, played: 0, plays: 0, runs: 0, phase: 'idle', startCeil: START_CEIL
+  warm: 1, warmHold: 0, warmClean: 0, known: 2, ivEase: {}, ivN: {}, drillIv: 0, drillOk: 0, aside: [], queue: [], queueAfter: [], corpusDone: 0, pending: 0, since: 99, drillLastDown: false, lastNote: 60, cur: null, cursor: 0, played: 0, plays: 0, runs: 0, phase: 'idle', startCeil: START_CEIL
 };
 function load() {
   try {
@@ -268,6 +360,8 @@ function load() {
       S.warmHold = j.warmHold || 0;
       S.warmClean = j.warmClean || 0;
       S.known = j.known || 2;
+      S.ivEase = j.ivEase || {};
+      S.ivN = j.ivN || {};
     }
   } catch (e) { /* stockage indisponible */ }
 }
@@ -276,7 +370,7 @@ function save() {
     localStorage.setItem('depiquage.monde.v7', JSON.stringify(
       { ceiling: S.ceiling, done: S.done, eases: S.eases.slice(-40),
         startCeil: S.startCeil, warm: S.warm, warmHold: S.warmHold,
-        warmClean: S.warmClean, known: S.known }));
+        warmClean: S.warmClean, known: S.known, ivEase: S.ivEase, ivN: S.ivN }));
   } catch (e) { /* ignore */ }
 }
 
@@ -305,8 +399,6 @@ function tone(midi, when, dur, gain) {
 
 /* ---------- helpers ---------- */
 const $ = function (id) { return document.getElementById(id); };
-function noteName(m) { return NOTE_FR[((m % 12) + 12) % 12]; }
-function noteOct(m) { return Math.floor(m / 12) - 1; }
 function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
 function levelAt(d) {
   let lo = 0, hi = CORPUS.length - 1;
@@ -351,7 +443,7 @@ function warmMelody(n) {
   warmLast = idx[idx.length - 1];
   const p = idx.map(function (x) { return WARM_SCALE[x]; });
   const d = p.map(function () { return 1; });
-  return { ref: { title: n === 1 ? 'Le do' : 'Amorce, ' + n + ' notes',
+  return { ref: { title: n === 1 ? t('theC') : t('warmTitle', {n: n}),
                   src: 'w', D: 0, lvl: 0, d: d },
            pitches: p, durs: d };
 }
@@ -371,15 +463,13 @@ function schedule(durs, D) {
   return dt;
 }
 let refDone = false;
-function refPitch() {
-  const lo = Math.min.apply(null, S.cur.pitches);
-  let c = 60; while (c > lo - 2) c -= 12; while (c < 36) c += 12;
-  return c;
-}
+/* Un seul et même son de référence partout : le do de départ, une octave
+   au-dessus du do central, joué seul. */
+const REF_C = 60;
+function refPitch() { return REF_C; }
 function playRef(at) {
-  const c = refPitch();
-  tone(c, at, 0.55, 0.16); tone(c + 12, at, 0.55, 0.09);
-  return 0.75;
+  tone(REF_C, at, 1.1, 0.22);
+  return 1.25;
 }
 
 
@@ -388,10 +478,7 @@ function playRef(at) {
    sixtes, septièmes, octave. Trois exercices : montant, descendant, puis précédé
    d'un intervalle déjà connu. Ils partent de la dernière note entendue. */
 const LADDER = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-const IV_NOMS = {2:'la seconde',3:'la tierce mineure',4:'la tierce majeure',
-  5:'la quarte',6:'le triton',7:'la quinte',8:'la sixte mineure',
-  9:'la sixte majeure',10:'la septième mineure',11:'la septième majeure',12:'l’octave'};
-const DRILL_NEEDED = 5, CONSOL = 4;
+const DRILL_NEEDED = 5;
 
 function aisanceMoy() {
   const last = S.eases.slice(-12);
@@ -420,36 +507,35 @@ function drillMelody(iv, step) {
     if (!ok([a, a + iv])) a = 60;
     if (!ok([a, a + iv])) a = 55;
     p = [a, a + iv, a]; d = [1, 1, 2];
-    quoi = 'montant';
+    quoi = t('up');
 
   } else if (step === 1) {              /* 1  −X  1 */
     if (!ok([a, a - iv])) a = 72;
     if (!ok([a, a - iv])) a = 77;
     p = [a, a - iv, a]; d = [1, 1, 2];
-    quoi = 'descendant';
+    quoi = t('down');
 
   } else if (step === 2) {              /* 1  Y  X */
     Y = ivConnu(iv);
     if (!ok([a, a + Y, a + Y + iv])) a = 55;
     if (!ok([a, a + Y, a + Y + iv])) a = 49;
     p = [a, a + Y, a + Y + iv]; d = [1, 1, 2];
-    quoi = 'après ' + (IV_NOMS[Y] || Y + ' demi-tons');
+    quoi = t('after', {iv: t('ivs')[Y] || Y});
 
   } else if (step === 3) {              /* 1  −Y  −X */
     Y = ivConnu(iv);
     if (!ok([a, a - Y, a - Y - iv])) a = 78;
     if (!ok([a, a - Y, a - Y - iv])) a = 82;
     p = [a, a - Y, a - Y - iv]; d = [1, 1, 2];
-    quoi = 'après ' + (IV_NOMS[Y] || Y + ' demi-tons') + ', vers le bas';
+    quoi = t('afterDown', {iv: t('ivs')[Y] || Y});
 
   } else {                              /* X seul, depuis la dernière note entendue */
     let dir = fits(a + iv) ? 1 : -1;
     if (!fits(a + dir * iv)) { a = 60; dir = 1; }
     p = [a, a + dir * iv]; d = [1, 2];
-    quoi = 'seul, ' + (dir > 0 ? 'montant' : 'descendant');
+    quoi = t('alone', {dir: dir > 0 ? t('up') : t('down')});
   }
-  return { ref: { title: 'Nouvel intervalle · ' + (IV_NOMS[iv] || iv + ' demi-tons') +
-                         ' — ' + quoi,
+  return { ref: { title: t('newIv') + ' · ' + (t('ivs')[iv] || iv) + ' — ' + quoi,
                   src: 'd', D: 0, lvl: 0, d: d, date: '', home: 0, mxIv: iv },
            pitches: p, durs: d };
 }
@@ -467,40 +553,107 @@ function fenetre() {
   if (!pool.length) pool = CORPUS.slice(0, 40);
   return pool;
 }
-function pick() {
-  const pool = fenetre();
-  /* consolidation : on retravaille l'intervalle qui vient d'être présenté */
-  if (S.consolLeft > 0) {
-    let avec = pool.filter(function (m) { return m.mxIv === S.consolIv; });
-    if (avec.length < 2) {
-      const t = clamp(S.ceiling - margin(S.ceiling), 0, 1);
-      avec = CORPUS.filter(function (m) {
-        return m.mxIv === S.consolIv && S.recent.indexOf(m) < 0 && Math.abs(m.D - t) < 0.12;
-      });
-    }
-    if (avec.length) {
-      S.consolLeft--;
-      const m0 = avec[Math.floor(Math.random() * avec.length)];
-      S.recent.push(m0); if (S.recent.length > 40) S.recent.shift();
-      return m0;
-    }
-    S.consolLeft = 0;
+
+/* ---------- aisance par intervalle ----------
+   Chaque mélodie réussie répartit son aisance sur les intervalles qu'elle contient,
+   au prorata de leur présence. Les intervalles faibles remontent ensuite dans le
+   tirage : on retombe plus souvent sur ce qui résiste. */
+const IV_NEUTRE = 0.80, IV_POIDS = 4.0, IV_MIN_OBS = 6;
+
+function majIvEase(pitches, ease) {
+  const cnt = {};
+  let tot = 0;
+  for (let i = 1; i < pitches.length; i++) {
+    const d = Math.abs(pitches[i] - pitches[i - 1]);
+    if (d < 1 || d > 12) continue;
+    cnt[d] = (cnt[d] || 0) + 1; tot++;
   }
+  if (!tot) return;
+  for (const k in cnt) {
+    const part = cnt[k] / tot;
+    const a = 0.15 + 0.25 * part;                 /* l'intervalle dominant pèse plus */
+    const av = (S.ivEase[k] === undefined) ? IV_NEUTRE : S.ivEase[k];
+    S.ivEase[k] = Math.round((av + a * (ease - av)) * 1000) / 1000;
+    S.ivN[k] = (S.ivN[k] || 0) + 1;
+  }
+}
+/* Référence : l'aisance moyenne du joueur. Un intervalle présent dans presque
+   toutes les mélodies suit cette moyenne et n'est donc pas signalé ; seul celui
+   qui fait nettement moins bien que le reste ressort. */
+function ivRef() {
+  let som = 0, n = 0;
+  for (const k in S.ivEase) { som += S.ivEase[k] * Math.min(S.ivN[k] || 1, 20); n += Math.min(S.ivN[k] || 1, 20); }
+  return n ? som / n : IV_NEUTRE;
+}
+function deficitIv(m) {
+  const ref = ivRef();
+  let def = 0;
+  for (let iv = 1; iv <= 12; iv++) {
+    if (!(m.ivMask & (1 << iv))) continue;
+    if ((S.ivN[iv] || 0) < 3) continue;
+    const d = ref - S.ivEase[iv];
+    if (d > def) def = d;
+  }
+  return clamp(def, 0, 0.5);
+}
+function tirerPondere(list) {
+  if (list.length < 2) return list[0];
+  const w = []; let tot = 0;
+  for (let i = 0; i < list.length; i++) {
+    const x = 1 + IV_POIDS * deficitIv(list[i]);
+    w.push(x); tot += x;
+  }
+  let r = Math.random() * tot;
+  for (let i = 0; i < list.length; i++) { r -= w[i]; if (r <= 0) return list[i]; }
+  return list[list.length - 1];
+}
+function ivFaible() {
+  const ref = ivRef();
+  let best = 0, bv = 0;
+  for (let iv = 2; iv <= S.known; iv++) {
+    if ((S.ivN[iv] || 0) < IV_MIN_OBS) continue;   /* pas assez vu pour se prononcer */
+    const d = ref - S.ivEase[iv];
+    if (d > bv) { bv = d; best = iv; }
+  }
+  return bv > 0.04 ? best : 0;
+}
+
+function unknownOf(m) {
+  const out = [];
+  for (let iv = 1; iv <= 12; iv++) if ((m.ivMask & (1 << iv)) && iv > S.known) out.push(iv);
+  return out;
+}
+function purgeAside() {
+  S.aside = S.aside.filter(function (m) { return m.mxIv > S.known; });
+  if (S.aside.length > 60) S.aside = S.aside.slice(-60);
+}
+function pick() {
+  /* les mélodies mises de côté qui ont motivé la présentation passent en premier */
+  if (S.queue.length) {
+    const q = S.queue.shift();
+    S.recent.push(q); if (S.recent.length > 40) S.recent.shift();
+    return q;
+  }
+  const pool = fenetre();
   /* les trois premières mélodies du corpus commencent sur un do */
   if (S.corpusDone < 3) {
     const surDo = pool.filter(function (x) { return x.doStart && x.mxIv <= S.known; });
     if (surDo.length) {
-      const m1 = surDo[Math.floor(Math.random() * surDo.length)];
+      const m1 = tirerPondere(surDo);
       S.recent.push(m1); if (S.recent.length > 40) S.recent.shift();
       return m1;
     }
   }
   /* tirage normal : ce qui contient un intervalle non présenté est mis de côté */
   let m = null;
-  for (let t = 0; t < 14 && !m; t++) {
-    const c = pool[Math.floor(Math.random() * pool.length)];
+  for (let k2 = 0; k2 < 14 && !m; k2++) {
+    const c = tirerPondere(pool);
     if (!c) break;
-    if (c.mxIv > S.known) { S.pending++; continue; }
+    if (c.mxIv > S.known) {
+      if (S.aside.indexOf(c) < 0) S.aside.push(c);
+      S.pending++;
+      continue;
+    }
     if (c.cut && Math.random() < 0.8) {
       const entiere = pool.filter(function (x) { return !x.cut && x.mxIv <= S.known; });
       if (entiere.length >= 4) continue;
@@ -508,35 +661,51 @@ function pick() {
     m = c;
   }
   if (!m) {
-    const j = pool.filter(function (x) { return x.mxIv <= S.known; });
-    m = j.length ? j[Math.floor(Math.random() * j.length)]
-                 : pool[Math.floor(Math.random() * pool.length)];
+    const jj = pool.filter(function (x) { return x.mxIv <= S.known; });
+    m = jj.length ? tirerPondere(jj) : tirerPondere(pool);
   }
   S.recent.push(m); if (S.recent.length > 40) S.recent.shift();
   return m;
 }
-/* Faut-il présenter l'intervalle suivant ? Oui quand deux mélodies au moins ont
-   été mises de côté parce qu'elles le contenaient, et qu'on a joué au moins six
-   mélodies depuis la dernière présentation. */
-const PENDING_NEEDED = 2, ECART_MIN = 6, ECART_LARGE = 11;
+/* Faut-il présenter l'intervalle suivant ? Oui quand au moins deux mélodies
+   mises de côté désignent le même intervalle — et lui seul, aucun autre intervalle
+   inconnu dedans — et qu'on a joué six mélodies depuis la dernière présentation.
+   Ces mélodies-là sont exactement celles qu'on rejouera juste après. */
+const PENDING_NEEDED = 2, ECART_MIN = 6;
+let pendingIv = 0, pendingMels = [];
+
 function besoinPresentation() {
-  if (S.consolLeft > 0) return 0;
-  const suivant = nextIv(S.known);
-  if (!suivant) return 0;
+  if (S.queue.length) return 0;
   if (S.since < ECART_MIN) return 0;
-  if (S.pending >= PENDING_NEEDED) return suivant;
-  /* au bout d'un moment, on va chercher l'intervalle un peu plus loin dans l'échelle
-     plutôt que d'attendre qu'il tombe dans la fenêtre étroite */
-  if (S.since >= ECART_LARGE) {
-    const t = clamp(S.ceiling - margin(S.ceiling), 0, 1);
-    const dispo = CORPUS.some(function (m) {
-      return m.mxIv === suivant && Math.abs(m.D - t) < 0.12;
-    });
-    if (dispo) return suivant;
+  purgeAside();
+  /* le déclencheur : deux mélodies au moins mises de côté */
+  if (S.aside.length < PENDING_NEEDED) return 0;
+  /* le choix : le plus petit intervalle non présenté pour lequel il existe au moins
+     deux mélodies jouables juste après, c'est-à-dire n'ayant que lui d'inconnu. */
+  const tg = clamp(S.ceiling - margin(S.ceiling), 0, 1);
+  for (let x = 0; x < LADDER.length; x++) {
+    const X = LADDER[x];
+    if (X <= S.known) continue;
+    const seul = function (m) {
+      if (!(m.ivMask & (1 << X))) return false;
+      return m.mxIv === X;                  /* X est son saut maximal : rien d'autre d'inconnu */
+    };
+    let cands = S.aside.filter(seul);
+    if (cands.length < PENDING_NEEDED) {
+      const extra = CORPUS.filter(function (m) {
+        return seul(m) && cands.indexOf(m) < 0 && Math.abs(m.D - tg) < 0.18;
+      });
+      cands = cands.concat(extra);
+    }
+    if (cands.length >= PENDING_NEEDED) {
+      pendingIv = X;
+      pendingMels = cands.slice(0, 3);
+      return X;
+    }
   }
-  const pool = fenetre();
-  return pool.filter(function (m) { return m.mxIv <= S.known; }).length === 0 ? suivant : 0;
+  return 0;
 }
+
 /* Tonalité et registre, tous deux gradués.
    Le corpus fournit `home` : la hauteur à ramener sur le do. C'est la tonique en
    majeur et la relative majeure en mineur, si bien qu'une phrase mineure atterrit
@@ -601,13 +770,27 @@ function flagPath(x, y, up) {
   return 'M' + x + ',' + y + ' c 2.2,4 8,6 8.4,12 c 0.4,4.4 -1.4,7.4 -3.7,9.4 '
        + 'c 2.1,-6.2 -1.2,-9.2 -4.7,-12.6 z';
 }
-function renderScore(pitches, durs) {
-  var GAP = 11, LEFT = 68, W_MIN = 32, TOP = 42;
+function renderScore(pitches, durs, minW) {
+  var GAP = 11, LEFT = 68, W_MIN = 32, TOP;
   var CLEF_SOL = 7.4, CLEF_FA = 4.6;   // taille des clés, en multiples de l'interligne
   var STEM = 32;
   var med = pitches.slice().sort(function (a, b) { return a - b; })[pitches.length >> 1];
   var bass = med < 57;
   var refStep = bass ? diatStep(43) : diatStep(64);
+  /* la hauteur du bloc s'ajuste à l'ambitus, avec un plancher pour éviter les sauts */
+  var stMin = 0, stMax = 8;
+  for (var q = 0; q < pitches.length; q++) {
+    var stq = diatStep(pitches[q]) - refStep;
+    if (stq < stMin) stMin = stq;
+    if (stq > stMax) stMax = stq;
+  }
+  var topNeed = Math.max(0, stMax - 8) * (GAP / 2) + 16;
+  var lowDrop = Math.max(0, -stMin) * (GAP / 2);
+  var botNeed = lowDrop + (pitches.length ? 23 : 16);
+  var H0 = topNeed + 4 * GAP + botNeed;
+  var Hh = Math.max(98, H0);
+  TOP = topNeed + (Hh - H0) / 2;
+  var yName = TOP + 4 * GAP + lowDrop + 15;
   var y0 = TOP + 4 * GAP;
   var xs = [], x = LEFT;
   for (var i = 0; i < pitches.length; i++) {
@@ -615,7 +798,7 @@ function renderScore(pitches, durs) {
     var d = durs[i] || 1;
     x += Math.max(W_MIN, Math.min(72, 24 + Math.sqrt(d) * 20));
   }
-  var W = x + 20, H = TOP + 4 * GAP + 60;
+  var W = Math.max(x + 20, minW || 560), H = Hh;
   var o = ['<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H +
            '" role="img" aria-label="partition de la mélodie">'];
   for (var l = 0; l < 5; l++) {
@@ -653,10 +836,8 @@ function renderScore(pitches, durs) {
       var dy = (Math.abs(st) % 2 === 0) ? cy - GAP / 2 : cy;   // le point va dans un interligne
       o.push('<circle cx="' + (cx + 12) + '" cy="' + dy + '" r="1.9" class="st-head"/>');
     }
-    o.push('<text x="' + cx + '" y="' + (TOP + 4 * GAP + 40) + '" class="st-name">' +
+    o.push('<text x="' + cx + '" y="' + yName.toFixed(1) + '" class="st-name">' +
            noteName(m) + '</text>');
-    o.push('<text x="' + cx + '" y="' + (TOP + 4 * GAP + 54) + '" class="st-oct">' +
-           noteOct(m) + '</text>');
   }
   o.push('</svg>');
   return o.join('');
@@ -669,11 +850,11 @@ function renderMeter() {
     $('mCeil').style.width = (f * 100 * 1.6) + '%';
     $('mTgt').style.width = (f * 100) + '%';
     $('mMark').style.left = (f * 100 * 1.6) + '%';
-    $('dLabel').textContent = 'Amorce';
-    $('lvlName').textContent = 'Amorce · ' + Math.min(WARM_MAX, S.warm)
-      + (S.warm > 1 ? ' notes' : ' note');
-    $('ceilLabel').textContent = 'avant le palier 1';
+    $('dLabel').textContent = t('warmup');
+    $('lvlName').textContent = t('warmup');
+    $('ceilLabel').textContent = t('beforeL1');
     $('stLvl').textContent = '—';
+    $('stWeak').textContent = '—';
     return;
   }
   const target = clamp(S.ceiling - margin(S.ceiling), 0, 1);
@@ -682,9 +863,11 @@ function renderMeter() {
   $('mMark').style.left = (S.ceiling * 100).toFixed(2) + '%';
   $('dLabel').textContent = (target * 100).toFixed(1) + ' %';
   const lv = levelAt(target);
-  $('lvlName').textContent = 'Palier ' + lv + ' · ' + LEVELS[lv - 1];
-  $('ceilLabel').textContent = 'plafond ' + (S.ceiling * 100).toFixed(1) + ' %';
+  $('lvlName').textContent = t('levelN', {n: lv, name: t('levels')[lv - 1]});
+  $('ceilLabel').textContent = t('ceiling', {v: (S.ceiling * 100).toFixed(1)});
   $('stLvl').textContent = lv;
+  const fb = ivFaible();
+  $('stWeak').textContent = fb ? (t('ivs')[fb] || fb) : '—';
 }
 function renderStats() {
   $('stDone').textContent = S.done;
@@ -702,19 +885,13 @@ function renderStats() {
   });
 }
 function renderSlots(revealAll) {
-  const box = $('slots'), sc = $('score');
-  box.innerHTML = ''; sc.innerHTML = '';
-  if (revealAll) {
-    box.classList.add('hidden'); sc.classList.remove('hidden');
-    sc.innerHTML = renderScore(S.cur.pitches, S.cur.durs);
-  } else {
-    box.classList.remove('hidden'); sc.classList.add('hidden');
-    S.cur.pitches.forEach(function () {
-      const el = document.createElement('div');
-      el.className = 'slot'; el.textContent = '\u00b7';
-      box.appendChild(el);
-    });
-  }
+  const sc = $('score');
+  sc.classList.remove('hidden');
+  const staffW = Math.max(320, sc.clientWidth - 14);
+  /* la portée reste toujours affichée : vide et discrète pendant la recherche, écrite une fois trouvée */
+  sc.classList.toggle('idle', !revealAll);
+  sc.innerHTML = revealAll ? renderScore(S.cur.pitches, S.cur.durs, staffW)
+                           : renderScore([], [], staffW);
   $('sNotes').textContent = S.cur.pitches.length;
   $('sPlayed').textContent = S.played;
   $('sPlays').textContent = S.plays;
@@ -731,7 +908,7 @@ function buildKB() {
   whites.forEach(function (m) {
     const d = document.createElement('div');
     d.className = 'wk'; d.dataset.m = m;
-    if (m % 12 === 0) d.textContent = 'do' + noteOct(m);
+    if (m % 12 === 0) { d.dataset.c = '1'; d.textContent = noteName(m) + noteOct(m); }
     d.addEventListener('pointerdown', function (e) { e.preventDefault(); hit(m); });
     kb.appendChild(d); keyEls[m] = d;
   });
@@ -751,6 +928,16 @@ function buildKB() {
     }
   });
 }
+function relayoutKB() {
+  const kb = $('kb'); if (!kb) return;
+  const ws = kb.querySelectorAll('.wk');
+  kb.querySelectorAll('.bk').forEach(function (b) {
+    const m = +b.dataset.m; let idx = 0;
+    for (let k = KB_LO; k < m; k++) if (!BLACK[k % 12]) idx++;
+    if (idx === 0 || idx > ws.length - 1) return;
+    b.style.left = (ws[idx].offsetLeft - 13) + 'px';
+  });
+}
 function flashKey(m, ms) {
   const el = keyEls[m]; if (!el) return;
   el.classList.add('on');
@@ -764,20 +951,22 @@ function playMelody() {
   S.plays++; $('sPlays').textContent = S.plays;
   S.phase = 'listening';
   $('bPlay').disabled = true;
-  let t = 0.25;
+  let tm = 0.25;
   const dts = schedule(S.cur.durs, S.cur.ref.D);
   S.cur.pitches.forEach(function (p, i) {
     const dur = dts[i];
-    tone(p, t, Math.max(0.16, dur * 0.92));
-    t += dur;   /* pas d'affichage au clavier : ce serait donner la réponse */
+    tone(p, tm, Math.max(0.16, dur * 0.92));
+    tm += dur;   /* pas d'affichage au clavier : ce serait donner la réponse */
   });
   setTimeout(function () {
     S.phase = 'playing'; $('bPlay').disabled = false;
-    $('bPlay').textContent = 'Réécouter';
-    if (!S.played) setMsg('À toi. Il faut la jouer entière, sans faute, d’un seul trait.');
-  }, (t + 0.15) * 1000);
+    $('bPlay').textContent = t('listenAgain');
+    if (!S.played) setMsgL(function () { return t('msgYourTurn'); });
+  }, (tm + 0.15) * 1000);
 }
-function setMsg(html) { $('msg').innerHTML = html; }
+let msgFn = null;
+function setMsg(html) { msgFn = null; $('msg').innerHTML = html; }
+function setMsgL(fn) { msgFn = fn; $('msg').innerHTML = fn(); }
 
 /* ---------- annonce du do, au début de la séance ---------- */
 let doAnnounced = false;
@@ -788,9 +977,10 @@ function announceDo(force) {
   if (c.state !== 'running' && !force) return false;
   doAnnounced = true; refDone = true;
   const sound = function () {
-    tone(60, 0.15, 1.2, 0.22);
-    tone(72, 0.15, 1.2, 0.07);
-    setMsg('<span class="reveal">Ceci est un do.</span> Tu ne l’entendras plus de la séance : garde-le en tête.');
+    tone(REF_C, 0.15, 1.2, 0.22);
+    setMsgL(function () {
+      return '<span class="reveal">' + t('msgThisIsC') + '</span> ' + t('msgKeepIt');
+    });
   };
   if (c.state === 'running') sound();
   else c.resume().then(sound, sound);
@@ -808,13 +998,17 @@ function nextMelody(silent) {
     if (suivant && aisanceMoy() > 0.90) {
       /* l'oreille suit sans qu'on lui explique : on acquiert l'intervalle sans
          présentation, mais on joue quand même les mélodies qui devaient suivre */
+      /* l'oreille suit sans qu'on lui explique : acquis sans présentation,
+         mais on joue quand même les mélodies qui l'avaient déclenchée */
       S.known = Math.max(S.known, suivant);
-      S.consolIv = suivant; S.consolLeft = CONSOL;
+      S.queue = pendingMels.slice();
+      purgeAside();
       S.pending = 0; S.since = 0;
       const mel0 = pick();
       S.cur = { ref: mel0, pitches: transpose(mel0), durs: mel0.d };
     } else if (suivant) {
       S.drillIv = suivant; S.drillOk = 0; S.pending = 0; S.since = 0;
+      S.queueAfter = pendingMels.slice();
       S.cur = drillMelody(S.drillIv, 0);
     } else {
       const mel = pick();
@@ -826,11 +1020,11 @@ function nextMelody(silent) {
   $('mTitle').textContent = S.cur.ref.title || 'sans titre';
   /* pas de provenance affichée : la date, ou rien */
   $('mSrc').textContent = S.warm > 0 ? '' : (S.cur.ref.date || '');
-  $('sRuns').textContent = '—';        /* le compte des départs n'apparaît qu'une fois la phrase passée */
-  $('bPlay').textContent = 'Écouter';
+  if ($('sRuns')) $('sRuns').textContent = '—';        /* le compte des départs n'apparaît qu'une fois la phrase passée */
+  $('bPlay').textContent = t('listen');
   $('bPlay').disabled = false;
   renderSlots(false); renderMeter(); renderStats();
-  setMsg('Nouvelle mélodie, ' + S.cur.pitches.length + ' notes. Écoute-la puis rejoue-la d’un trait.');
+  setMsgL(function () { return t('msgNew', {n: S.cur.pitches.length}); });
   if (!silent) setTimeout(playMelody, 380);
 }
 function match(midi, i) { return midi === S.cur.pitches[i]; }
@@ -859,6 +1053,7 @@ function finish() {
   if (S.drillIv) return finishDrill();
   /* les deux premières écoutes sont gratuites, et la pénalité suivante est légère */
   S.since++; S.corpusDone++;
+  majIvEase(S.cur.pitches, ease);
   const effort = ease / (1 + 0.07 * Math.max(0, S.plays - 2));
   let delta;
   const brake = 1 - 0.5 * S.ceiling;            /* on avance plus finement en haut de l'échelle */
@@ -871,13 +1066,13 @@ function finish() {
   S.ceiling = clamp(S.ceiling + delta, START_CEIL, 1);
   S.done++; S.eases.push(ease); if (S.eases.length > 60) S.eases.shift();
   save(); renderSlots(true); renderMeter(); renderStats();
-  $('sRuns').textContent = S.runs + 1;
+  if ($('sRuns')) $('sRuns').textContent = S.runs + 1;
   const mel = S.cur.ref;
-  const verdict = S.runs === 0 ? 'D’un seul trait, du premier coup.'
-    : S.runs === 1 ? 'Passée au deuxième essai.'
-    : 'Passée après ' + (S.runs + 1) + ' départs.';
-  setMsg('<span class="reveal">' + verdict + '</span> Aisance ' + Math.round(ease * 100)
-    + ' % · difficulté ' + (delta >= 0 ? '+' : '') + (delta * 100).toFixed(2) + ' pt');
+  const verdict = S.runs === 0 ? t('v1') : S.runs === 1 ? t('v2')
+    : t('vN', {n: S.runs + 1});
+  setMsg('<span class="reveal">' + verdict + '</span> ' +
+    t('easeDiff', {e: Math.round(ease * 100),
+                   d: (delta >= 0 ? '+' : '') + (delta * 100).toFixed(2)}));
   const c = audio();
   if (c) { [0, 0.09, 0.18].forEach(function (t, i) { tone([60, 64, 67][i] + 12, t, 0.3, 0.12); }); }
   setTimeout(nextMelody, 1900);
@@ -891,14 +1086,16 @@ function finishDrill() {
   const passe = S.drillOk >= DRILL_NEEDED;
   if (passe) {
     S.known = Math.max(S.known, iv); S.drillIv = 0; S.drillOk = 0;
-    S.consolIv = iv; S.consolLeft = CONSOL;      /* on va la travailler tout de suite */
+    S.queue = (S.queueAfter || []).slice();      /* on rejoue ce qui l'avait déclenchée */
+    S.queueAfter = [];
+    purgeAside();
   }
   save(); renderSlots(true); renderMeter(); renderStats();
   if ($('sRuns')) $('sRuns').textContent = S.runs + 1;
   setMsg(passe
-    ? '<span class="reveal">' + (IV_NOMS[iv] || '') + ' est acquise.</span> On repart sur les mélodies.'
-    : (clean ? 'Juste. ' : 'Raté, on refait. ') + Math.min(S.drillOk + 1, DRILL_NEEDED) +
-      ' sur ' + DRILL_NEEDED + ' · ces exercices ne comptent pas dans le score');
+    ? '<span class="reveal">' + t('drillOk', {iv: t('ivs')[iv] || iv}) + '</span> ' + t('drillOk2')
+    : (clean ? t('drillRight') : t('drillWrong')) + ' ' +
+      t('drillCount', {k: Math.min(S.drillOk + 1, DRILL_NEEDED), t: DRILL_NEEDED}));
   const c = audio();
   if (c) [0, 0.09, 0.18].forEach(function (t, i) { tone([60, 64, 67][i] + 12, t, 0.3, 0.12); });
   setTimeout(nextMelody, passe ? 1900 : 1300);
@@ -911,19 +1108,16 @@ function finishWarm(ease, n) {
     S.warmHold++;
     if (S.warmHold >= 2) { S.warm = Math.min(WARM_MAX, S.warm + 1); S.warmHold = 0; }
   } else { S.warmHold = 0; if (S.warm > 1 && ease < 0.35) S.warm--; }
-  const step = clean
-    ? S.warmClean + ' sur ' + WARM_CLEAN_NEEDED + ' sans faute'
-    : 'sans faute : toujours ' + S.warmClean + ' sur ' + WARM_CLEAN_NEEDED;
+  const step = clean ? t('warmProg', {k: S.warmClean, t: WARM_CLEAN_NEEDED})
+                     : t('warmProgFail', {k: S.warmClean, t: WARM_CLEAN_NEEDED});
   S.done++; S.eases.push(ease); if (S.eases.length > 60) S.eases.shift();
   const over = S.warmClean >= WARM_CLEAN_NEEDED;
   if (over) S.warm = 0;
   save(); renderSlots(true); renderMeter(); renderStats();
   if ($('sRuns')) $('sRuns').textContent = S.runs + 1;
   if ($('sEase')) $('sEase').textContent = Math.round(ease * 100) + ' %';
-  setMsg(over
-    ? 'Amorce terminée. <span class="reveal">On passe au vrai répertoire.</span>'
-    : 'Trouvée en ' + S.played + (S.played > 1 ? ' notes' : ' note') + ' · aisance '
-      + Math.round(ease * 100) + ' % · ' + step);
+  setMsg(over ? t('warmDone') + ' <span class="reveal">' + t('warmDone2') + '</span>'
+              : t('warmFound', {n: S.played, e: Math.round(ease * 100)}) + ' · ' + step);
   const c = audio();
   if (c) [0, 0.09, 0.18].forEach(function (t, i) { tone([60, 64, 67][i] + 12, t, 0.3, 0.12); });
   setTimeout(nextMelody, over ? 2200 : 1500);
@@ -936,7 +1130,7 @@ function giveUp(reveal) {
   else S.ceiling = clamp(S.ceiling - 0.005, START_CEIL, 1);
   S.eases.push(0); if (S.eases.length > 60) S.eases.shift();
   save(); renderSlots(true); renderMeter(); renderStats();
-  setMsg(reveal ? 'La voilà, en clair. Difficulté −0,50 pt.' : 'Passée. Difficulté −0,50 pt.');
+  setMsg(reveal ? t('revealed') : t('skipped'));
   setTimeout(nextMelody, reveal ? 2600 : 1200);
 }
 
@@ -953,7 +1147,7 @@ function bindInput(id) {
       if (st === 0x90 && e.data[2] > 0) hit(e.data[1]);
     };
     $('midiStatus').className = 'status';
-    $('midiStatus').textContent = 'Connecté : ' + boundInput.name;
+    $('midiStatus').textContent = t('connected', {name: boundInput.name});
   }
 }
 function refreshInputs() {
@@ -961,9 +1155,9 @@ function refreshInputs() {
   const list = [];
   midiAccess.inputs.forEach(function (i) { list.push(i); });
   if (!list.length) {
-    sel.innerHTML = '<option>Aucun appareil</option>';
+    sel.innerHTML = '<option>' + t('noDevice') + '</option>';
     $('midiStatus').className = 'status warn';
-    $('midiStatus').textContent = 'Aucun clavier détecté. Branche-le puis recharge, ou joue au clavier d’ordinateur.';
+    $('midiStatus').textContent = t('midiNone');
     return;
   }
   list.forEach(function (i) {
@@ -973,15 +1167,15 @@ function refreshInputs() {
 }
 function initMIDI() {
   if (!navigator.requestMIDIAccess) {
-    $('midiSel').innerHTML = '<option>Non disponible</option>';
+    $('midiSel').innerHTML = '<option>' + t('notAvail') + '</option>';
     $('midiStatus').className = 'status warn';
-    $('midiStatus').textContent = 'Web MIDI n’est pas disponible ici. Ouvre le fichier dans Chrome, ou joue à la souris / au clavier.';
+    $('midiStatus').textContent = t('midiNoApi');
     return;
   }
   const slow = setTimeout(function () {
     if (!midiAccess) {
       $('midiStatus').className = 'status warn';
-      $('midiStatus').textContent = 'En attente de l’autorisation MIDI du navigateur.';
+      $('midiStatus').textContent = t('midiWait');
     }
   }, 2500);
   navigator.requestMIDIAccess({ sysex: false }).then(function (a) {
@@ -990,9 +1184,9 @@ function initMIDI() {
     a.onstatechange = refreshInputs;
   }).catch(function () {
     clearTimeout(slow);
-    $('midiSel').innerHTML = '<option>Refusé</option>';
+    $('midiSel').innerHTML = '<option>' + t('denied') + '</option>';
     $('midiStatus').className = 'status warn';
-    $('midiStatus').textContent = 'Accès MIDI refusé ou bloqué dans cette page. Le fichier ouvert en local fonctionne.';
+    $('midiStatus').textContent = t('midiDenied');
   });
 }
 
@@ -1012,28 +1206,64 @@ function updOct() {
   $('kbOct').textContent = noteName(typeOct) + noteOct(typeOct) + ' – ' + noteName(hi) + noteOct(hi);
 }
 
+
+/* ---------- application de la langue ---------- */
+function applyLang() {
+  document.documentElement.lang = LANG;
+  document.title = 'By Ear — Train Your Ear On The Repertoire';
+  document.querySelectorAll('[data-t]').forEach(function (el) {
+    el.textContent = t(el.getAttribute('data-t'));
+  });
+  document.querySelectorAll('.wk[data-c]').forEach(function (el) {
+    el.textContent = noteName(+el.dataset.m) + noteOct(+el.dataset.m);
+  });
+  updOct();
+  $('kbOctLabel').innerHTML = t('kbHint', {
+    w: '<kbd>q s d f g h j k</kbd>', b: '<kbd>z e t y u</kbd>' });
+  if (!boundInput && midiAccess === null) $('midiSel').innerHTML = '<option>' + t('searching') + '</option>';
+  const sel = $('langSel');
+  if (sel && !sel.options.length) {
+    LANGS.forEach(function (L) {
+      const o = document.createElement('option');
+      o.value = L.c; o.textContent = L.f + '  ' + L.n; sel.appendChild(o);
+    });
+  }
+  if (sel) sel.value = LANG;
+  if (msgFn) $('msg').innerHTML = msgFn();
+  if (S.cur) {
+    $('mTitle').textContent = S.cur.ref.title || '';
+    renderSlots(S.phase === 'done');
+  }
+  renderMeter(); renderStats();
+}
+function setLang(c) {
+  LANG = c;
+  try { localStorage.setItem('byear.lang', c); } catch (e) {}
+  applyLang();
+}
+function initLang() {
+  let c = null;
+  try { c = localStorage.getItem('byear.lang'); } catch (e) {}
+  if (!c) {
+    const nav = (navigator.language || 'en').toLowerCase();
+    for (let i = 0; i < LANGS.length; i++) if (nav.indexOf(LANGS[i].c) === 0) { c = LANGS[i].c; break; }
+  }
+  LANG = c || 'en';
+}
+
 /* ---------- wiring ---------- */
 document.querySelectorAll('button').forEach(function (b) {
   b.addEventListener('click', function () { b.blur(); });
 });
 $('bPlay').addEventListener('click', playMelody);
-$('bSkip').addEventListener('click', function () { giveUp(false); });
+if ($('bSkip')) $('bSkip').addEventListener('click', function () { giveUp(false); });
 $('bReveal').addEventListener('click', function () { giveUp(true); });
-/* outil de mise au point : fait comme si la mélodie avait été sortie
-   d'un seul trait, du premier coup. À retirer avant publication. */
-$('bGG').addEventListener('click', function () {
-  if (!S.cur || S.phase === 'done') return;
-  S.phase = 'playing';
-  const n = S.cur.pitches.length;
-  S.cursor = n; S.played = n; S.runs = 0;
-  if (!S.plays) S.plays = 1;
-  finish();
-});
+$('langSel').addEventListener('change', function (e) { setLang(e.target.value); });
 $('bRef').addEventListener('click', function () { audio(); playRef(0); });
 $('midiSel').addEventListener('change', function (e) { bindInput(e.target.value); });
 $('bReset').addEventListener('click', function () {
   S.ceiling = START_CEIL; S.startCeil = START_CEIL; S.done = 0; S.eases = []; S.recent = [];
-  S.warm = 1; S.warmHold = 0; S.warmClean = 0; S.known = 2; S.drillIv = 0; S.drillOk = 0; S.consolIv = 0; S.consolLeft = 0; S.corpusDone = 0; S.pending = 0; S.since = 99; S.lastNote = 60; refDone = false; warmLast = null; warmPrev = '';
+  S.warm = 1; S.warmHold = 0; S.warmClean = 0; S.known = 2; S.ivEase = {}; S.ivN = {}; S.drillIv = 0; S.drillOk = 0; S.aside = []; S.queue = []; S.queueAfter = []; S.corpusDone = 0; S.pending = 0; S.since = 99; S.lastNote = 60; refDone = false; warmLast = null; warmPrev = '';
   save(); doAnnounced = false; startSession();
 });
 
@@ -1048,15 +1278,46 @@ function startSession() {
   if (announceDo()) {
     setTimeout(playMelody, 2400);
   } else {
-    setMsg('Clique n’importe où pour lancer la séance.');
+    setMsgL(function () { return t('msgClick'); });
     document.addEventListener('pointerdown', go);
     document.addEventListener('keydown', go);
   }
 }
 
-load(); buildKB(); updOct(); renderMeter(); renderStats(); initMIDI(); startSession();
+let reflowT = null;
+window.addEventListener('resize', function () {
+  clearTimeout(reflowT);
+  reflowT = setTimeout(function () {
+    relayoutKB();
+    if (S.cur) renderSlots(S.phase === 'done');
+  }, 150);
+});
+
+/* les deux volets ne font qu'un : ouvrir ou fermer l'un fait l'autre.
+   ils démarrent toujours fermés au lancement de l'app. */
+const PANELS = ['panelMidi', 'panelSession']
+  .map(function (id) { return document.getElementById(id); })
+  .filter(Boolean);
+let panelRedoT = null;
+function setPanels(open) {
+  PANELS.forEach(function (d) { d.open = open; });
+  clearTimeout(panelRedoT);
+  const redo = function () { relayoutKB(); if (S.cur) renderSlots(S.phase === 'done'); };
+  setTimeout(redo, 60);
+  panelRedoT = setTimeout(redo, 340);
+}
+PANELS.forEach(function (d) {
+  const head = d.querySelector('summary');
+  if (head) head.addEventListener('click', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    setPanels(!d.open);
+  });
+});
+
+initLang(); load(); buildKB(); updOct(); applyLang(); renderMeter(); renderStats(); initMIDI(); startSession();
 
 </script>
+
 
 </body>
 </html>

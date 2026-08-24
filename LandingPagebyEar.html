@@ -1,0 +1,1014 @@
+<title>By Ear</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&amp;family=Archivo:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+/* ============ tokens ============ */
+:root{
+  --bg:#EFECE6;
+  --bg-deep:#E5E1D8;
+  --surface:#F9F7F3;
+  --surface-2:#E8E4DC;
+  --ink:#17141C;
+  --ink-2:#4C4657;
+  --ink-3:#7E7788;
+  --line:rgba(23,20,28,.13);
+  --line-soft:rgba(23,20,28,.07);
+  --accent:#4B2E86;
+  --accent-2:#6A46BE;
+  --accent-soft:rgba(75,46,134,.10);
+  --accent-glow:rgba(75,46,134,.28);
+  --on-accent:#FCFBF9;
+  --key-w:#FCFBF9;
+  --key-w-edge:rgba(23,20,28,.16);
+  --key-b:#1D1926;
+  --shadow-s:0 1px 2px rgba(23,20,28,.06),0 8px 24px -12px rgba(23,20,28,.18);
+  --shadow-l:0 2px 4px rgba(23,20,28,.05),0 30px 60px -30px rgba(23,20,28,.30);
+  --r:14px;
+  --maxw:1120px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131017;
+    --bg-deep:#0D0B11;
+    --surface:#1B1723;
+    --surface-2:#241F2F;
+    --ink:#F1EEF6;
+    --ink-2:#B9B2C6;
+    --ink-3:#8A8399;
+    --line:rgba(241,238,246,.15);
+    --line-soft:rgba(241,238,246,.08);
+    --accent:#A78CF5;
+    --accent-2:#C3AEFF;
+    --accent-soft:rgba(167,140,245,.15);
+    --accent-glow:rgba(167,140,245,.35);
+    --on-accent:#120F18;
+    --key-w:#DCD7E4;
+    --key-w-edge:rgba(13,11,17,.5);
+    --key-b:#0B0910;
+    --shadow-s:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+    --shadow-l:0 2px 4px rgba(0,0,0,.4),0 30px 60px -30px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --on-accent:#120F18;
+  --bg:#131017;
+  --bg-deep:#0D0B11;
+  --surface:#1B1723;
+  --surface-2:#241F2F;
+  --ink:#F1EEF6;
+  --ink-2:#B9B2C6;
+  --ink-3:#8A8399;
+  --line:rgba(241,238,246,.15);
+  --line-soft:rgba(241,238,246,.08);
+  --accent:#A78CF5;
+  --accent-2:#C3AEFF;
+  --accent-soft:rgba(167,140,245,.15);
+  --accent-glow:rgba(167,140,245,.35);
+  --key-w:#DCD7E4;
+  --key-w-edge:rgba(13,11,17,.5);
+  --key-b:#0B0910;
+  --shadow-s:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  --shadow-l:0 2px 4px rgba(0,0,0,.4),0 30px 60px -30px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",Arial,"Hiragino Sans","Yu Gothic","PingFang SC","Microsoft YaHei","Malgun Gothic",sans-serif;
+  font-size:17px;
+  line-height:1.6;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0;font-family:"Bodoni Moda","Didot","Times New Roman","Hiragino Mincho ProN","Yu Mincho","Songti SC","Noto Serif CJK SC","Nanum Myeongjo",serif;font-weight:400;text-wrap:balance;letter-spacing:-.01em;line-height:1.04}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-3);margin:0;
+}
+.lede{color:var(--ink-2);font-size:19px;line-height:1.55;max-width:60ch}
+.section{padding:112px 0;border-top:1px solid var(--line-soft)}
+.section-head{display:flex;flex-direction:column;gap:18px;margin-bottom:56px}
+.h2{font-size:clamp(34px,5vw,58px)}
+em{font-style:italic}
+
+/* ============ nav ============ */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--bg) 84%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-soft);
+}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:32px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:"Bodoni Moda",serif;font-size:22px;letter-spacing:-.015em}
+.brand-mark{display:flex;gap:1.5px;align-items:flex-end;height:20px}
+.brand-mark i{display:block;width:3px;height:20px;background:var(--ink);border-radius:0 0 1px 1px}
+.brand-mark i:nth-child(2),.brand-mark i:nth-child(4){height:12px;background:var(--accent)}
+.nav-links{display:flex;gap:28px;margin-left:auto;font-size:14.5px;color:var(--ink-2)}
+.nav-links a{text-decoration:none}
+.nav-links a:hover{color:var(--accent)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:"Archivo",sans-serif;font-size:15px;font-weight:500;
+  padding:12px 22px;border-radius:100px;text-decoration:none;border:1px solid transparent;
+  background:var(--accent);color:var(--on-accent);transition:transform .18s ease,background .18s ease;
+}
+.btn:hover{background:var(--accent-2);transform:translateY(-1px)}
+.btn-sm{padding:9px 18px;font-size:14px}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+
+/* ============ hero ============ */
+.hero{padding:88px 0 96px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:64px;align-items:center}
+.hero h1{font-size:clamp(46px,6.6vw,84px);letter-spacing:-.025em}
+.hero h1 em{color:var(--accent)}
+.hero-copy{display:flex;flex-direction:column;gap:26px;align-items:flex-start}
+.hero-sub{color:var(--ink-2);font-size:19px;line-height:1.55;max-width:34ch}
+.hero-cta{display:flex;flex-direction:column;gap:12px}
+.hero-note{font-size:13.5px;color:var(--ink-3)}
+.rule-keys{display:flex;gap:2px;align-items:flex-end;height:14px;opacity:.6}
+.rule-keys i{width:5px;height:14px;background:var(--ink-3);border-radius:0 0 1px 1px}
+.rule-keys i:nth-child(2n){height:8px;background:var(--accent)}
+
+/* ============ demo card ============ */
+.demo{
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;
+  box-shadow:var(--shadow-l);padding:24px;position:relative;overflow:hidden;
+}
+.demo::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:20px;
+  background:radial-gradient(120% 70% at 50% -20%,var(--accent-soft),transparent 60%);
+}
+.demo-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;position:relative;z-index:1}
+.demo-tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.2em;color:var(--ink-3)}
+.phase-rail{display:flex;gap:6px;flex-wrap:wrap}
+.phase{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  padding:5px 10px;border-radius:100px;color:var(--ink-3);border:1px solid var(--line-soft);
+  transition:color .25s ease,background .25s ease,border-color .25s ease;
+}
+.phase.on{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+
+.stage{position:relative;z-index:1;display:flex;flex-direction:column;gap:16px}
+.readout{
+  min-height:88px;border-radius:12px;background:var(--bg-deep);border:1px solid var(--line-soft);
+  padding:16px 18px;display:flex;flex-direction:column;justify-content:center;gap:10px;
+}
+.notes-row{display:flex;gap:7px;align-items:center;min-height:26px;flex-wrap:wrap}
+.note-pip{
+  width:9px;height:9px;border-radius:50%;background:var(--accent);
+  opacity:0;transform:scale(.4);transition:opacity .3s ease,transform .3s ease;
+}
+.note-pip.on{opacity:1;transform:scale(1)}
+.note-pip.ghost{background:var(--ink-3);opacity:.28}
+.readout-label{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.slot{display:grid;min-height:54px;align-items:center}
+.slot>*{grid-area:1 / 1}
+.hear-wave{display:flex;gap:5px;justify-content:space-between;align-items:center;height:40px;opacity:0;transition:opacity .35s ease}
+.hear-wave.on{opacity:1}
+.hear-wave i{flex:1 1 0;max-width:4px;height:10%;background:var(--accent);border-radius:2px;opacity:.55;transform-origin:center}
+.hear-wave.on i{animation:hear 1.15s ease-in-out infinite}
+@keyframes hear{0%,100%{height:12%}50%{height:var(--h,60%)}}
+.reveal-line{font-family:"Bodoni Moda","Hiragino Mincho ProN","Songti SC","Nanum Myeongjo",serif;font-size:21px;line-height:1.2;opacity:0;transition:opacity .4s ease}
+.reveal-line.on{opacity:1}
+.reveal-line span{font-family:"Archivo",sans-serif;font-size:13px;color:var(--ink-3);display:block;margin-top:4px;letter-spacing:.02em}
+.verdict{
+  display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  font-size:13px;font-weight:500;color:var(--accent);
+  background:var(--accent-soft);border:1px solid var(--accent);border-radius:100px;padding:5px 14px;
+  opacity:0;transform:translateY(4px);transition:opacity .3s ease,transform .3s ease;
+}
+.verdict.on{opacity:1;transform:none}
+
+/* ============ keyboard ============ */
+.kb{position:relative;width:100%;aspect-ratio:52/11;user-select:none}
+.kb-white{display:flex;gap:2px;height:100%}
+.kb .key{border-radius:0 0 5px 5px;transition:background .12s ease,box-shadow .12s ease}
+.key-w{flex:1 1 0;background:var(--key-w);border:1px solid var(--key-w-edge);border-top:none;position:relative}
+.key-b{
+  position:absolute;top:0;height:62%;width:calc(100% / 15 * .58);
+  transform:translateX(-50%);background:var(--key-b);border-radius:0 0 4px 4px;
+  box-shadow:0 3px 6px rgba(0,0,0,.35);
+}
+.kb-black{position:absolute;inset:0;pointer-events:none}
+.key-w.lit{background:color-mix(in srgb,var(--accent) 22%,var(--key-w));box-shadow:0 0 0 1px var(--accent),0 0 22px var(--accent-glow)}
+.key-b.lit{background:var(--accent);box-shadow:0 0 22px var(--accent-glow)}
+.key-w.ok{background:color-mix(in srgb,var(--accent) 38%,var(--key-w));box-shadow:inset 0 -3px 0 var(--accent)}
+.key-b.ok{background:var(--accent-2)}
+.kb-sm{aspect-ratio:52/9}
+
+/* ============ steps ============ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.step{display:flex;flex-direction:column;gap:14px}
+.step-n{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;color:var(--accent)}
+.step h3{font-size:22px}
+.step p{font-size:14.5px;color:var(--ink-2);line-height:1.5}
+.step-vis{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 12px 0;box-shadow:var(--shadow-s)}
+.step-vis .kb{margin-bottom:12px}
+.step-strip{display:flex;gap:5px;align-items:center;height:16px;margin-bottom:10px}
+.step-strip i{width:7px;height:7px;border-radius:50%;background:var(--ink-3);opacity:.25}
+.step-strip i.on{background:var(--accent);opacity:1}
+.step-strip .chk{font-size:12px;color:var(--accent);opacity:1;background:none;width:auto;height:auto;border-radius:0;font-weight:600}
+
+/* ============ cards ============ */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:30px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow-s);
+}
+.card h3{font-size:26px}
+.card p{color:var(--ink-2);font-size:15.5px;line-height:1.55}
+.card-icon{
+  width:34px;height:34px;border-radius:9px;background:var(--accent-soft);border:1px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:6px;
+}
+.tm{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    border:1px solid var(--accent);border-radius:100px;padding:6px 14px;display:inline-block}
+
+/* ============ engine flow ============ */
+.flow{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:center}
+.flow-chain{display:flex;flex-direction:column;gap:0}
+.chain-node{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-2);padding:12px 0;
+}
+.chain-arrow{width:1px;height:22px;background:var(--line);margin-left:6px;position:relative}
+.chain-arrow::after{content:"";position:absolute;bottom:0;left:-3px;width:7px;height:7px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
+.chain-node.accentnode{color:var(--accent)}
+.profile{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:28px;box-shadow:var(--shadow-s);display:flex;flex-direction:column;gap:20px;
+}
+.profile-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line-soft);padding-bottom:16px}
+.profile-head .t{font-family:"Bodoni Moda","Hiragino Mincho ProN","Songti SC","Nanum Myeongjo",serif;font-size:22px}
+.meter{display:grid;grid-template-columns:110px 1fr 48px;align-items:center;gap:14px}
+.meter .m-label{font-size:14px;color:var(--ink-2)}
+.meter .m-track{display:block;height:8px;border-radius:100px;background:var(--surface-2);overflow:hidden}
+.meter .m-fill{display:block;height:100%;border-radius:100px;background:var(--accent);width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+.meter .m-val{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.profile-foot{font-size:13.5px;color:var(--ink-3);border-top:1px solid var(--line-soft);padding-top:16px}
+.profile-foot b{color:var(--accent);font-weight:500}
+
+/* ============ progression ============ */
+.prog{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.prog-col{padding:30px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:16px;position:relative}
+.prog-col:last-child{border-right:none}
+.prog-col .lvl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.prog-col h3{font-size:28px}
+.prog-col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.prog-col li{font-size:15px;color:var(--ink-2);display:flex;gap:10px;align-items:flex-start}
+.prog-col li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:8px;flex:none;opacity:.55}
+.prog-bars{display:flex;gap:3px;align-items:flex-end;height:44px;margin-top:auto;padding-top:22px}
+.prog-bars i{flex:1;background:var(--accent);border-radius:2px 2px 0 0;opacity:.22}
+.range{display:flex;align-items:center;gap:20px;margin-top:30px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.range-line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),var(--accent));position:relative;min-width:60px}
+.range-line::before,.range-line::after{content:"";position:absolute;top:50%;width:7px;height:7px;border-radius:50%;transform:translateY(-50%)}
+.range-line::before{left:0;background:var(--ink-3);opacity:.55}
+.range-line::after{right:0;background:var(--accent)}
+.range b{color:var(--ink-2);font-weight:500}
+.prog-col:nth-child(2) .prog-bars i{opacity:.4}
+.prog-col:nth-child(3) .prog-bars i{opacity:.72}
+
+/* ============ repertoire ============ */
+.rep{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.rep-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px;
+  display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow-s);
+}
+.rep-card .names{display:flex;flex-wrap:wrap;gap:8px}
+.rep-card .names span{
+  font-size:14px;color:var(--ink-2);border:1px solid var(--line);border-radius:100px;padding:6px 14px;background:var(--bg);
+}
+.rep-card h3{font-size:30px}
+.big-quote{font-family:"Bodoni Moda","Hiragino Mincho ProN","Songti SC","Nanum Myeongjo",serif;font-size:clamp(28px,3.6vw,42px);line-height:1.15;max-width:22ch;text-wrap:balance}
+
+/* ============ app mock ============ */
+.exp{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center}
+.app{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-l);
+  padding:18px;display:flex;flex-direction:column;gap:14px;
+}
+.app-bar{display:flex;align-items:center;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.app-dots{display:flex;gap:4px}
+.app-dots i{width:6px;height:6px;border-radius:50%;background:var(--line);display:block}
+.app-dots i.on{background:var(--accent)}
+.app-panel{background:var(--bg-deep);border:1px solid var(--line-soft);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.wave{display:flex;gap:3px;align-items:center;height:38px}
+.wave i{flex:1;background:var(--accent);border-radius:2px;opacity:.35}
+.app-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;color:var(--ink-2)}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent);border-radius:100px;padding:4px 12px}
+.annot{display:flex;flex-direction:column;gap:26px}
+.annot-item{display:grid;grid-template-columns:34px 1fr;gap:16px;align-items:start}
+.annot-num{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-size:13px;
+}
+.annot-item h3{font-size:20px;margin-bottom:4px}
+.annot-item p{font-size:14.5px;color:var(--ink-2);line-height:1.5}
+
+/* ============ results ============ */
+.results{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.res-list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line);margin:0;padding:0;list-style:none}
+.res-list li{list-style:none;padding:18px 4px;border-bottom:1px solid var(--line);font-size:18px;display:flex;gap:14px;align-items:center}
+.res-mark{color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:12px}
+
+/* ============ pricing ============ */
+.pricing{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:840px;margin:0 auto}
+.plan{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px;
+  display:flex;flex-direction:column;gap:20px;box-shadow:var(--shadow-s);
+}
+.plan.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow-l)}
+.plan h3{font-size:30px}
+.plan .price{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.plan ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+.plan li{font-size:15px;color:var(--ink-2);display:flex;gap:11px;align-items:flex-start}
+.plan li::before{content:"♪";color:var(--accent);font-size:13px;line-height:1.6}
+.plan .btn{margin-top:auto}
+
+/* ============ faq ============ */
+.faq{max-width:760px;margin:0 auto;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  cursor:pointer;list-style:none;padding:22px 40px 22px 0;position:relative;
+  font-family:"Bodoni Moda",serif;font-size:21px;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:6px;top:20px;color:var(--accent);font-family:"Archivo",sans-serif;font-size:22px;font-weight:300;transition:transform .2s ease}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .a{padding:0 40px 24px 0;color:var(--ink-2);font-size:16px;max-width:62ch}
+
+/* ============ final ============ */
+.final{text-align:center;padding:130px 0;border-top:1px solid var(--line-soft)}
+.final h2{font-size:clamp(38px,6vw,72px);margin-bottom:32px}
+.final .btn{font-size:16px;padding:15px 30px}
+.footer{border-top:1px solid var(--line-soft);padding:38px 0}
+.footer-in{display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:14px;color:var(--ink-3)}
+.footer-links{display:flex;gap:22px}
+.footer-links a{text-decoration:none}
+.footer-links a:hover{color:var(--accent)}
+
+/* ============ reveal ============ */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ============ responsive ============ */
+@media (max-width:980px){
+  .hero-grid,.flow,.exp,.results{grid-template-columns:1fr;gap:44px}
+  .steps{grid-template-columns:1fr 1fr}
+  .cards-3{grid-template-columns:1fr}
+  .prog{grid-template-columns:1fr}
+  .prog-col{border-right:none;border-bottom:1px solid var(--line)}
+  .rep,.pricing{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .section{padding:82px 0}
+  .hero{padding:56px 0 72px}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .steps{grid-template-columns:1fr}
+  .wrap{padding:0 20px}
+  .nav-in{padding:12px 20px}
+  .meter{grid-template-columns:92px 1fr 42px;gap:10px}
+  .range{flex-direction:column;align-items:flex-start;gap:12px}
+  .range-line{width:100%;flex:none}
+  .demo{padding:16px;border-radius:16px}
+  .demo-top{flex-direction:column;align-items:flex-start;gap:12px}
+  .phase{font-size:10px;padding:4px 9px}
+  .kb{aspect-ratio:38/11}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  .rv{opacity:1;transform:none}
+}
+
+/* ============ language picker ============ */
+.lang{position:relative;flex:none}
+.lang-btn{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;
+  padding:8px 12px;border-radius:100px;border:1px solid var(--line);
+  background:transparent;color:var(--ink-2);
+  transition:color .16s ease,border-color .16s ease,background .16s ease;
+}
+.lang-btn:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.lang-flag{font-size:15px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.lang-caret{transition:transform .2s ease;opacity:.7}
+.lang-btn[aria-expanded="true"] .lang-caret{transform:rotate(180deg)}
+.lang-menu{
+  position:absolute;top:calc(100% + 10px);right:0;z-index:60;
+  margin:0;padding:6px;list-style:none;display:none;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow-l);min-width:344px;max-height:min(72vh,470px);overflow-y:auto;
+}
+.lang-menu.open{display:grid;grid-template-columns:1fr 1fr;gap:1px}
+.lang-menu li{margin:0}
+.lang-menu button{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:left;cursor:pointer;
+  padding:9px 11px;border:0;border-radius:9px;background:none;
+  font-family:"Archivo",sans-serif;font-size:14.5px;color:var(--ink-2);
+}
+.lang-menu button:hover{background:var(--accent-soft);color:var(--accent)}
+.lang-menu button[aria-selected="true"]{color:var(--accent);font-weight:500}
+.lang-menu button[aria-selected="true"]::after{content:"\2713";margin-left:auto;font-size:12px}
+
+/* ============ CJK typography ============ */
+html[lang="ja"] h1,html[lang="ja"] h2,html[lang="ja"] h3,
+html[lang="ko"] h1,html[lang="ko"] h2,html[lang="ko"] h3,
+html[lang="zh"] h1,html[lang="zh"] h2,html[lang="zh"] h3,
+html[lang="ja"] .big-quote,html[lang="ko"] .big-quote,html[lang="zh"] .big-quote,
+html[lang="ja"] .reveal-line,html[lang="ko"] .reveal-line,html[lang="zh"] .reveal-line{
+  letter-spacing:0;line-height:1.28;
+}
+html[lang="ja"] .hero h1,html[lang="ko"] .hero h1,html[lang="zh"] .hero h1{font-size:clamp(38px,5.2vw,64px)}
+html[lang="ja"] .h2,html[lang="ko"] .h2,html[lang="zh"] .h2{font-size:clamp(30px,4.2vw,48px)}
+html[lang="ja"] .final h2,html[lang="ko"] .final h2,html[lang="zh"] .final h2{font-size:clamp(32px,5vw,58px)}
+html[lang="ja"] .eyebrow,html[lang="ko"] .eyebrow,html[lang="zh"] .eyebrow,
+html[lang="ja"] .chain-node,html[lang="ko"] .chain-node,html[lang="zh"] .chain-node,
+html[lang="ja"] .range,html[lang="ko"] .range,html[lang="zh"] .range{letter-spacing:.1em}
+.footer-links{flex-wrap:wrap;justify-content:center}
+html[lang="ko"]{word-break:keep-all;overflow-wrap:break-word}
+/* langues aux mots longs : on laisse respirer le titre du hero */
+html[lang="it"] .hero h1,html[lang="pt"] .hero h1,html[lang="ro"] .hero h1{font-size:clamp(42px,5.5vw,72px)}
+@media (max-width:980px){.lang{margin-left:auto}}
+@media (max-width:600px){
+  .nav-in{gap:10px}
+  .brand{font-size:19px}
+  .nav .btn-sm{white-space:nowrap;padding:8px 13px;font-size:13px}
+  .lang-btn{padding:6px 9px;font-size:11px;gap:5px}
+  .lang-flag{font-size:13px}
+  .lang-menu{min-width:186px;max-height:62vh}
+  .lang-menu.open{grid-template-columns:1fr}
+}
+</style>
+<nav class="nav">
+<div class="nav-in">
+<a class="brand" href="#top">
+<span aria-hidden="true" class="brand-mark"><i></i><i></i><i></i><i></i><i></i></span>
+      By Ear
+    </a>
+<div class="nav-links">
+<a data-i18n="nav.1" href="#how">How it works</a>
+<a data-i18n="nav.2" href="#engine">Adaptive engine</a>
+<a data-i18n="nav.3" href="#repertoire">Repertoire</a>
+<a data-i18n="nav.4" href="#pricing">Pricing</a>
+</div>
+    <div class="lang" id="langPick">
+      <button class="lang-btn" id="langBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Language">
+        <span class="lang-flag" id="langFlag">🇬🇧</span><span class="lang-code" id="langCode">EN</span>
+        <svg class="lang-caret" width="9" height="6" viewBox="0 0 9 6" aria-hidden="true"><path d="M1 1l3.5 3.5L8 1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <ul class="lang-menu" id="langMenu" role="listbox" aria-label="Language"></ul>
+    </div>
+<a class="btn btn-sm" data-i18n="nav.5" href="#pricing">Start free</a>
+</div>
+</nav>
+<main id="top">
+<!-- ===== HERO ===== -->
+<section class="hero">
+<div class="wrap hero-grid">
+<div class="hero-copy">
+<p class="eyebrow" data-i18n="sec.1">By Ear</p>
+<h1 data-i18n-html="sec.2">Train your <em>ear</em>.<br/>One melody at a time.</h1>
+<p class="hero-sub" data-i18n="sec.3">Listen to a melody from the classical and traditional repertoire. Play it back. By Ear adapts your training to you.</p>
+<div class="hero-cta">
+<a class="btn" data-i18n="sec.4" href="#pricing">Start training for free</a>
+<p class="hero-note" data-i18n="sec.5">Any level. No theory. No guessing what to practice. Just listen and play.</p>
+</div>
+<div aria-hidden="true" class="rule-keys"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+<div class="demo" id="demo">
+<div class="demo-top">
+<span class="demo-tag" data-i18n="demo.1">SESSION · MELODY 12</span>
+<div class="phase-rail" id="rail">
+<span class="phase" data-i18n="demo.2" data-p="0">Listen</span>
+<span class="phase" data-i18n="demo.3" data-p="1">Play</span>
+<span class="phase" data-i18n="demo.4" data-p="2">Feedback</span>
+<span class="phase" data-i18n="demo.5" data-p="3">Next</span>
+</div>
+</div>
+<div class="stage">
+<div class="readout">
+<p class="readout-label" id="stageLabel">Listening</p>
+<div class="notes-row" id="pips"></div>
+<div class="slot">
+<div aria-hidden="true" class="hear-wave" id="hwave"></div>
+<p class="reveal-line" id="reveal"></p>
+</div>
+<span class="verdict" data-i18n="demo.6" id="verdict">✓ Perfect</span>
+</div>
+<div aria-hidden="true" class="kb" id="kbHero"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- ===== APP EXPERIENCE ===== -->
+<section class="section" id="experience">
+<div class="wrap">
+<div class="section-head">
+<p class="eyebrow" data-i18n="experience.1">Inside a session</p>
+<h2 class="h2" data-i18n="experience.2">How does it work?</h2>
+</div>
+<div class="exp">
+<div class="app rv">
+<div class="app-bar"><span data-i18n="experience.3">By Ear · Session</span><span aria-hidden="true" class="app-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></span></div>
+<div class="app-panel">
+<div class="app-row"><span data-i18n="experience.4">Melody 12 of 20</span><span class="chip" data-i18n="experience.5">ADAPTIVE</span></div>
+<div aria-hidden="true" class="wave"></div>
+<div class="app-row"><span data-i18n="experience.6">Replay ⟳</span><span data-i18n="experience.7">8 notes</span></div>
+</div>
+<div class="kb kb-sm" data-lit="72" data-ok="67,69,71"></div>
+<div class="app-panel">
+<div class="app-row"><span data-i18n="experience.8">Interval accuracy</span><span class="chip" data-i18n="experience.9">92%</span></div>
+<div class="app-row"><span data-i18n="experience.10">Melodic memory</span><span class="chip" data-i18n="experience.11">74%</span></div>
+</div>
+</div>
+<div class="annot">
+<div class="annot-item rv"><span class="annot-num" data-i18n="experience.12">1</span><div><h3 data-i18n="experience.13">Listen</h3><p data-i18n="experience.14">A melody is played once, or several times if you ask for it.</p></div></div>
+<div class="annot-item rv"><span class="annot-num" data-i18n="experience.15">2</span><div><h3 data-i18n="experience.16">Find the notes</h3><p data-i18n="experience.17">Play the melody back on the keyboard, on screen or on your MIDI keyboard.</p></div></div>
+<div class="annot-item rv"><span class="annot-num" data-i18n="experience.18">3</span><div><h3 data-i18n="experience.19">Get feedback</h3><p data-i18n="experience.20">Your performance is analysed instantly — pitch, intervals, memory, jumps.</p></div></div>
+<div class="annot-item rv"><span class="annot-num" data-i18n="experience.21">4</span><div><h3 data-i18n="experience.22">Keep going</h3><p data-i18n="experience.23">The next melody is chosen for you. You never have to decide what to practise.</p></div></div>
+</div>
+</div>
+</div>
+</section>
+<!-- ===== THE DIFFERENCE ===== -->
+<section class="section" id="difference">
+<div class="wrap">
+<div class="section-head">
+<p class="eyebrow" data-i18n="difference.1">The difference</p>
+<h2 class="h2" data-i18n-html="difference.2">Your ear is unique.<br/>Your training should be too.</h2>
+<p class="lede" data-i18n-html="difference.3">By Ear analyses how you perform and continuously adapts the melodies you receive. <span class="tm" style="margin-left:6px">Adaptive Ear Engine™</span></p>
+</div>
+<div class="cards-3">
+<div class="card rv">
+<div aria-hidden="true" class="card-icon" data-i18n="difference.4">◎</div>
+<h3 data-i18n="difference.5">Personalised</h3>
+<p data-i18n="difference.6">The right challenge for your current level — not a fixed curriculum somebody else designed.</p>
+</div>
+<div class="card rv">
+<div aria-hidden="true" class="card-icon" data-i18n="difference.7">◈</div>
+<h3 data-i18n="difference.8">Adaptive</h3>
+<p data-i18n="difference.9">Your strengths and weaknesses shape what comes next, melody after melody.</p>
+</div>
+<div class="card rv">
+<div aria-hidden="true" class="card-icon" data-i18n="difference.10">♪</div>
+<h3 data-i18n="difference.11">10,000+ melodies</h3>
+<p data-i18n="difference.12">Explore melodies from the classical and traditional repertoire, not generated exercises.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ===== ENGINE ===== -->
+<section class="section" id="engine">
+<div class="wrap flow">
+<div>
+<p class="eyebrow" data-i18n="engine.1" style="margin-bottom:18px">Adaptive Ear Engine™</p>
+<h2 class="h2" data-i18n="engine.2" style="margin-bottom:22px">It learns how you hear.</h2>
+<p class="lede" data-i18n="engine.3" style="margin-bottom:36px">Every melody you play gives By Ear more information about your ear. The Adaptive Ear Engine™ uses that information to continuously shape your training.</p>
+<div class="flow-chain">
+<span class="chain-node" data-i18n="engine.4">Your performance</span>
+<span aria-hidden="true" class="chain-arrow"></span>
+<span class="chain-node accentnode" data-i18n="engine.5">By Ear analyses it</span>
+<span aria-hidden="true" class="chain-arrow"></span>
+<span class="chain-node" data-i18n="engine.6">Your ear profile updates</span>
+<span aria-hidden="true" class="chain-arrow"></span>
+<span class="chain-node" data-i18n="engine.7">Next melodies selected</span>
+<span aria-hidden="true" class="chain-arrow"></span>
+<span class="chain-node accentnode" data-i18n="engine.8">You improve</span>
+</div>
+</div>
+<div class="profile rv" id="profile">
+<div class="profile-head">
+<span class="t" data-i18n="engine.9">Your ear profile</span>
+<span class="demo-tag" data-i18n="engine.10">UPDATED AFTER EVERY MELODY</span>
+</div>
+<div class="meter"><span class="m-label" data-i18n="engine.11">Pitch</span><span class="m-track"><span class="m-fill" data-v="82"></span></span><span class="m-val" data-i18n="engine.12">82%</span></div>
+<div class="meter"><span class="m-label" data-i18n="engine.13">Intervals</span><span class="m-track"><span class="m-fill" data-v="67"></span></span><span class="m-val" data-i18n="engine.14">67%</span></div>
+<div class="meter"><span class="m-label" data-i18n="engine.15">Memory</span><span class="m-track"><span class="m-fill" data-v="74"></span></span><span class="m-val" data-i18n="engine.16">74%</span></div>
+<div class="meter"><span class="m-label" data-i18n="engine.17">Melodic jumps</span><span class="m-track"><span class="m-fill" data-v="51"></span></span><span class="m-val" data-i18n="engine.18">51%</span></div>
+<p class="profile-foot" data-i18n-html="engine.19">Next melodies favour <b>wider intervals and larger jumps</b> — the two things your ear is still working out.</p>
+</div>
+</div>
+</section>
+<!-- ===== PROGRESSION ===== -->
+<section class="section" id="progression">
+<div class="wrap">
+<div class="section-head">
+<p class="eyebrow" data-i18n="progression.1">Progression</p>
+<h2 class="h2" data-i18n-html="progression.2">Never too easy.<br/>Never overwhelming.</h2>
+<p class="lede" data-i18n="progression.3">Difficulty moves with you, in small steps. You feel it as music getting more interesting — not as a level number going up.</p>
+</div>
+<div class="prog rv">
+<div class="prog-col">
+<span class="lvl" data-i18n="progression.4">Start</span>
+<h3 data-i18n="progression.5">Simple movement</h3>
+<ul><li data-i18n="progression.6">Steps and small intervals</li><li data-i18n="progression.7">Short phrases</li><li data-i18n="progression.8">One clear key centre</li></ul>
+<div aria-hidden="true" class="prog-bars"><i style="height:22%"></i><i style="height:30%"></i><i style="height:26%"></i><i style="height:34%"></i><i style="height:28%"></i><i style="height:36%"></i></div>
+</div>
+<div class="prog-col">
+<span class="lvl" data-i18n="progression.9">Develop</span>
+<h3 data-i18n="progression.10">Wider intervals</h3>
+<ul><li data-i18n="progression.11">Larger leaps</li><li data-i18n="progression.12">Longer, more complex phrases</li><li data-i18n="progression.13">Melodies that change direction</li></ul>
+<div aria-hidden="true" class="prog-bars"><i style="height:34%"></i><i style="height:52%"></i><i style="height:44%"></i><i style="height:64%"></i><i style="height:48%"></i><i style="height:70%"></i></div>
+</div>
+<div class="prog-col">
+<span class="lvl" data-i18n="progression.14">Challenge</span>
+<h3 data-i18n="progression.15">Chromatic &amp; wide</h3>
+<ul><li data-i18n="progression.16">Chromatic movement</li><li data-i18n="progression.17">Wide melodic jumps</li><li data-i18n="progression.18">Long melodies held in memory</li></ul>
+<div aria-hidden="true" class="prog-bars"><i style="height:58%"></i><i style="height:82%"></i><i style="height:66%"></i><i style="height:100%"></i><i style="height:74%"></i><i style="height:92%"></i></div>
+</div>
+</div>
+<div class="range rv">
+<span><b data-i18n="progression.19">Never played by ear</b></span>
+<span aria-hidden="true" class="range-line"></span>
+<span><b data-i18n="progression.20">Advanced musician</b></span>
+</div>
+</div>
+</section>
+<!-- ===== REPERTOIRE ===== -->
+<section class="section" id="repertoire">
+<div class="wrap">
+<div class="section-head">
+<p class="eyebrow" data-i18n="repertoire.1">Repertoire</p>
+<h2 class="h2" data-i18n="repertoire.2">Train with real music.</h2>
+<p class="lede" data-i18n="repertoire.3">You're not training with random exercises. You're training with music — thousands of melodies people have been playing for centuries.</p>
+</div>
+<div class="rep">
+<div class="rep-card rv">
+<p class="eyebrow" data-i18n="repertoire.4">Classical</p>
+<h3 data-i18n="repertoire.5">Themes you already half-know</h3>
+<div class="names"><span data-i18n="repertoire.6">Bach</span><span data-i18n="repertoire.7">Mozart</span><span data-i18n="repertoire.8">Beethoven</span><span data-i18n="repertoire.9">Schubert</span><span data-i18n="repertoire.10">Haydn</span><span data-i18n="repertoire.11">Chopin</span></div>
+</div>
+<div class="rep-card rv">
+<p class="eyebrow" data-i18n="repertoire.12">Traditional</p>
+<h3 data-i18n="repertoire.13">Melodies passed on by ear</h3>
+<div class="names"><span data-i18n="repertoire.14">Folk melodies</span><span data-i18n="repertoire.15">Traditional songs</span><span data-i18n="repertoire.16">Regional repertoire</span><span data-i18n="repertoire.17">Dance tunes</span></div>
+</div>
+</div>
+<p class="big-quote" data-i18n="repertoire.18" style="margin-top:48px">No score to read. Nothing to know in advance. Only the melody.</p>
+</div>
+</section>
+<!-- ===== RESULTS ===== -->
+<section class="section" id="results">
+<div class="wrap results">
+<div>
+<p class="eyebrow" data-i18n="results.1" style="margin-bottom:18px">What changes</p>
+<h2 class="h2" data-i18n-html="results.2">Hear it.<br/>Find it.<br/>Play it.</h2>
+</div>
+<ul class="res-list">
+<li data-i18n-html="results.3"><span class="res-mark">01</span>Hear melodies more clearly</li>
+<li data-i18n-html="results.4"><span class="res-mark">02</span>Recognise intervals naturally</li>
+<li data-i18n-html="results.5"><span class="res-mark">03</span>Build melodic memory</li>
+<li data-i18n-html="results.6"><span class="res-mark">04</span>Play what you hear with confidence</li>
+</ul>
+</div>
+</section>
+<!-- ===== PRICING ===== -->
+<section class="section" id="pricing">
+<div class="wrap">
+<div class="section-head" style="align-items:center;text-align:center">
+<p class="eyebrow" data-i18n="pricing.1">Pricing</p>
+<h2 class="h2" data-i18n="pricing.2">Start training your ear today.</h2>
+</div>
+<div class="pricing">
+<div class="plan rv">
+<h3 data-i18n="pricing.3">Free</h3>
+<p class="price" data-i18n="pricing.4">Always free</p>
+<ul>
+<li data-i18n="pricing.5">A daily set of 5 melodies</li>
+<li data-i18n="pricing.6">Personalised difficulty</li>
+<li data-i18n="pricing.7">Basic progress tracking</li>
+</ul>
+<a class="btn btn-ghost" data-i18n="pricing.8" href="byEar.html">Start for free</a>
+</div>
+<div class="plan featured rv">
+<h3 data-i18n="pricing.9">Premium</h3>
+<p class="price" data-i18n="pricing.10">Everything, unlimited</p>
+<ul>
+<li data-i18n="pricing.11">Unlimited training</li>
+<li data-i18n="pricing.12">Full Adaptive Ear Engine™</li>
+<li data-i18n="pricing.13">10,000+ melodies</li>
+<li data-i18n="pricing.14">Detailed progress</li>
+<li data-i18n="pricing.15">Full repertoire</li>
+</ul>
+<a class="btn" data-i18n="pricing.16" href="byEar.html">Go Premium</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ===== FAQ ===== -->
+<section class="section" id="faq">
+<div class="wrap">
+<div class="section-head" style="align-items:center;text-align:center">
+<p class="eyebrow" data-i18n="faq.1">Questions</p>
+<h2 class="h2" data-i18n="faq.2">Before you start.</h2>
+</div>
+<div class="faq">
+<details open=""><summary data-i18n="faq.3">Do I need to read music?</summary><p class="a" data-i18n="faq.4">No. By Ear is built around listening and playing. Nothing is written down, and you never have to name what you hear.</p></details>
+<details><summary data-i18n="faq.5">What do I play on?</summary><p class="a" data-i18n="faq.6">The on-screen keyboard, with your mouse, your touchscreen or your computer keys. If you plug in a MIDI keyboard, By Ear listens to that instead.</p></details>
+<details><summary data-i18n="faq.7">What level is it for?</summary><p class="a" data-i18n="faq.8">Every level. If you've never found a melody by ear, the first ones are three or four notes long. If you've been playing for years, the engine keeps raising the ceiling until the melodies are genuinely hard — nobody is stuck at a level.</p></details>
+<details><summary data-i18n="faq.9">What kind of music is included?</summary><p class="a" data-i18n="faq.10">Classical and traditional repertoire: thousands of melodies, from Bach themes to folk tunes.</p></details>
+<details><summary data-i18n="faq.11">How does the Adaptive Ear Engine™ work?</summary><p class="a" data-i18n="faq.12">It analyses your performance across several aspects of melodic hearing — pitch, intervals, memory, melodic jumps — and uses that profile to choose your next challenges.</p></details>
+</div>
+</div>
+</section>
+<!-- ===== FINAL ===== -->
+<section class="final">
+<div class="wrap">
+<h2 data-i18n="sec.6">Ready to train your ear?</h2>
+<a class="btn" data-i18n="sec.7" href="#pricing">Start for free</a>
+</div>
+</section>
+<footer class="footer">
+<div class="wrap footer-in">
+<span class="brand" style="font-size:19px"><span aria-hidden="true" class="brand-mark"><i></i><i></i><i></i><i></i><i></i></span>By Ear</span>
+<div class="footer-links"><a data-i18n="footer.1" href="#faq">FAQ</a><a data-i18n="footer.2" href="#pricing">Pricing</a><a data-i18n="footer.3" href="#top">Privacy</a><a data-i18n="footer.4" href="#top">Terms</a><a data-i18n="footer.5" href="#top">Contact</a></div>
+<span data-i18n="footer.6">Listen. Play. Improve.</span>
+</div>
+</footer>
+</main>
+<script>
+(function(){
+  var LANGS = [["en", "🇬🇧", "English"], ["fr", "🇫🇷", "Français"], ["de", "🇩🇪", "Deutsch"], ["es", "🇪🇸", "Español"], ["it", "🇮🇹", "Italiano"], ["pt", "🇵🇹", "Português"], ["nl", "🇳🇱", "Nederlands"], ["cs", "🇨🇿", "Čeština"], ["hu", "🇭🇺", "Magyar"], ["ro", "🇷🇴", "Română"], ["tr", "🇹🇷", "Türkçe"], ["ja", "🇯🇵", "日本語"], ["ko", "🇰🇷", "한국어"], ["zh", "🇨🇳", "简体中文"]];
+  var I18N  = {"en": {}, "cs": {"nav.1": "Jak to funguje", "nav.2": "Adaptivní systém", "nav.3": "Repertoár", "nav.4": "Ceník", "nav.5": "Začni zdarma", "sec.2": "Trénuj <em>sluch</em>.<br/>Melodii po melodii.", "sec.3": "Poslechni si melodii z klasického nebo lidového repertoáru. Najdi ji na klávesách. By Ear se přizpůsobí tobě.", "sec.4": "Trénuj zdarma", "sec.5": "Pro každou úroveň. Bez teorie. Bez hledání, co cvičit. Stačí poslouchat a hrát.", "demo.1": "LEKCE · MELODIE 12", "demo.2": "Poslech", "demo.3": "Hra", "demo.4": "Hodnocení", "demo.5": "Další", "demo.6": "✓ Přesně", "experience.1": "Průběh lekce", "experience.2": "Jak to funguje?", "experience.3": "By Ear · Lekce", "experience.4": "Melodie 12 z 20", "experience.5": "ADAPTIVNÍ", "experience.6": "Znovu ⟳", "experience.7": "8 tónů", "experience.8": "Přesnost intervalů", "experience.10": "Melodická paměť", "experience.13": "Poslouchej", "experience.14": "Melodie zazní jednou. Když chceš, klidně víckrát.", "experience.16": "Najdi tóny", "experience.17": "Najdi melodii na klaviatuře — na obrazovce, nebo na MIDI klávesách.", "experience.19": "Jak to šlo", "experience.20": "By Ear hru okamžitě rozebere — výšku tónů, intervaly, paměť i skoky.", "experience.22": "Pokračuj", "experience.23": "Další melodii vybere By Ear. Nemusíš řešit, co cvičit.", "difference.1": "V čem je rozdíl", "difference.2": "Každý slyší jinak.<br/>Každý trénuje jinak.", "difference.3": "By Ear sleduje, jak hraješ, a průběžně mění, co uslyšíš dál. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Na míru", "difference.6": "Přesně tak těžké, jak na to zrovna máš — žádné osnovy, které za tebe vymyslel někdo jiný.", "difference.8": "Adaptivní", "difference.9": "Co ti jde a co ne, rozhoduje o tom, co přijde dál. Melodii za melodií.", "difference.11": "10 000+ melodií", "difference.12": "Melodie z klasického i lidového repertoáru — ne cvičení z generátoru.", "engine.2": "Učí se, jak slyšíš.", "engine.3": "Každá zahraná melodie prozradí něco o tvém sluchu. Adaptive Ear Engine™ z toho skládá trénink, který sedí právě tobě.", "engine.4": "Jak hraješ", "engine.5": "By Ear to rozebere", "engine.6": "Profil sluchu se mění", "engine.7": "Vybere další melodie", "engine.8": "Zlepšuješ se", "engine.9": "Profil sluchu", "engine.10": "MĚNÍ SE PO KAŽDÉ MELODII", "engine.11": "Výška tónů", "engine.13": "Intervaly", "engine.15": "Paměť", "engine.17": "Melodické skoky", "engine.19": "Další melodie zamíří na <b>širší intervaly a větší skoky</b> — přesně tam, kde sluch ještě tápe.", "progression.1": "Postup", "progression.2": "Nikdy nuda.<br/>Nikdy přes hlavu.", "progression.3": "Obtížnost roste s tebou, po malých krocích. Nepoznáš to podle čísla úrovně, ale podle toho, že je hudba čím dál zajímavější.", "progression.4": "Začátek", "progression.5": "Jednoduchý pohyb", "progression.6": "Sekundové kroky a malé intervaly", "progression.7": "Krátké fráze", "progression.8": "Jedno jasné tónové centrum", "progression.9": "Rozvoj", "progression.10": "Širší intervaly", "progression.11": "Větší skoky", "progression.12": "Delší a složitější fráze", "progression.13": "Melodie, které mění směr", "progression.14": "Výzva", "progression.15": "Chromatika a velké skoky", "progression.16": "Chromatický pohyb", "progression.17": "Široké melodické skoky", "progression.18": "Dlouhé melodie, které udržíš v paměti", "progression.19": "Bez zkušeností s hrou podle sluchu", "progression.20": "Pokročilý hudebník", "repertoire.1": "Repertoár", "repertoire.2": "Hraj opravdovou hudbu.", "repertoire.3": "Žádná náhodná cvičení. Skutečná hudba — tisíce melodií, které lidé hrají už celá staletí.", "repertoire.4": "Klasika", "repertoire.5": "Témata, která máš v uchu", "repertoire.12": "Lidová hudba", "repertoire.13": "Melodie předávané podle sluchu", "repertoire.14": "Lidové melodie", "repertoire.15": "Tradiční písně", "repertoire.16": "Regionální repertoár", "repertoire.17": "Taneční melodie", "repertoire.18": "Žádné noty. Nic se neučíš dopředu. Jenom melodie.", "results.1": "Co se změní", "results.2": "Slyšíš.<br/>Najdeš.<br/>Hraješ.", "results.3": "<span class=\"res-mark\">01</span>Slyšet melodie jasněji", "results.4": "<span class=\"res-mark\">02</span>Poznat intervaly bez přemýšlení", "results.5": "<span class=\"res-mark\">03</span>Udržet v paměti delší melodie", "results.6": "<span class=\"res-mark\">04</span>Zahrát s jistotou, co slyšíš", "pricing.1": "Ceník", "pricing.2": "Začni trénovat sluch dnes.", "pricing.3": "Zdarma", "pricing.4": "Navždy zdarma", "pricing.5": "5 melodií každý den", "pricing.6": "Obtížnost na míru", "pricing.7": "Základní přehled o pokroku", "pricing.8": "Začni zdarma", "pricing.9": "Premium", "pricing.10": "Všechno bez omezení", "pricing.11": "Neomezený trénink", "pricing.12": "Adaptive Ear Engine™ naplno", "pricing.13": "10 000+ melodií", "pricing.14": "Podrobné statistiky", "pricing.15": "Celý repertoár", "pricing.16": "Chci Premium", "faq.1": "Otázky", "faq.2": "Než začneš.", "faq.3": "Musím umět noty?", "faq.4": "Ne. By Ear stojí na poslechu a hraní. Nic se nezapisuje a nemusíš umět pojmenovat, co slyšíš.", "faq.5": "Na co hraju?", "faq.6": "Na klaviatuře na obrazovce: myší, prstem nebo klávesnicí počítače. Když připojíš MIDI klávesy, By Ear poslouchá rovnou je.", "faq.7": "Pro jakou úroveň to je?", "faq.8": "Pro každou. Když je hraní podle sluchu novinka, první melodie mají tři čtyři tóny. Když hraješ roky, By Ear zvedá laťku dál, dokud melodie nejsou doopravdy těžké — nikdo neuvízne na jedné úrovni.", "faq.9": "Jakou hudbu uslyším?", "faq.10": "Klasický a lidový repertoár: tisíce melodií od Bachových témat po lidové písně.", "faq.11": "Jak funguje Adaptive Ear Engine™?", "faq.12": "Sleduje tvoji hru v několika směrech — výška tónů, intervaly, paměť, melodické skoky — a podle toho vybírá, co dostaneš dál.", "sec.6": "Jdeme trénovat sluch?", "sec.7": "Začni zdarma", "footer.1": "Časté dotazy", "footer.2": "Ceník", "footer.3": "Soukromí", "footer.4": "Podmínky", "footer.5": "Kontakt", "footer.6": "Poslouchej. Hraj. Zlepšuj se.", "demo.listening": "Poslech — hraje melodie", "demo.yourturn": "Teď ty — najdi ji na klávesách", "demo.complete": "Melodie sedí", "demo.choosing": "Vybírá se další melodie", "composer.traditional": "Lidová", "lang.label": "Jazyk"}, "de": {"nav.1": "So funktioniert's", "nav.2": "Die Engine", "nav.3": "Repertoire", "nav.4": "Preise", "nav.5": "Kostenlos starten", "sec.2": "Schule dein <em>Gehör</em>.<br/>Melodie für Melodie.", "sec.3": "Du hörst eine Melodie aus dem klassischen und traditionellen Repertoire. Du spielst sie nach. By Ear stellt sich dabei auf dein Gehör ein.", "sec.4": "Kostenlos trainieren", "sec.5": "Jedes Niveau. Keine Theorie. Du musst nicht überlegen, was dran ist. Einfach hören und spielen.", "demo.1": "SESSION · MELODIE 12", "demo.2": "Hören", "demo.3": "Spielen", "demo.4": "Feedback", "demo.5": "Weiter", "demo.6": "✓ Perfekt", "experience.1": "In der Session", "experience.2": "Wie läuft das ab?", "experience.3": "By Ear · Session", "experience.4": "Melodie 12 von 20", "experience.5": "ADAPTIV", "experience.6": "Nochmal ⟳", "experience.7": "8 Töne", "experience.8": "Intervallgenauigkeit", "experience.10": "Melodiegedächtnis", "experience.13": "Hören", "experience.14": "Eine Melodie erklingt – einmal, oder so oft du willst.", "experience.16": "Töne finden", "experience.17": "Spiel sie auf der Klaviatur nach – am Bildschirm oder auf deinem MIDI-Keyboard.", "experience.19": "Feedback bekommen", "experience.20": "By Ear hört mit und wertet sofort aus: Tonhöhe, Intervalle, Gedächtnis, Sprünge.", "experience.22": "Dranbleiben", "experience.23": "By Ear wählt die nächste Melodie. Du musst nie überlegen, was du üben sollst.", "difference.1": "Der Unterschied", "difference.2": "Dein Gehör ist einzigartig.<br/>Dein Training auch.", "difference.3": "By Ear hört zu, wie du spielst, und wählt die Melodien laufend neu. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Persönlich", "difference.6": "Genau die Herausforderung, die zu deinem Niveau passt – kein fester Lehrplan von der Stange.", "difference.8": "Adaptiv", "difference.9": "Deine Stärken und Schwächen bestimmen, was als Nächstes kommt. Melodie für Melodie.", "difference.11": "10.000+ Melodien", "difference.12": "Melodien aus dem klassischen und traditionellen Repertoire. Nichts davon ist am Rechner erzeugt.", "engine.2": "Sie hört, wie du hörst.", "engine.3": "Jede Melodie, die du spielst, verrät By Ear mehr über dein Gehör. Die Adaptive Ear Engine™ formt daraus dein Training.", "engine.4": "Du spielst", "engine.5": "By Ear hört mit", "engine.6": "Dein Gehörprofil wächst", "engine.7": "Nächste Melodien stehen fest", "engine.8": "Du wirst besser", "engine.9": "Dein Gehörprofil", "engine.10": "NACH JEDER MELODIE NEU", "engine.11": "Tonhöhe", "engine.13": "Intervalle", "engine.15": "Gedächtnis", "engine.17": "Sprünge", "engine.19": "Als Nächstes kommen <b>weite Intervalle und größere Sprünge</b> – genau da tut sich dein Gehör noch schwer.", "progression.1": "Steigerung", "progression.2": "Nie zu leicht.<br/>Nie zu viel.", "progression.3": "Die Schwierigkeit wächst mit dir, in kleinen Schritten. Du merkst es nicht an einer Zahl, sondern daran, dass die Musik spannender wird.", "progression.4": "Anfang", "progression.5": "Einfache Bewegung", "progression.6": "Schritte und kleine Intervalle", "progression.7": "Kurze Phrasen", "progression.8": "Ein klares tonales Zentrum", "progression.9": "Entwicklung", "progression.10": "Weite Intervalle", "progression.11": "Größere Sprünge", "progression.12": "Längere, komplexere Phrasen", "progression.13": "Melodien, die die Richtung wechseln", "progression.14": "Herausforderung", "progression.15": "Chromatisch & weit", "progression.16": "Chromatische Bewegung", "progression.17": "Weite Sprünge", "progression.18": "Lange Melodien, ganz aus dem Gedächtnis", "progression.19": "Noch nie nach Gehör gespielt", "progression.20": "Fortgeschritten", "repertoire.1": "Repertoire", "repertoire.2": "Übe an echter Musik.", "repertoire.3": "Keine zufällig erzeugten Übungen. Du übst an Musik, die seit Jahrhunderten gespielt wird – Tausende Melodien.", "repertoire.4": "Klassik", "repertoire.5": "Themen, die du halb im Ohr hast", "repertoire.12": "Tradition", "repertoire.13": "Von Ohr zu Ohr weitergegeben", "repertoire.14": "Volksweisen", "repertoire.15": "Überlieferte Lieder", "repertoire.16": "Regionales Repertoire", "repertoire.17": "Tanzmelodien", "repertoire.18": "Keine Noten. Kein Vorwissen. Nur die Melodie.", "results.1": "Was sich ändert", "results.2": "Hören.<br/>Finden.<br/>Spielen.", "results.3": "<span class=\"res-mark\">01</span>Melodien klarer hören", "results.4": "<span class=\"res-mark\">02</span>Intervalle wie von selbst erkennen", "results.5": "<span class=\"res-mark\">03</span>Melodiegedächtnis aufbauen", "results.6": "<span class=\"res-mark\">04</span>Sicher spielen, was du hörst", "pricing.1": "Preise", "pricing.2": "Schule dein Gehör. Ab heute.", "pricing.3": "Kostenlos", "pricing.4": "Dauerhaft kostenlos", "pricing.5": "Jeden Tag 5 Melodien", "pricing.6": "Schwierigkeit passt sich an", "pricing.7": "Fortschritt im Überblick", "pricing.8": "Kostenlos starten", "pricing.9": "Premium", "pricing.10": "Alles, ohne Limit", "pricing.11": "Training ohne Limit", "pricing.12": "Adaptive Ear Engine™ komplett", "pricing.13": "10.000+ Melodien", "pricing.14": "Fortschritt im Detail", "pricing.15": "Das ganze Repertoire", "pricing.16": "Premium holen", "faq.1": "Fragen", "faq.2": "Bevor du loslegst.", "faq.3": "Muss ich Noten lesen können?", "faq.4": "Nein. Bei By Ear geht es ums Hören und Spielen. Nichts steht auf Papier, und du musst nie benennen, was du hörst.", "faq.5": "Worauf spiele ich?", "faq.6": "Auf der Klaviatur am Bildschirm – mit Maus, Touchscreen oder Computertastatur. Steckst du ein MIDI-Keyboard an, hört By Ear auf das.", "faq.7": "Für welches Niveau ist das gedacht?", "faq.8": "Für jedes. Wer noch nie eine Melodie nach Gehör gefunden hat, beginnt mit drei oder vier Tönen. Wer seit Jahren spielt, merkt schnell: Nach oben ist offen. Die Melodien werden wirklich schwer, und niemand bleibt auf einem Niveau stecken.", "faq.9": "Welche Musik ist dabei?", "faq.10": "Klassisches und traditionelles Repertoire: Tausende Melodien, von Bach-Themen bis zur Volksweise.", "faq.11": "Wie arbeitet die Adaptive Ear Engine™?", "faq.12": "Sie hört auf mehrere Seiten deines melodischen Gehörs – Tonhöhe, Intervalle, Gedächtnis, Sprünge – und sucht danach die nächsten Melodien aus.", "sec.6": "Dann hör mal hin.", "sec.7": "Kostenlos starten", "footer.1": "FAQ", "footer.2": "Preise", "footer.3": "Datenschutz", "footer.4": "AGB", "footer.5": "Kontakt", "footer.6": "Hören. Spielen. Besser werden.", "demo.listening": "Zuhören – die Melodie läuft", "demo.yourturn": "Du bist dran – spiel sie nach", "demo.complete": "Melodie sitzt", "demo.choosing": "By Ear sucht die nächste Melodie", "composer.traditional": "Überliefert", "lang.label": "Sprache"}, "es": {"nav.1": "Cómo funciona", "nav.2": "Motor adaptativo", "nav.3": "Repertorio", "nav.4": "Precios", "nav.5": "Empieza gratis", "sec.2": "Educa el <em>oído</em>.<br/>Melodía a melodía.", "sec.3": "Escucha una melodía del repertorio clásico y tradicional. Sácala en el teclado. By Ear se ajusta a tu oído.", "sec.4": "Empieza a entrenar gratis", "sec.5": "Cualquier nivel. Sin teoría. Sin decidir qué practicar. Solo escuchar y tocar.", "demo.1": "SESIÓN · MELODÍA 12", "demo.2": "Escucha", "demo.3": "Toca", "demo.4": "Análisis", "demo.5": "Siguiente", "demo.6": "✓ Perfecto", "experience.1": "Dentro de una sesión", "experience.2": "¿Cómo funciona?", "experience.3": "By Ear · Sesión", "experience.4": "Melodía 12 de 20", "experience.5": "ADAPTATIVO", "experience.6": "Repetir ⟳", "experience.7": "8 notas", "experience.8": "Precisión de intervalos", "experience.10": "Memoria melódica", "experience.13": "Escucha", "experience.14": "Suena una melodía. Una vez, o las veces que quieras.", "experience.16": "Encuentra las notas", "experience.17": "Tócala en el teclado de la pantalla o en un teclado MIDI.", "experience.19": "Recibe el análisis", "experience.20": "By Ear analiza al instante lo que has tocado: altura, intervalos, memoria y saltos.", "experience.22": "Sigue adelante", "experience.23": "By Ear elige la siguiente melodía. Nunca tienes que decidir qué practicar.", "difference.1": "La diferencia", "difference.2": "Cada oído es único.<br/>Cada entrenamiento también.", "difference.3": "By Ear analiza cómo tocas y ajusta las melodías sobre la marcha. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "A tu medida", "difference.6": "El reto justo para el nivel de ahora, no un programa cerrado que diseñó otro.", "difference.8": "Adaptativo", "difference.9": "Lo que dominas y lo que se te resiste marcan qué suena después, melodía tras melodía.", "difference.11": "10.000+ melodías", "difference.12": "Explora melodías del repertorio clásico y tradicional, no ejercicios generados.", "engine.2": "Aprende cómo oyes tú.", "engine.3": "Cada melodía que tocas dice algo sobre tu oído. El Adaptive Ear Engine™ usa esa información y va ajustando el entrenamiento.", "engine.4": "Lo que tocas", "engine.5": "By Ear lo analiza", "engine.6": "El perfil se afina", "engine.7": "Cambian las melodías", "engine.8": "Oyes mejor", "engine.9": "Perfil de oído", "engine.10": "SE ACTUALIZA CON CADA MELODÍA", "engine.11": "Altura", "engine.13": "Intervalos", "engine.15": "Memoria", "engine.17": "Saltos melódicos", "engine.19": "Ahora vendrán más <b>intervalos amplios y saltos grandes</b>: justo lo que a tu oído todavía le cuesta.", "progression.1": "Progresión", "progression.2": "Ni te aburres.<br/>Ni te ahogas.", "progression.3": "La dificultad avanza contigo, poco a poco. No lo notas como un número que sube, sino como música cada vez más interesante.", "progression.4": "Inicio", "progression.5": "Movimiento simple", "progression.6": "Grados conjuntos e intervalos pequeños", "progression.7": "Frases cortas", "progression.8": "Una tonalidad clara", "progression.9": "Desarrollo", "progression.10": "Intervalos amplios", "progression.11": "Saltos más grandes", "progression.12": "Frases más largas y complejas", "progression.13": "Melodías que cambian de dirección", "progression.14": "Reto", "progression.15": "Cromático y amplio", "progression.16": "Movimiento cromático", "progression.17": "Saltos melódicos grandes", "progression.18": "Melodías largas de memoria", "progression.19": "Nunca has tocado de oído", "progression.20": "Músico avanzado", "repertoire.1": "Repertorio", "repertoire.2": "Música, no ejercicios.", "repertoire.3": "Aquí no hay ejercicios sueltos. Hay música: miles de melodías que llevan siglos sonando.", "repertoire.4": "Clásico", "repertoire.5": "Temas que ya te suenan", "repertoire.12": "Tradicional", "repertoire.13": "De oído en oído", "repertoire.14": "Melodías populares", "repertoire.15": "Canciones tradicionales", "repertoire.16": "Repertorio regional", "repertoire.17": "Música de baile", "repertoire.18": "Sin partitura. Sin nada que saber. Solo la melodía.", "results.1": "Qué cambia", "results.2": "Óyela.<br/>Búscala.<br/>Tócala.", "results.3": "<span class=\"res-mark\">01</span>Oyes las melodías con más claridad", "results.4": "<span class=\"res-mark\">02</span>Reconoces los intervalos sin pensar", "results.5": "<span class=\"res-mark\">03</span>Ganas memoria melódica", "results.6": "<span class=\"res-mark\">04</span>Tocas lo que oyes sin dudar", "pricing.1": "Precios", "pricing.2": "Empieza hoy a educar el oído.", "pricing.3": "Gratis", "pricing.4": "Gratis para siempre", "pricing.5": "5 melodías al día", "pricing.6": "Dificultad a tu medida", "pricing.7": "Seguimiento básico", "pricing.8": "Empieza gratis", "pricing.9": "Premium", "pricing.10": "Todo, sin límite", "pricing.11": "Entrenamiento sin límite", "pricing.12": "Adaptive Ear Engine™ completo", "pricing.13": "10.000+ melodías", "pricing.14": "Seguimiento detallado", "pricing.15": "Repertorio completo", "pricing.16": "Pasa a Premium", "faq.1": "Preguntas", "faq.2": "Antes de empezar.", "faq.3": "¿Hace falta saber solfeo?", "faq.4": "No. Aquí todo es escuchar y tocar. No hay nada escrito y nunca tienes que ponerle nombre a lo que oyes.", "faq.5": "¿Dónde toco?", "faq.6": "En el teclado de la pantalla: con el ratón, con los dedos o con las teclas del ordenador. Si conectas un teclado MIDI, By Ear escucha ese.", "faq.7": "¿Para qué nivel es?", "faq.8": "Para todos. Si nunca has sacado una melodía de oído, las primeras tienen tres o cuatro notas. Si llevas años tocando, el motor sube el techo hasta que las melodías cuestan de verdad: aquí nadie se queda estancado.", "faq.9": "¿Qué música hay?", "faq.10": "Repertorio clásico y tradicional: miles de melodías, desde temas de Bach hasta canciones populares.", "faq.11": "¿Cómo funciona el Adaptive Ear Engine™?", "faq.12": "Analiza cómo tocas en varios frentes del oído melódico —altura, intervalos, memoria y saltos melódicos— y con ese perfil elige el siguiente reto.", "sec.6": "¿Empezamos?", "sec.7": "Empieza gratis", "footer.1": "FAQ", "footer.2": "Precios", "footer.3": "Privacidad", "footer.4": "Condiciones", "footer.5": "Contacto", "footer.6": "Escucha. Toca. Mejora.", "demo.listening": "Suena la melodía", "demo.yourturn": "Tu turno — sácala de oído", "demo.complete": "Melodía resuelta", "demo.choosing": "Buscando la siguiente melodía", "composer.traditional": "Tradicional", "lang.label": "Idioma"}, "fr": {"nav.1": "Le principe", "nav.2": "Moteur adaptatif", "nav.3": "Répertoire", "nav.4": "Tarifs", "nav.5": "Commencer", "sec.2": "Travaille ton <em>oreille</em>.<br/>Une mélodie à la fois.", "sec.3": "Une mélodie du répertoire classique ou traditionnel. Tu l’écoutes, tu la retrouves au clavier. By Ear règle la suite sur ton oreille.", "sec.4": "S’entraîner gratuitement", "sec.5": "Tous niveaux. Aucune théorie. Rien à choisir : tu écoutes, tu joues.", "demo.1": "SÉANCE · MÉLODIE 12", "demo.2": "Écoute", "demo.3": "Réponse", "demo.4": "Analyse", "demo.5": "Suite", "demo.6": "✓ Parfait", "experience.1": "Dans une séance", "experience.2": "Comment ça se passe ?", "experience.3": "By Ear · Séance", "experience.4": "Mélodie 12 sur 20", "experience.5": "ADAPTATIF", "experience.6": "Réécouter ⟳", "experience.7": "8 notes", "experience.8": "Justesse des intervalles", "experience.10": "Mémoire mélodique", "experience.13": "Écouter", "experience.14": "Une mélodie passe. Une fois, ou autant de fois que tu veux.", "experience.16": "Retrouver les notes", "experience.17": "Rejoue-la au clavier : celui de l’écran, ou ton clavier MIDI.", "experience.19": "Comprendre", "experience.20": "Ce que tu viens de jouer est analysé aussitôt : hauteur, intervalles, mémoire, sauts.", "experience.22": "Continuer", "experience.23": "La mélodie suivante arrive toute seule. Tu n’as jamais à choisir quoi travailler.", "difference.1": "La différence", "difference.2": "Ton oreille est unique.<br/>Ton entraînement aussi.", "difference.3": "By Ear apprend ta façon d’entendre et ajuste en continu les mélodies qu’il te propose. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Sur mesure", "difference.6": "Le bon niveau de difficulté, maintenant. Pas un programme écrit d’avance pour quelqu’un d’autre.", "difference.8": "Adaptatif", "difference.9": "Ce que tu réussis et ce qui résiste dessinent la suite, mélodie après mélodie.", "difference.11": "10 000+ mélodies", "difference.12": "Du répertoire classique et traditionnel, pas des exercices fabriqués.", "engine.2": "Il apprend ton oreille.", "engine.3": "Chaque mélodie que tu joues en dit un peu plus sur ton oreille. L’Adaptive Ear Engine™ s’en sert pour ajuster ton entraînement, séance après séance.", "engine.4": "Tu joues", "engine.5": "By Ear analyse", "engine.6": "Ton profil évolue", "engine.7": "Les mélodies s’ajustent", "engine.8": "Tu progresses", "engine.9": "Ton profil d’oreille", "engine.10": "MIS À JOUR À CHAQUE MÉLODIE", "engine.11": "Hauteur", "engine.13": "Intervalles", "engine.15": "Mémoire", "engine.17": "Sauts mélodiques", "engine.19": "Les prochaines mélodies insisteront sur <b>les intervalles larges et les grands sauts</b> — ce qui résiste encore à ton oreille.", "progression.1": "Progression", "progression.2": "Jamais trop facile.<br/>Jamais hors de portée.", "progression.3": "La difficulté avance avec toi, par petits pas. Ce n’est pas un niveau qui monte : c’est la musique qui devient plus riche.", "progression.4": "Premiers pas", "progression.5": "Ligne simple", "progression.6": "Degrés conjoints, petits intervalles", "progression.7": "Phrases courtes", "progression.8": "Une tonalité claire", "progression.9": "Développement", "progression.10": "Intervalles plus larges", "progression.11": "Sauts plus amples", "progression.12": "Phrases plus longues, plus complexes", "progression.13": "Des mélodies qui changent de cap", "progression.14": "Défi", "progression.15": "Chromatismes et écarts", "progression.16": "Mouvements chromatiques", "progression.17": "Grands sauts mélodiques", "progression.18": "De longues mélodies à retenir", "progression.19": "Jamais joué d’oreille", "progression.20": "Musicien confirmé", "repertoire.1": "Répertoire", "repertoire.2": "De la vraie musique.", "repertoire.3": "Pas des exercices tirés au hasard : de la musique. Des milliers de mélodies que l’on joue depuis des siècles.", "repertoire.4": "Classique", "repertoire.5": "Des thèmes déjà dans ton oreille", "repertoire.12": "Traditionnel", "repertoire.13": "D’oreille en oreille", "repertoire.14": "Airs populaires", "repertoire.15": "Chansons traditionnelles", "repertoire.16": "Répertoires régionaux", "repertoire.17": "Airs à danser", "repertoire.18": "Aucune partition. Rien à savoir d’avance. La mélodie, c’est tout.", "results.1": "Ce qui change", "results.2": "Entendre.<br/>Retrouver.<br/>Jouer.", "results.3": "<span class=\"res-mark\">01</span>Entendre les mélodies plus nettement", "results.4": "<span class=\"res-mark\">02</span>Reconnaître les intervalles sans y penser", "results.5": "<span class=\"res-mark\">03</span>Développer ta mémoire mélodique", "results.6": "<span class=\"res-mark\">04</span>Jouer ce que tu entends, sans hésiter", "pricing.1": "Tarifs", "pricing.2": "Ça commence aujourd’hui.", "pricing.3": "Gratuit", "pricing.4": "Pour toujours", "pricing.5": "5 mélodies par jour", "pricing.6": "Difficulté sur mesure", "pricing.7": "Suivi simple", "pricing.8": "Commencer gratuitement", "pricing.9": "Premium", "pricing.10": "Tout, sans limite", "pricing.11": "Entraînement illimité", "pricing.12": "Adaptive Ear Engine™ complet", "pricing.13": "10 000+ mélodies", "pricing.14": "Suivi détaillé", "pricing.15": "Tout le répertoire", "pricing.16": "Passer au Premium", "faq.1": "Questions", "faq.2": "Avant de te lancer.", "faq.3": "Faut-il savoir lire la musique ?", "faq.4": "Non. Ici, on écoute et on joue. Rien n’est écrit, et tu n’as jamais à mettre un nom sur ce que tu entends.", "faq.5": "Sur quoi jouer ?", "faq.6": "Le clavier à l’écran : à la souris, au doigt, ou avec les touches de ton ordinateur. Et si tu branches un clavier MIDI, By Ear l’écoute directement.", "faq.7": "Pour quel niveau ?", "faq.8": "Tous. Si tu n’as jamais relevé une mélodie d’oreille, les premières font trois ou quatre notes. Si tu joues depuis des années, le moteur monte le plafond jusqu’à ce que ça devienne vraiment difficile. Personne ne plafonne.", "faq.9": "Quelle musique entend-on ?", "faq.10": "Le répertoire classique et traditionnel : des milliers de mélodies, des thèmes de Bach aux airs populaires.", "faq.11": "Comment fonctionne l’Adaptive Ear Engine™ ?", "faq.12": "Il analyse ton jeu sous plusieurs angles — hauteur, intervalles, mémoire, sauts mélodiques — et se sert de ce profil pour choisir tes prochaines mélodies.", "sec.6": "On commence ?", "sec.7": "Commencer gratuitement", "footer.1": "FAQ", "footer.2": "Tarifs", "footer.3": "Confidentialité", "footer.4": "CGU", "footer.5": "Contact", "footer.6": "Écoute. Joue. Progresse.", "demo.listening": "Écoute — la mélodie se joue", "demo.yourturn": "À toi — retrouve-la", "demo.complete": "Mélodie trouvée", "demo.choosing": "By Ear choisit la suivante", "composer.traditional": "Traditionnel", "lang.label": "Langue"}, "hu": {"nav.1": "Hogyan működik", "nav.2": "Adaptív motor", "nav.3": "Repertoár", "nav.4": "Árak", "nav.5": "Kezdd ingyen", "sec.2": "Fejleszd a <em>hallásod</em>.<br/>Dallamról dallamra.", "sec.3": "Szól egy dallam a klasszikus vagy a népzenei repertoárból. Játszd vissza. A By Ear pedig hozzád igazítja a gyakorlást.", "sec.4": "Vágj bele ingyen", "sec.5": "Bármilyen szinten. Elmélet nélkül. Nem kell kitalálnod, mit gyakorolj — csak hallgasd meg és játszd vissza.", "demo.1": "GYAKORLÁS · 12. DALLAM", "demo.2": "Hallgasd", "demo.3": "Játszd", "demo.4": "Visszajelzés", "demo.5": "Tovább", "demo.6": "✓ Hibátlan", "experience.1": "Egy gyakorlás belülről", "experience.2": "Hogyan működik?", "experience.3": "By Ear · Gyakorlás", "experience.4": "12. dallam a 20-ból", "experience.5": "ADAPTÍV", "experience.6": "Újra ⟳", "experience.7": "8 hang", "experience.8": "Hangközök pontossága", "experience.10": "Dallamemlékezet", "experience.13": "Hallgasd meg", "experience.14": "A dallam egyszer szólal meg. Ha kéred, többször is.", "experience.16": "Keresd ki a hangokat", "experience.17": "Játszd vissza a dallamot a képernyős billentyűzeten vagy MIDI-billentyűzeten.", "experience.19": "Nézd, hogy ment", "experience.20": "A By Ear azonnal elemzi, hogyan játszottad — hangmagasság, hangközök, emlékezet, ugrások.", "experience.22": "Menj tovább", "experience.23": "A következő dallamot a By Ear választja ki. Neked nem kell eldöntened, mit gyakorolj.", "difference.1": "A különbség", "difference.2": "A hallásod egyedi.<br/>A gyakorlásod is legyen az.", "difference.3": "A By Ear elemzi, hogyan játszol, és folyamatosan ehhez igazítja a soron következő dallamokat. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Személyre szabott", "difference.6": "Mindig a szintedhez mért kihívás — nem előre gyártott tanmenet, amit valaki más állított össze.", "difference.8": "Alkalmazkodik", "difference.9": "Az erősségeid és a gyengéid döntik el, mi jön ezután — dallamról dallamra.", "difference.11": "10 000+ dallam", "difference.12": "Valódi dallamok a klasszikus és a népzenei repertoárból, nem generált gyakorlatok.", "engine.2": "Megtanulja, hogyan hallasz.", "engine.3": "Minden dallam, amit visszajátszol, elárul valamit a hallásodról. Az Adaptive Ear Engine™ ebből építi tovább a gyakorlást.", "engine.4": "Ahogy játszol", "engine.5": "A By Ear elemzi", "engine.6": "Frissül a hallásprofil", "engine.7": "Új dallamokat választ", "engine.8": "Fejlődsz", "engine.9": "Hallásprofil", "engine.10": "MINDEN DALLAM UTÁN FRISSÜL", "engine.11": "Hangmagasság", "engine.13": "Hangközök", "engine.15": "Emlékezet", "engine.17": "Dallamugrások", "engine.19": "A következő dallamokban <b>tágabb hangközök és nagyobb ugrások</b> várnak — most ez a kettő megy a legnehezebben.", "progression.1": "Fejlődés", "progression.2": "Sosem túl könnyű.<br/>Sosem túl sok.", "progression.3": "A nehézség kis lépésekben mozdul veled. Nem szintszám nő, hanem a zene lesz érdekesebb.", "progression.4": "Indulás", "progression.5": "Egyszerű dallammozgás", "progression.6": "Lépések és kis hangközök", "progression.7": "Rövid motívumok", "progression.8": "Világos hangnemi központ", "progression.9": "Építkezés", "progression.10": "Tágabb hangközök", "progression.11": "Nagyobb ugrások", "progression.12": "Hosszabb, összetettebb dallamsorok", "progression.13": "Irányt váltó dallamok", "progression.14": "Kihívás", "progression.15": "Kromatika és nagy ugrások", "progression.16": "Kromatikus mozgás", "progression.17": "Tág dallamugrások", "progression.18": "Hosszú dallamok fejben tartva", "progression.19": "Még sosem játszottál hallás után", "progression.20": "Gyakorlott zenész", "repertoire.1": "Repertoár", "repertoire.2": "Igazi zenén gyakorolj.", "repertoire.3": "Itt nem gyakorlatok szólnak, hanem zene: több ezer dallam, amit évszázadok óta játszanak az emberek.", "repertoire.4": "Klasszikus", "repertoire.5": "Témák, amelyek ismerősen csengenek", "repertoire.12": "Népzene", "repertoire.13": "Szájhagyomány útján", "repertoire.14": "Népdalok", "repertoire.15": "Hagyományos dalok", "repertoire.16": "Tájegységek repertoárja", "repertoire.17": "Táncdallamok", "repertoire.18": "Nincs kotta. Nincs előismeret. Csak a dallam.", "results.1": "Mi változik", "results.2": "Halld meg.<br/>Keresd ki.<br/>Játszd el.", "results.3": "<span class=\"res-mark\">01</span>Tisztábban hallod a dallamokat", "results.4": "<span class=\"res-mark\">02</span>Magától felismered a hangközöket", "results.5": "<span class=\"res-mark\">03</span>Erősödik a dallamemlékezeted", "results.6": "<span class=\"res-mark\">04</span>Magabiztosan játszod, amit hallasz", "pricing.1": "Árak", "pricing.2": "Kezdd el ma a hallásfejlesztést.", "pricing.3": "Ingyenes", "pricing.4": "Örökre ingyenes", "pricing.5": "Napi 5 dallam", "pricing.6": "Személyre szabott nehézség", "pricing.7": "Alap fejlődéskövetés", "pricing.8": "Kezdd ingyen", "pricing.9": "Premium", "pricing.10": "Minden, korlátlanul", "pricing.11": "Korlátlan gyakorlás", "pricing.12": "Teljes Adaptive Ear Engine™", "pricing.13": "10 000+ dallam", "pricing.14": "Részletes fejlődéskövetés", "pricing.15": "A teljes repertoár", "pricing.16": "Válts Premiumra", "faq.1": "Kérdések", "faq.2": "Mielőtt belevágsz.", "faq.3": "Kell tudnom kottát olvasni?", "faq.4": "Nem. A By Earben hallgatsz és játszol. Semmi nincs leírva, és soha nem kell megnevezned, amit hallasz.", "faq.5": "Min játszom?", "faq.6": "A képernyős billentyűzeten: egérrel, érintőképernyőn vagy a gép billentyűivel. Ha MIDI-billentyűzetet csatlakoztatsz, a By Ear azt hallgatja.", "faq.7": "Milyen szinten kell lennem?", "faq.8": "Bármilyenen. Ha még sosem kerestél ki dallamot hallás után, az első dallamok három-négy hangból állnak. Ha évek óta játszol, a motor addig emeli a lécet, amíg a dallamok tényleg nehézzé nem válnak — egy szinten sem ragadsz be.", "faq.9": "Milyen zenét hallok benne?", "faq.10": "Klasszikus és népzenei repertoárt: több ezer dallamot, Bach-témáktól a népdalokig.", "faq.11": "Hogyan működik az Adaptive Ear Engine™?", "faq.12": "Elemzi, hogyan játszol, a dallamhallás több szempontja szerint — hangmagasság, hangközök, emlékezet, dallamugrások —, és ebből a profilból választja ki a következő kihívásokat.", "sec.6": "Belevágsz?", "sec.7": "Kezdd ingyen", "footer.1": "GYIK", "footer.2": "Árak", "footer.3": "Adatvédelem", "footer.4": "Feltételek", "footer.5": "Kapcsolat", "footer.6": "Hallgasd. Játszd. Fejlődj.", "demo.listening": "Most szól a dallam", "demo.yourturn": "Te jössz — játszd vissza", "demo.complete": "Megvan a dallam", "demo.choosing": "Kiválasztjuk a következő dallamot", "composer.traditional": "Népzene", "lang.label": "Nyelv"}, "it": {"nav.1": "Come funziona", "nav.2": "Motore adattivo", "nav.3": "Repertorio", "nav.4": "Prezzi", "nav.5": "Inizia gratis", "sec.2": "Allena l'<em>orecchio</em>.<br/>Melodia dopo melodia.", "sec.3": "Ascolta una melodia del repertorio classico e tradizionale. Ritrovala sulla tastiera. By Ear adatta l'allenamento a come suoni.", "sec.4": "Allenati gratis", "sec.5": "Per qualsiasi livello. Niente teoria. Non devi decidere cosa studiare: ascolti e suoni.", "demo.1": "SESSIONE · MELODIA 12", "demo.2": "Ascolta", "demo.3": "Suona", "demo.4": "Feedback", "demo.5": "Avanti", "demo.6": "✓ Perfetto", "experience.1": "Dentro una sessione", "experience.2": "Come funziona?", "experience.3": "By Ear · Sessione", "experience.4": "Melodia 12 di 20", "experience.5": "ADATTIVO", "experience.6": "Riascolta ⟳", "experience.7": "8 note", "experience.8": "Precisione intervalli", "experience.10": "Memoria melodica", "experience.13": "Ascolta", "experience.14": "La melodia suona una volta. Se ti serve, la riascolti.", "experience.16": "Ritrova le note", "experience.17": "Ritrova la melodia sulla tastiera a schermo o su una tastiera MIDI.", "experience.19": "Com'è andata", "experience.20": "By Ear analizza subito come hai suonato: altezza, intervalli, memoria, salti.", "experience.22": "Continua", "experience.23": "La prossima melodia la sceglie By Ear. Non devi mai chiederti cosa studiare.", "difference.1": "La differenza", "difference.2": "Ogni orecchio è diverso.<br/>Anche ogni allenamento.", "difference.3": "By Ear ascolta come suoni e sceglie di conseguenza le melodie successive. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Su misura", "difference.6": "La sfida giusta per il livello di adesso, non un percorso uguale per tutti.", "difference.8": "Adattivo", "difference.9": "Quello che ti riesce e quello che ancora ti sfugge decidono la melodia successiva.", "difference.11": "10.000+ melodie", "difference.12": "Melodie vere del repertorio classico e tradizionale, non esercizi generati al computer.", "engine.2": "Impara come ascolti.", "engine.3": "Ogni melodia che suoni dice qualcosa in più sul tuo orecchio. L'Adaptive Ear Engine™ se ne serve per calibrare l'allenamento, passo dopo passo.", "engine.4": "Come suoni", "engine.5": "By Ear analizza", "engine.6": "Il profilo si aggiorna", "engine.7": "Nuove melodie scelte", "engine.8": "Migliori", "engine.9": "Profilo d'ascolto", "engine.10": "SI AGGIORNA A OGNI MELODIA", "engine.11": "Altezza", "engine.13": "Intervalli", "engine.15": "Memoria", "engine.17": "Salti melodici", "engine.19": "Le prossime melodie insistono su <b>intervalli più ampi e salti più grandi</b>: le due cose che l'orecchio deve ancora mettere a fuoco.", "progression.1": "Progressione", "progression.2": "Mai troppo facile.<br/>Mai fuori portata.", "progression.3": "La difficoltà cresce con te, a piccoli passi. Non la vedi salire come un numero di livello: la senti come musica che diventa più interessante.", "progression.4": "Inizio", "progression.5": "Movimento semplice", "progression.6": "Gradi congiunti e intervalli piccoli", "progression.7": "Frasi brevi", "progression.8": "Un centro tonale chiaro", "progression.9": "Sviluppo", "progression.10": "Intervalli più ampi", "progression.11": "Salti più grandi", "progression.12": "Frasi più lunghe e articolate", "progression.13": "Melodie che cambiano direzione", "progression.14": "Sfida", "progression.15": "Cromatismi e salti", "progression.16": "Movimento cromatico", "progression.17": "Salti melodici ampi", "progression.18": "Melodie lunghe da tenere a mente", "progression.19": "Mai suonato a orecchio", "progression.20": "Musicista esperto", "repertoire.1": "Repertorio", "repertoire.2": "Solo musica vera.", "repertoire.3": "Non ti alleni su esercizi: ti alleni sulla musica. Migliaia di melodie che si suonano da secoli.", "repertoire.4": "Classica", "repertoire.5": "Temi che hai già nell'orecchio", "repertoire.12": "Tradizionale", "repertoire.13": "Melodie tramandate a orecchio", "repertoire.14": "Melodie popolari", "repertoire.15": "Canti tradizionali", "repertoire.16": "Repertori regionali", "repertoire.17": "Musiche da ballo", "repertoire.18": "Niente spartito. Niente da sapere prima. Solo la melodia.", "results.1": "Cosa cambia", "results.2": "Ascolta.<br/>Ritrova.<br/>Suona.", "results.3": "<span class=\"res-mark\">01</span>Senti le melodie più nitide", "results.4": "<span class=\"res-mark\">02</span>Riconosci gli intervalli senza pensarci", "results.5": "<span class=\"res-mark\">03</span>Tieni a mente melodie più lunghe", "results.6": "<span class=\"res-mark\">04</span>Suoni quello che senti, con sicurezza", "pricing.1": "Prezzi", "pricing.2": "Il primo passo è gratis.", "pricing.3": "Gratis", "pricing.4": "Sempre gratis", "pricing.5": "5 melodie al giorno", "pricing.6": "Difficoltà su misura", "pricing.7": "Progressi, in sintesi", "pricing.8": "Inizia gratis", "pricing.9": "Premium", "pricing.10": "Tutto, senza limiti", "pricing.11": "Allenamento illimitato", "pricing.12": "Adaptive Ear Engine™ completo", "pricing.13": "10.000+ melodie", "pricing.14": "Progressi, in dettaglio", "pricing.15": "Repertorio completo", "pricing.16": "Passa a Premium", "faq.1": "Domande", "faq.2": "Prima di iniziare.", "faq.3": "Devo saper leggere la musica?", "faq.4": "No. Con By Ear si ascolta e si suona. Non c'è niente di scritto e non devi dare un nome a quello che senti.", "faq.5": "Su cosa suono?", "faq.6": "Sulla tastiera a schermo, con il mouse, il touch o i tasti del computer. Se colleghi una tastiera MIDI, By Ear ascolta quella.", "faq.7": "Va bene per il mio livello?", "faq.8": "Sì, qualunque sia. Se non hai mai cercato una melodia a orecchio, le prime sono di tre o quattro note. Se suoni da anni, il motore alza l'asticella finché le melodie non diventano davvero difficili: nessuno resta bloccato a un livello.", "faq.9": "Che musica si ascolta?", "faq.10": "Repertorio classico e tradizionale: migliaia di melodie, dai temi di Bach alle musiche popolari.", "faq.11": "Come funziona l'Adaptive Ear Engine™?", "faq.12": "Analizza come suoni su più aspetti dell'ascolto melodico — altezza, intervalli, memoria, salti melodici — e da quel profilo sceglie le sfide successive.", "sec.6": "Allena l'orecchio, ora.", "sec.7": "Inizia gratis", "footer.1": "FAQ", "footer.2": "Prezzi", "footer.3": "Privacy", "footer.4": "Termini", "footer.5": "Contatti", "footer.6": "Ascolta. Suona. Migliora.", "demo.listening": "In ascolto — la melodia suona", "demo.yourturn": "Tocca a te — ritrovala", "demo.complete": "Melodia ritrovata", "demo.choosing": "By Ear sceglie la prossima melodia", "composer.traditional": "Tradizionale", "lang.label": "Lingua"}, "ja": {"nav.1": "仕組み", "nav.2": "適応エンジン", "nav.3": "レパートリー", "nav.4": "料金", "nav.5": "無料で始める", "sec.2": "<em>耳</em>が、変わっていく。<br/>メロディ一つずつ。", "sec.3": "クラシックと伝統音楽のメロディを聴き、そのまま弾き返す。By Ear は演奏を読み取り、次の一曲を選び直します。", "sec.4": "無料で始める", "sec.5": "レベルは問いません。楽典の知識も、何を練習するかの迷いも不要。聴いて、弾くだけです。", "demo.1": "セッション · 12曲目", "demo.2": "聴く", "demo.3": "弾く", "demo.4": "結果", "demo.5": "次へ", "demo.6": "✓ 完璧", "experience.1": "セッションの流れ", "experience.2": "どう進むのか。", "experience.3": "By Ear · セッション", "experience.4": "20曲中 12曲目", "experience.5": "適応中", "experience.6": "もう一度 ⟳", "experience.7": "8音", "experience.8": "音程の精度", "experience.10": "メロディの記憶", "experience.13": "聴く", "experience.14": "メロディが一度流れます。もう一度と思えば、何度でも。", "experience.16": "音を探す", "experience.17": "聴こえたとおりに弾き返します。画面のキーボードでも、MIDI キーボードでも。", "experience.19": "結果が返る", "experience.20": "音高・音程・記憶・跳躍。演奏をその場で読み取ります。", "experience.22": "そのまま次へ", "experience.23": "次のメロディは自動で選ばれます。何を練習するかで迷う時間はありません。", "difference.1": "違うところ", "difference.2": "耳は、人それぞれ。<br/>練習も、人それぞれ。", "difference.3": "By Ear は演奏を読み取り、届くメロディを絶えず変えていきます。<span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "自分専用", "difference.6": "誰かが組んだカリキュラムではなく、いまのレベルにちょうどいい一曲が届きます。", "difference.8": "変わり続ける", "difference.9": "得意も苦手も、次の一曲に反映されます。一曲ごとに、少しずつ。", "difference.11": "10,000曲以上", "difference.12": "自動生成の練習曲ではありません。クラシックと伝統音楽のレパートリーそのものです。", "engine.2": "聴き方を、覚えていく。", "engine.3": "一曲弾くたび、By Ear は耳のことを少しずつ知っていきます。Adaptive Ear Engine™ は、その情報から練習の形を変え続けます。", "engine.4": "演奏する", "engine.5": "By Ear が読み取る", "engine.6": "プロファイルが変わる", "engine.7": "次の一曲が決まる", "engine.8": "耳が伸びる", "engine.9": "耳のプロファイル", "engine.10": "1曲ごとに更新", "engine.11": "音高", "engine.13": "音程", "engine.15": "記憶", "engine.17": "跳躍", "engine.19": "次のメロディは<b>広い音程と大きな跳躍</b>を多めに。いま、耳が掴みかけている二つです。", "progression.1": "進み方", "progression.2": "易しすぎず、<br/>難しすぎず。", "progression.3": "難易度は小さな歩幅で動きます。感じ取れるのはレベルの数字ではなく、音楽が少しずつ面白くなっていくことです。", "progression.4": "はじめ", "progression.5": "素直な動き", "progression.6": "順次進行と狭い音程", "progression.7": "短いフレーズ", "progression.8": "調がはっきりしている", "progression.9": "発展", "progression.10": "広がる音程", "progression.11": "大きめの跳躍", "progression.12": "長く複雑なフレーズ", "progression.13": "向きが変わるメロディ", "progression.14": "挑戦", "progression.15": "半音階と大跳躍", "progression.16": "半音階の動き", "progression.17": "大きく開く跳躍", "progression.18": "記憶で支える長いメロディ", "progression.19": "耳コピは初めて", "progression.20": "熟練の音楽家", "repertoire.1": "レパートリー", "repertoire.2": "教材ではなく、音楽で。", "repertoire.3": "相手はランダムな練習課題ではありません。何世紀も弾き継がれてきた、何千ものメロディです。", "repertoire.4": "クラシック", "repertoire.5": "どこかで聴いた主題", "repertoire.12": "伝統音楽", "repertoire.13": "耳から耳へ伝わったメロディ", "repertoire.14": "民謡", "repertoire.15": "伝承歌", "repertoire.16": "各地のレパートリー", "repertoire.17": "舞曲", "repertoire.18": "楽譜はありません。予備知識も要りません。あるのはメロディだけ。", "results.1": "変わること", "results.2": "聴こえる。<br/>見つかる。<br/>弾ける。", "results.3": "<span class=\"res-mark\">01</span>メロディがはっきり聴こえる", "results.4": "<span class=\"res-mark\">02</span>音程が自然にわかる", "results.5": "<span class=\"res-mark\">03</span>メロディを覚えていられる", "results.6": "<span class=\"res-mark\">04</span>聴いた音を迷わず弾ける", "pricing.1": "料金", "pricing.2": "今日から、耳を育てる。", "pricing.3": "無料", "pricing.4": "ずっと無料", "pricing.5": "毎日5曲のメロディ", "pricing.6": "耳に合わせた難易度", "pricing.7": "基本の記録", "pricing.8": "無料で始める", "pricing.9": "プレミアム", "pricing.10": "すべてを、無制限に", "pricing.11": "練習は無制限", "pricing.12": "Adaptive Ear Engine™ 全機能", "pricing.13": "10,000曲以上のメロディ", "pricing.14": "詳しい記録", "pricing.15": "全レパートリー", "pricing.16": "プレミアムへ", "faq.1": "よくある質問", "faq.2": "始める前に。", "faq.3": "楽譜が読めなくても大丈夫ですか？", "faq.4": "はい。By Ear は聴いて弾くことだけでできています。楽譜は出てきませんし、聴こえた音に名前をつける必要もありません。", "faq.5": "どうやって弾きますか？", "faq.6": "画面のキーボードを、マウスやタッチ、パソコンのキーで鳴らします。MIDI キーボードをつなげば、そちらの演奏を聴き取ります。", "faq.7": "どのレベル向けですか？", "faq.8": "すべてのレベルです。耳でメロディを取ったことがなければ、最初は3〜4音から。長く弾いてきた方には、本当に難しいと感じるところまで上限が上がり続けます。同じレベルに留まる人はいません。", "faq.9": "どんな音楽が入っていますか？", "faq.10": "クラシックと伝統音楽のレパートリーです。バッハの主題から民謡まで、何千曲も収録しています。", "faq.11": "Adaptive Ear Engine™ は何をしているのですか？", "faq.12": "音高・音程・記憶・跳躍。メロディを聴き取る力をいくつかの面から読み取り、そのプロファイルをもとに次の課題を選びます。", "sec.6": "さあ、はじめの一曲を。", "sec.7": "無料で始める", "footer.1": "よくある質問", "footer.2": "料金", "footer.3": "プライバシー", "footer.4": "利用規約", "footer.5": "お問い合わせ", "footer.6": "聴く。弾く。伸びる。", "demo.listening": "メロディが流れます", "demo.yourturn": "弾き返してください", "demo.complete": "弾き切りました", "demo.choosing": "次のメロディを選んでいます", "composer.traditional": "伝承曲", "lang.label": "言語"}, "ko": {"nav.1": "훈련 방식", "nav.2": "적응형 엔진", "nav.3": "레퍼토리", "nav.4": "요금제", "nav.5": "무료 시작", "sec.2": "<em>귀</em>가 트입니다.<br/>멜로디 하나씩.", "sec.3": "클래식과 전통 레퍼토리의 멜로디를 듣고, 들은 대로 건반에서 찾습니다. By Ear는 그 연주에 맞춰 다음 멜로디를 고릅니다.", "sec.4": "무료로 훈련 시작", "sec.5": "수준은 가리지 않습니다. 이론도, 연습 계획도 필요 없습니다. 듣고 연주하면 됩니다.", "demo.1": "세션 · 멜로디 12", "demo.2": "듣기", "demo.3": "연주", "demo.4": "피드백", "demo.5": "다음", "demo.6": "✓ 완벽", "experience.1": "세션 속으로", "experience.2": "이렇게 훈련합니다.", "experience.3": "By Ear · 세션", "experience.4": "멜로디 12 / 20", "experience.5": "적응형", "experience.6": "다시 듣기 ⟳", "experience.7": "8음", "experience.8": "음정 정확도", "experience.10": "멜로디 기억력", "experience.13": "듣기", "experience.14": "멜로디가 한 번 흐릅니다. 더 필요하면 몇 번이든 다시 듣습니다.", "experience.16": "건반에서 찾기", "experience.17": "화면 건반이나 MIDI 건반으로 방금 들은 멜로디를 되짚습니다.", "experience.19": "바로 피드백", "experience.20": "By Ear가 음높이, 음정, 기억력, 도약을 곧바로 짚어 줍니다.", "experience.22": "계속 이어가기", "experience.23": "다음 멜로디는 By Ear가 고릅니다. 무엇을 연습할지 고민할 일이 없습니다.", "difference.1": "다른 점", "difference.2": "귀는 저마다 다릅니다.<br/>훈련도 그래야 합니다.", "difference.3": "By Ear는 연주를 분석해 다음에 올 멜로디를 계속 바꿔 갑니다. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "맞춤", "difference.6": "남이 짜 둔 커리큘럼이 아니라, 지금 실력에 꼭 맞는 난이도로 나아갑니다.", "difference.8": "적응형", "difference.9": "잘하는 것과 약한 것에 따라 다음 멜로디가 달라집니다. 한 곡마다.", "difference.11": "10,000곡 이상", "difference.12": "만들어 낸 연습 문제가 아니라, 클래식과 전통 레퍼토리의 실제 멜로디를 다룹니다.", "engine.2": "귀를 읽습니다.", "engine.3": "멜로디를 하나 연주할 때마다 By Ear는 귀에 대해 조금 더 알게 됩니다. Adaptive Ear Engine™은 그 기록으로 훈련의 방향을 계속 다듬습니다.", "engine.4": "연주", "engine.5": "By Ear 분석", "engine.6": "귀 프로필 갱신", "engine.7": "다음 멜로디 선정", "engine.8": "귀가 트임", "engine.9": "귀 프로필", "engine.10": "멜로디마다 갱신", "engine.11": "음높이", "engine.13": "음정", "engine.15": "기억력", "engine.17": "도약", "engine.19": "다음 멜로디는 <b>넓은 음정과 큰 도약</b> 위주로 나옵니다. 아직 귀에 덜 익은 두 가지입니다.", "progression.1": "성장", "progression.2": "쉽지 않게.<br/>버겁지 않게.", "progression.3": "난이도는 한 걸음씩 따라 올라옵니다. 레벨 숫자가 오르는 것이 아니라, 음악이 점점 재미있어집니다.", "progression.4": "시작", "progression.5": "단순한 흐름", "progression.6": "순차 진행과 좁은 음정", "progression.7": "짧은 악구", "progression.8": "또렷한 하나의 조성", "progression.9": "발전", "progression.10": "넓어지는 음정", "progression.11": "커지는 도약", "progression.12": "길고 복잡해지는 악구", "progression.13": "방향이 바뀌는 멜로디", "progression.14": "도전", "progression.15": "반음계와 넓은 도약", "progression.16": "반음계 진행", "progression.17": "폭이 큰 도약", "progression.18": "길게 기억해야 할 멜로디", "progression.19": "귀로 찾아본 적 없음", "progression.20": "숙련 연주자", "repertoire.1": "레퍼토리", "repertoire.2": "진짜 음악으로 훈련합니다.", "repertoire.3": "무작위로 만든 연습 문제가 아닙니다. 수백 년 동안 사람들이 연주해 온 멜로디 수천 곡, 곧 음악입니다.", "repertoire.4": "클래식", "repertoire.5": "어디선가 들어 본 멜로디", "repertoire.12": "전통 음악", "repertoire.13": "귀에서 귀로 전해진 멜로디", "repertoire.14": "민요", "repertoire.15": "전통 노래", "repertoire.16": "지역별 레퍼토리", "repertoire.17": "춤곡", "repertoire.18": "읽을 악보도, 미리 알아야 할 것도 없습니다. 멜로디 하나면 됩니다.", "results.1": "달라지는 것", "results.2": "듣는다.<br/>찾는다.<br/>연주한다.", "results.3": "<span class=\"res-mark\">01</span>멜로디가 또렷하게 들립니다", "results.4": "<span class=\"res-mark\">02</span>음정이 저절로 잡힙니다", "results.5": "<span class=\"res-mark\">03</span>멜로디 기억력이 자랍니다", "results.6": "<span class=\"res-mark\">04</span>들은 대로 망설임 없이 칩니다", "pricing.1": "요금제", "pricing.2": "청음, 오늘부터.", "pricing.3": "무료", "pricing.4": "언제나 무료", "pricing.5": "매일 멜로디 5곡", "pricing.6": "맞춤 난이도", "pricing.7": "기본 진행 기록", "pricing.8": "무료로 시작", "pricing.9": "프리미엄", "pricing.10": "전부, 무제한", "pricing.11": "무제한 훈련", "pricing.12": "Adaptive Ear Engine™ 전체", "pricing.13": "10,000곡 이상", "pricing.14": "상세 기록", "pricing.15": "전체 레퍼토리", "pricing.16": "프리미엄 시작", "faq.1": "궁금한 점", "faq.2": "시작하기 전에.", "faq.3": "악보를 읽을 줄 알아야 하나요?", "faq.4": "아니요. By Ear는 듣고 연주하는 것이 전부입니다. 악보도 없고, 들은 음의 이름을 댈 필요도 없습니다.", "faq.5": "무엇으로 연주하나요?", "faq.6": "화면 건반을 마우스나 터치, 컴퓨터 자판으로 누릅니다. MIDI 건반을 연결하면 By Ear가 그쪽 연주를 듣습니다.", "faq.7": "어느 정도 수준이어야 하나요?", "faq.8": "수준은 가리지 않습니다. 귀로 멜로디를 찾아본 적이 없다면 서너 음짜리부터 시작합니다. 오래 연주해 온 사람이라면 정말 어려워질 때까지 엔진이 상한을 계속 올립니다. 한 레벨에 머무는 일은 없습니다.", "faq.9": "어떤 음악이 들어 있나요?", "faq.10": "클래식과 전통 레퍼토리입니다. 바흐의 주제부터 민요까지 수천 곡이 있습니다.", "faq.11": "Adaptive Ear Engine™은 어떻게 작동하나요?", "faq.12": "음높이, 음정, 기억력, 도약 등 멜로디를 듣는 여러 측면에서 연주를 분석하고, 그 프로필로 다음 과제를 고릅니다.", "sec.6": "귀가 트일 차례입니다.", "sec.7": "무료로 시작", "footer.1": "자주 묻는 질문", "footer.2": "요금제", "footer.3": "개인정보 처리방침", "footer.4": "이용약관", "footer.5": "문의", "footer.6": "듣는다. 연주한다. 트인다.", "demo.listening": "듣는 중 — 멜로디 재생", "demo.yourturn": "이제 차례 — 들은 대로 연주", "demo.complete": "멜로디 완료", "demo.choosing": "다음 멜로디 고르는 중", "composer.traditional": "전통곡", "lang.label": "언어"}, "nl": {"nav.1": "Hoe het werkt", "nav.2": "Adaptieve engine", "nav.3": "Repertoire", "nav.4": "Prijzen", "nav.5": "Gratis starten", "sec.2": "Train je <em>gehoor</em>.<br/>Melodie voor melodie.", "sec.3": "Je hoort een melodie uit het klassieke en traditionele repertoire. Je speelt hem na. By Ear stemt de training af op jouw gehoor.", "sec.4": "Gratis aan de slag", "sec.5": "Elk niveau. Geen theorie. Nooit zelf bedenken wat je moet oefenen. Luisteren en spelen, meer niet.", "demo.1": "SESSIE · MELODIE 12", "demo.2": "Luister", "demo.3": "Speel", "demo.4": "Analyse", "demo.5": "Volgende", "demo.6": "✓ Foutloos", "experience.1": "In een sessie", "experience.2": "Zo werkt het.", "experience.3": "By Ear · Sessie", "experience.4": "Melodie 12 van 20", "experience.5": "ADAPTIEF", "experience.6": "Opnieuw ⟳", "experience.7": "8 noten", "experience.8": "Intervalprecisie", "experience.10": "Melodisch geheugen", "experience.13": "Luisteren", "experience.14": "Een melodie klinkt één keer. Vaker mag ook.", "experience.16": "De noten vinden", "experience.17": "Speel de melodie na op het klavier op je scherm, of op een MIDI-keyboard.", "experience.19": "Meteen weten", "experience.20": "By Ear analyseert direct wat je speelde — toonhoogte, intervallen, geheugen, sprongen.", "experience.22": "Doorspelen", "experience.23": "De volgende melodie staat al klaar. Wat je oefent, hoef je nooit zelf te kiezen.", "difference.1": "Het verschil", "difference.2": "Elk gehoor is anders.<br/>Elke training dus ook.", "difference.3": "By Ear kijkt mee hoe je speelt en past de melodieën daar voortdurend op aan. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Op maat", "difference.6": "De juiste uitdaging voor het niveau waarop je nu speelt — geen vast programma dat iemand anders voor je bedacht.", "difference.8": "Adaptief", "difference.9": "Wat je al hoort en wat nog niet, bepaalt wat er volgt. Melodie na melodie.", "difference.11": "10.000+ melodieën", "difference.12": "Melodieën uit het klassieke en traditionele repertoire. Geen verzonnen oefenstof.", "engine.2": "Hij leert hoe je hoort.", "engine.3": "Elke melodie die je speelt, zegt iets over je gehoor. De Adaptive Ear Engine™ gebruikt dat om de training voortdurend bij te sturen.", "engine.4": "Je spel", "engine.5": "By Ear analyseert", "engine.6": "Gehoorprofiel bijgewerkt", "engine.7": "Nieuwe melodieën gekozen", "engine.8": "Je gaat vooruit", "engine.9": "Je gehoorprofiel", "engine.10": "BIJGEWERKT NA ELKE MELODIE", "engine.11": "Toonhoogte", "engine.13": "Intervallen", "engine.15": "Geheugen", "engine.17": "Melodische sprongen", "engine.19": "De volgende melodieën zitten vol <b>grotere intervallen en ruimere sprongen</b> — precies waar het gehoor nog aan werkt.", "progression.1": "Opbouw", "progression.2": "Nooit te makkelijk.<br/>Nooit te zwaar.", "progression.3": "De moeilijkheid groeit met je mee, in kleine stappen. Je hoort het aan muziek die interessanter wordt, niet aan een cijfer dat oploopt.", "progression.4": "Begin", "progression.5": "Rustige lijnen", "progression.6": "Stappen en kleine intervallen", "progression.7": "Korte frasen", "progression.8": "Eén duidelijke toonsoort", "progression.9": "Groei", "progression.10": "Grotere intervallen", "progression.11": "Ruimere sprongen", "progression.12": "Langere en complexere frasen", "progression.13": "Melodieën die van richting wisselen", "progression.14": "Uitdaging", "progression.15": "Chromatisch & wijd", "progression.16": "Chromatische beweging", "progression.17": "Wijde sprongen", "progression.18": "Lange melodieën onthouden", "progression.19": "Nooit op gehoor gespeeld", "progression.20": "Gevorderde musicus", "repertoire.1": "Repertoire", "repertoire.2": "Train op echte muziek.", "repertoire.3": "Geen willekeurige oefeningen, maar muziek. Duizenden melodieën die mensen al eeuwen spelen.", "repertoire.4": "Klassiek", "repertoire.5": "Thema's die je half kent", "repertoire.12": "Traditioneel", "repertoire.13": "Op gehoor doorgegeven", "repertoire.14": "Volksmelodieën", "repertoire.15": "Traditionele liederen", "repertoire.16": "Streekrepertoire", "repertoire.17": "Dansmelodieën", "repertoire.18": "Geen partituur. Geen voorkennis. Alleen de melodie.", "results.1": "Wat het oplevert", "results.2": "Horen.<br/>Vinden.<br/>Spelen.", "results.3": "<span class=\"res-mark\">01</span>Melodieën scherper horen", "results.4": "<span class=\"res-mark\">02</span>Intervallen vanzelf herkennen", "results.5": "<span class=\"res-mark\">03</span>Melodisch geheugen opbouwen", "results.6": "<span class=\"res-mark\">04</span>Zonder aarzelen spelen wat je hoort", "pricing.1": "Prijzen", "pricing.2": "Train vandaag je gehoor.", "pricing.3": "Gratis", "pricing.4": "Altijd gratis", "pricing.5": "Elke dag 5 melodieën", "pricing.6": "Moeilijkheid op maat", "pricing.7": "Voortgang in het kort", "pricing.8": "Gratis starten", "pricing.9": "Premium", "pricing.10": "Alles, onbeperkt", "pricing.11": "Onbeperkt trainen", "pricing.12": "Volledige Adaptive Ear Engine™", "pricing.13": "10.000+ melodieën", "pricing.14": "Voortgang tot in detail", "pricing.15": "Het hele repertoire", "pricing.16": "Kies Premium", "faq.1": "Vragen", "faq.2": "Voor je begint.", "faq.3": "Moet ik noten kunnen lezen?", "faq.4": "Nee. By Ear draait om luisteren en spelen. Er komt geen notenschrift aan te pas, en je hoeft nooit te benoemen wat je hoort.", "faq.5": "Waar speel ik op?", "faq.6": "Op het klavier op je scherm — met de muis, het touchscreen of de toetsen van je computer. Sluit je een MIDI-keyboard aan, dan luistert By Ear daarnaar.", "faq.7": "Voor welk niveau is het?", "faq.8": "Voor elk niveau. Heb je nog nooit een melodie op gehoor gezocht, dan zijn de eerste drie of vier noten lang. Speel je al jaren, dan legt de engine de lat hoger tot de melodieën echt lastig worden. Niemand blijft steken op één niveau.", "faq.9": "Welke muziek zit erin?", "faq.10": "Klassiek en traditioneel repertoire: duizenden melodieën, van een thema van Bach tot een volksdeuntje.", "faq.11": "Hoe werkt de Adaptive Ear Engine™?", "faq.12": "Hij kijkt naar je spel op verschillende onderdelen van melodisch gehoor — toonhoogte, intervallen, geheugen, sprongen — en kiest op basis van dat profiel wat je hierna hoort.", "sec.6": "Zin om te beginnen?", "sec.7": "Gratis aan de slag", "footer.1": "Vragen", "footer.2": "Prijzen", "footer.3": "Privacy", "footer.4": "Voorwaarden", "footer.5": "Contact", "footer.6": "Luisteren. Spelen. Beter horen.", "demo.listening": "Luisteren — de melodie klinkt", "demo.yourturn": "Jouw beurt — speel hem na", "demo.complete": "Melodie gevonden", "demo.choosing": "De volgende melodie wordt gekozen", "composer.traditional": "Traditioneel", "lang.label": "Taal"}, "pt": {"nav.1": "Como funciona", "nav.2": "Motor adaptativo", "nav.3": "Repertório", "nav.4": "Preços", "nav.5": "Começar grátis", "sec.2": "Treina o <em>ouvido</em>.<br/>Uma melodia de cada vez.", "sec.3": "Ouve uma melodia do repertório clássico e tradicional. Tira-a de ouvido no teclado. O By Ear ajusta o treino a ti.", "sec.4": "Começar a treinar grátis", "sec.5": "Qualquer nível. Sem teoria. Sem adivinhar o que praticar. É só ouvir e tocar.", "demo.1": "SESSÃO · MELODIA 12", "demo.2": "Ouvir", "demo.3": "Tocar", "demo.4": "Resultado", "demo.5": "Seguinte", "demo.6": "✓ Perfeito", "experience.1": "Uma sessão por dentro", "experience.2": "Como funciona?", "experience.3": "By Ear · Sessão", "experience.4": "Melodia 12 de 20", "experience.5": "ADAPTATIVO", "experience.6": "Repetir ⟳", "experience.7": "8 notas", "experience.8": "Precisão nos intervalos", "experience.10": "Memória melódica", "experience.13": "Ouve", "experience.14": "A melodia toca uma vez — ou as vezes que precisares.", "experience.16": "Encontra as notas", "experience.17": "Toca-a no teclado do ecrã ou num teclado MIDI.", "experience.19": "Vê o resultado", "experience.20": "O By Ear analisa o que tocaste na hora — altura, intervalos, memória, saltos.", "experience.22": "Continua", "experience.23": "A melodia seguinte já está escolhida. Nunca tens de decidir o que praticar.", "difference.1": "A diferença", "difference.2": "Cada ouvido é único.<br/>Cada treino também.", "difference.3": "O By Ear analisa como tocas e ajusta continuamente as melodias que se seguem. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Personalizado", "difference.6": "O desafio certo para o nível em que estás — e não um programa fixo que outra pessoa desenhou.", "difference.8": "Adaptativo", "difference.9": "O que já dominas e o que ainda falha decidem o que vem a seguir, melodia após melodia.", "difference.11": "10 000+ melodias", "difference.12": "Melodias do repertório clássico e tradicional, não exercícios fabricados.", "engine.2": "Aprende como ouves.", "engine.3": "Cada melodia que tocas diz ao By Ear alguma coisa sobre a forma como ouves. O Adaptive Ear Engine™ usa isso para moldar o treino a cada passo.", "engine.4": "O que tocas", "engine.5": "O By Ear analisa", "engine.6": "O perfil atualiza-se", "engine.7": "Melodias à medida", "engine.8": "Ouves melhor", "engine.9": "Perfil auditivo", "engine.10": "ATUALIZADO A CADA MELODIA", "engine.11": "Altura", "engine.13": "Intervalos", "engine.15": "Memória", "engine.17": "Saltos melódicos", "engine.19": "As melodias seguintes vão insistir em <b>intervalos mais amplos e saltos maiores</b> — as duas coisas que ainda escapam ao ouvido.", "progression.1": "Progressão", "progression.2": "Nunca fácil demais.<br/>Nunca fora de alcance.", "progression.3": "A dificuldade acompanha-te, aos poucos. Não vês um número de nível a subir — ouves música cada vez mais interessante.", "progression.4": "Início", "progression.5": "Movimento simples", "progression.6": "Graus conjuntos e intervalos pequenos", "progression.7": "Frases curtas", "progression.8": "Um centro tonal claro", "progression.9": "Desenvolvimento", "progression.10": "Intervalos mais amplos", "progression.11": "Saltos maiores", "progression.12": "Frases mais longas e complexas", "progression.13": "Melodias que mudam de direção", "progression.14": "Desafio", "progression.15": "Cromático e amplo", "progression.16": "Movimento cromático", "progression.17": "Saltos melódicos amplos", "progression.18": "Melodias longas para reter de memória", "progression.19": "Nunca tiraste nada de ouvido", "progression.20": "Músico avançado", "repertoire.1": "Repertório", "repertoire.2": "Treina com música a sério.", "repertoire.3": "Aqui não há exercícios aleatórios. Há música — milhares de melodias que se tocam há séculos.", "repertoire.4": "Clássico", "repertoire.5": "Temas que já conheces sem saber", "repertoire.12": "Tradicional", "repertoire.13": "Melodias que passaram de ouvido em ouvido", "repertoire.14": "Melodias populares", "repertoire.15": "Canções tradicionais", "repertoire.16": "Repertório regional", "repertoire.17": "Melodias de dança", "repertoire.18": "Não há partitura. Não é preciso saber nada de antemão. Só a melodia.", "results.1": "O que muda", "results.2": "Ouve.<br/>Encontra.<br/>Toca.", "results.3": "<span class=\"res-mark\">01</span>Ouvir melodias com mais nitidez", "results.4": "<span class=\"res-mark\">02</span>Reconhecer intervalos sem pensar", "results.5": "<span class=\"res-mark\">03</span>Ganhar memória melódica", "results.6": "<span class=\"res-mark\">04</span>Tocar o que ouves sem hesitar", "pricing.1": "Preços", "pricing.2": "Começa hoje a treinar o ouvido.", "pricing.3": "Grátis", "pricing.4": "Grátis para sempre", "pricing.5": "5 melodias por dia", "pricing.6": "Dificuldade à medida", "pricing.7": "Progresso básico", "pricing.8": "Começar grátis", "pricing.9": "Premium", "pricing.10": "Tudo, sem limites", "pricing.11": "Treino ilimitado", "pricing.12": "Adaptive Ear Engine™ completo", "pricing.13": "10 000+ melodias", "pricing.14": "Progresso detalhado", "pricing.15": "Repertório completo", "pricing.16": "Passar a Premium", "faq.1": "Perguntas", "faq.2": "Antes de começares.", "faq.3": "Preciso de saber ler música?", "faq.4": "Não. No By Ear, ouve-se e toca-se. Não há nada escrito e nunca tens de dar nome ao que ouves.", "faq.5": "Em que é que toco?", "faq.6": "No teclado do ecrã, com o rato, com o dedo ou com as teclas do computador. Se ligares um teclado MIDI, o By Ear passa a ouvir esse.", "faq.7": "Que nível é preciso ter?", "faq.8": "Qualquer um. Se nunca tiraste uma melodia de ouvido, as primeiras têm três ou quatro notas. Se tocas há anos, o motor vai subindo a fasquia até as melodias serem mesmo difíceis — ninguém fica preso num nível.", "faq.9": "Que música vou ouvir?", "faq.10": "Repertório clássico e tradicional: milhares de melodias, de temas de Bach a melodias populares.", "faq.11": "Como funciona o Adaptive Ear Engine™?", "faq.12": "Analisa como ouves — altura, intervalos, memória, saltos melódicos — e usa esse perfil para escolher os desafios seguintes.", "sec.6": "Vamos treinar o ouvido?", "sec.7": "Começar grátis", "footer.1": "FAQ", "footer.2": "Preços", "footer.3": "Privacidade", "footer.4": "Termos", "footer.5": "Contacto", "footer.6": "Ouve. Toca. Evolui.", "demo.listening": "A ouvir — a melodia toca", "demo.yourturn": "É a tua vez — encontra as notas", "demo.complete": "Melodia concluída", "demo.choosing": "A escolher a melodia seguinte", "composer.traditional": "Tradicional", "lang.label": "Idioma"}, "ro": {"nav.1": "Cum funcționează", "nav.2": "Motorul adaptiv", "nav.3": "Repertoriu", "nav.4": "Prețuri", "nav.5": "Începe gratuit", "sec.2": "Antrenează <em>auzul</em>.<br/>Melodie cu melodie.", "sec.3": "Asculți o melodie din repertoriul clasic sau tradițional. O cauți pe claviatură. De aici încolo, By Ear alege după cum cânți.", "sec.4": "Antrenează-te gratuit", "sec.5": "Orice nivel. Fără teorie. Fără să te întrebi ce să exersezi. Asculți și cânți, atât.", "demo.1": "SESIUNE · MELODIA 12", "demo.2": "Ascultă", "demo.3": "Cântă", "demo.4": "Analiză", "demo.5": "Următoarea", "demo.6": "✓ Perfect", "experience.1": "Într-o sesiune", "experience.2": "Cum funcționează?", "experience.3": "By Ear · Sesiune", "experience.4": "Melodia 12 din 20", "experience.5": "ADAPTIV", "experience.6": "Din nou ⟳", "experience.7": "8 note", "experience.8": "Precizia intervalelor", "experience.10": "Memorie melodică", "experience.13": "Ascultă", "experience.14": "Melodia se aude o dată. Dacă ai nevoie, o mai asculți.", "experience.16": "Găsește notele", "experience.17": "Cânt-o pe claviatura de pe ecran sau pe una MIDI.", "experience.19": "Vezi analiza", "experience.20": "Analiza vine pe loc — înălțime, intervale, memorie, salturi.", "experience.22": "Mergi mai departe", "experience.23": "Melodia următoare vine singură. Nu tu decizi ce exersezi.", "difference.1": "Diferența", "difference.2": "Nu auzi ca oricine.<br/>Nu te antrenezi ca oricine.", "difference.3": "By Ear urmărește cum cânți și schimbă din mers melodiile care urmează. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Pe măsura ta", "difference.6": "Exact cât poți duce acum — nu o programă fixă, gândită de altcineva.", "difference.8": "Adaptiv", "difference.9": "Ce-ți iese și ce nu decide ce urmează, melodie după melodie.", "difference.11": "10.000+ melodii", "difference.12": "Asculți muzică din repertoriul clasic și tradițional, nu exerciții generate automat.", "engine.2": "Învață cum auzi.", "engine.3": "Fiecare melodie pe care o cânți spune ceva despre felul în care auzi. Adaptive Ear Engine™ ține minte totul și potrivește mereu ce urmează.", "engine.4": "Cum cânți", "engine.5": "By Ear analizează", "engine.6": "Profilul auditiv se schimbă", "engine.7": "Se aleg melodiile următoare", "engine.8": "Progresezi", "engine.9": "Profil auditiv", "engine.10": "ACTUALIZAT DUPĂ FIECARE MELODIE", "engine.11": "Înălțime", "engine.13": "Intervale", "engine.15": "Memorie", "engine.17": "Salturi melodice", "engine.19": "Urmează melodii cu <b>intervale mai largi și salturi mai mari</b> — exact ce nu-ți iese încă.", "progression.1": "Evoluție", "progression.2": "Nici prea ușor.<br/>Nici prea mult.", "progression.3": "Dificultatea urcă odată cu tine, pas cu pas. Se simte ca o muzică tot mai interesantă, nu ca un număr de nivel care crește.", "progression.4": "La început", "progression.5": "Mers simplu", "progression.6": "Trepte și intervale mici", "progression.7": "Fraze scurte", "progression.8": "Un centru tonal clar", "progression.9": "Pe parcurs", "progression.10": "Intervale mai largi", "progression.11": "Salturi mai mari", "progression.12": "Fraze mai lungi și mai complicate", "progression.13": "Melodii care schimbă direcția", "progression.14": "La greu", "progression.15": "Cromatic și larg", "progression.16": "Mers cromatic", "progression.17": "Salturi melodice mari", "progression.18": "Melodii lungi, ținute minte", "progression.19": "N-ai cântat niciodată după ureche", "progression.20": "Muzician cu experiență", "repertoire.1": "Repertoriu", "repertoire.2": "Cânți muzică adevărată.", "repertoire.3": "Nu exersezi pe exerciții inventate. Exersezi pe muzică — mii de melodii pe care lumea le cântă de secole.", "repertoire.4": "Clasic", "repertoire.5": "Teme care-ți sună cunoscut", "repertoire.12": "Tradițional", "repertoire.13": "Melodii transmise din auzite", "repertoire.14": "Melodii populare", "repertoire.15": "Cântece tradiționale", "repertoire.16": "Repertoriu regional", "repertoire.17": "Melodii de joc", "repertoire.18": "Nicio partitură. Nimic de știut dinainte. Doar melodia.", "results.1": "Ce se schimbă", "results.2": "Auzi.<br/>Găsești.<br/>Cânți.", "results.3": "<span class=\"res-mark\">01</span>Auzi melodiile mai limpede", "results.4": "<span class=\"res-mark\">02</span>Recunoști intervalele fără efort", "results.5": "<span class=\"res-mark\">03</span>Îți crește memoria melodică", "results.6": "<span class=\"res-mark\">04</span>Cânți ce auzi, fără ezitare", "pricing.1": "Prețuri", "pricing.2": "Antrenamentul începe azi.", "pricing.3": "Gratuit", "pricing.4": "Mereu gratuit", "pricing.5": "5 melodii pe zi", "pricing.6": "Dificultate pe măsura ta", "pricing.7": "Progres, pe scurt", "pricing.8": "Începe gratuit", "pricing.9": "Premium", "pricing.10": "Tot, nelimitat", "pricing.11": "Antrenament fără limită", "pricing.12": "Adaptive Ear Engine™ complet", "pricing.13": "10.000+ melodii", "pricing.14": "Progres, în detaliu", "pricing.15": "Repertoriu complet", "pricing.16": "Treci la Premium", "faq.1": "Întrebări", "faq.2": "Înainte să începi.", "faq.3": "Trebuie să știu note?", "faq.4": "Nu. La By Ear asculți și cânți, atât. Nu se scrie nimic și nu trebuie să pui nume la ce auzi.", "faq.5": "Pe ce cânt?", "faq.6": "Pe claviatura de pe ecran — cu mouse-ul, cu degetul sau cu tastele calculatorului. Dacă ai o claviatură MIDI, o conectezi și By Ear ascultă de acolo.", "faq.7": "Pentru ce nivel e?", "faq.8": "Pentru orice nivel. Dacă n-ai scos niciodată o melodie după ureche, primele au trei-patru note. Dacă tot cânți de ani buni, motorul ridică ștacheta până când melodiile chiar devin grele — nu rămâne nimeni blocat la un nivel.", "faq.9": "Ce fel de muzică aud?", "faq.10": "Repertoriu clasic și tradițional: mii de melodii, de la teme de Bach la melodii populare.", "faq.11": "Cum funcționează Adaptive Ear Engine™?", "faq.12": "Urmărește cum cânți pe mai multe laturi ale auzului melodic — înălțime, intervale, memorie, salturi — și din profilul care iese alege ce melodii urmează.", "sec.6": "Punem auzul la treabă?", "sec.7": "Începe gratuit", "footer.1": "Întrebări frecvente", "footer.2": "Prețuri", "footer.3": "Confidențialitate", "footer.4": "Termeni", "footer.5": "Contact", "footer.6": "Asculți. Cânți. Progresezi.", "demo.listening": "Se aude melodia", "demo.yourturn": "E rândul tău — cânt-o", "demo.complete": "Melodie găsită", "demo.choosing": "Se alege melodia următoare", "composer.traditional": "Tradițional", "lang.label": "Limbă"}, "tr": {"nav.1": "Nasıl çalışır", "nav.2": "Uyum sağlayan motor", "nav.3": "Repertuvar", "nav.4": "Fiyatlar", "nav.5": "Ücretsiz başla", "sec.2": "<em>Kulağını</em> eğit.<br/>Ezgi ezgi.", "sec.3": "Klasik ve geleneksel repertuvardan bir ezgi dinle. Klavyede bul, çal. By Ear eğitimini sana göre ayarlar.", "sec.4": "Ücretsiz çalışmaya başla", "sec.5": "Her seviyeye uygun. Teori yok. Ne çalışacağını düşünme. Sadece dinle, çal.", "demo.1": "SEANS · EZGİ 12", "demo.2": "Dinle", "demo.3": "Çal", "demo.4": "Sonuç", "demo.5": "Sonraki", "demo.6": "✓ Tam isabet", "experience.1": "Seansın içinde", "experience.2": "Nasıl çalışır?", "experience.3": "By Ear · Seans", "experience.4": "Ezgi 12 / 20", "experience.5": "UYARLANIYOR", "experience.6": "Tekrar ⟳", "experience.7": "8 ses", "experience.8": "Aralık doğruluğu", "experience.10": "Melodik bellek", "experience.13": "Dinle", "experience.14": "Ezgi bir kez çalınır. İstersen tekrar dinlersin.", "experience.16": "Sesleri bul", "experience.17": "Ezgiyi klavyede bul ve çal. Ekrandaki klavye de olur, MIDI klavyen de.", "experience.19": "Sonucu gör", "experience.20": "Nasıl çaldığın anında incelenir: perde, aralık, bellek, sıçrama.", "experience.22": "Devam et", "experience.23": "Sıradaki ezgiyi By Ear seçer. Ne çalışacağını düşünmen gerekmez.", "difference.1": "Fark", "difference.2": "Her kulak başka.<br/>Eğitimin de öyle olmalı.", "difference.3": "By Ear nasıl çaldığını inceler ve sıradaki ezgileri buna göre seçer. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "Sana özel", "difference.6": "Bulunduğun seviyeye göre bir zorluk — başkasının hazırladığı sabit bir müfredat değil.", "difference.8": "Seninle değişir", "difference.9": "Güçlü ve zayıf yanların sıradakini belirler, ezgi ezgi.", "difference.11": "10.000+ ezgi", "difference.12": "Klasik ve geleneksel repertuvardan ezgiler. Üretilmiş alıştırmalar değil.", "engine.2": "Nasıl duyduğunu öğrenir.", "engine.3": "Çaldığın her ezgi, kulağın hakkında yeni bir şey söyler. Adaptive Ear Engine™ bunları kullanarak eğitimini sürekli şekillendirir.", "engine.4": "Nasıl çaldığın", "engine.5": "By Ear inceler", "engine.6": "Kulak profilin güncellenir", "engine.7": "Sıradaki ezgiler seçilir", "engine.8": "İlerlersin", "engine.9": "Kulak profilin", "engine.10": "HER EZGİDEN SONRA GÜNCELLENİR", "engine.11": "Perde", "engine.13": "Aralıklar", "engine.15": "Bellek", "engine.17": "Sıçramalar", "engine.19": "Sıradaki ezgilerde <b>daha geniş aralıklar ve daha büyük sıçramalar</b> öne çıkacak — kulağının hâlâ zorlandığı iki nokta.", "progression.1": "İlerleme", "progression.2": "Ne fazla kolay,<br/>ne fazla ağır.", "progression.3": "Zorluk seninle birlikte, küçük adımlarla ilerler. Bunu artan bir seviye numarası olarak değil, müziğin ilginçleşmesi olarak duyarsın.", "progression.4": "Başlangıç", "progression.5": "Basit hareket", "progression.6": "Komşu sesler ve dar aralıklar", "progression.7": "Kısa ezgi cümleleri", "progression.8": "Net bir ton merkezi", "progression.9": "Gelişim", "progression.10": "Daha geniş aralıklar", "progression.11": "Daha büyük sıçramalar", "progression.12": "Daha uzun, daha karmaşık cümleler", "progression.13": "Yön değiştiren ezgiler", "progression.14": "İleri", "progression.15": "Kromatik ve geniş", "progression.16": "Kromatik hareket", "progression.17": "Geniş sıçramalar", "progression.18": "Bellekte tutulacak uzun ezgiler", "progression.19": "Hiç kulaktan çalmamış", "progression.20": "İleri düzey müzisyen", "repertoire.1": "Repertuvar", "repertoire.2": "Gerçek müzikle çalış.", "repertoire.3": "Rastgele alıştırmalarla değil, müzikle çalışıyorsun — yüzyıllardır çalınan binlerce ezgiyle.", "repertoire.4": "Klasik", "repertoire.5": "Bir yerden tanıdığın temalar", "repertoire.12": "Geleneksel", "repertoire.13": "Kulaktan kulağa aktarılan ezgiler", "repertoire.14": "Halk ezgileri", "repertoire.15": "Geleneksel şarkılar", "repertoire.16": "Yöresel repertuvar", "repertoire.17": "Dans havaları", "repertoire.18": "Nota yok. Ön bilgi yok. Sadece ezgi.", "results.1": "Ne değişir", "results.2": "Duy.<br/>Bul.<br/>Çal.", "results.3": "<span class=\"res-mark\">01</span>Ezgileri daha net duyarsın", "results.4": "<span class=\"res-mark\">02</span>Aralıkları kendiliğinden tanırsın", "results.5": "<span class=\"res-mark\">03</span>Melodik belleğin güçlenir", "results.6": "<span class=\"res-mark\">04</span>Duyduğunu tereddütsüz çalarsın", "pricing.1": "Fiyatlar", "pricing.2": "Kulağını eğitmeye bugün başla.", "pricing.3": "Ücretsiz", "pricing.4": "Hep ücretsiz", "pricing.5": "Günde 5 ezgi", "pricing.6": "Sana göre zorluk", "pricing.7": "Temel ilerleme takibi", "pricing.8": "Ücretsiz başla", "pricing.9": "Premium", "pricing.10": "Her şey, sınırsız", "pricing.11": "Sınırsız çalışma", "pricing.12": "Eksiksiz Adaptive Ear Engine™", "pricing.13": "10.000+ ezgi", "pricing.14": "Ayrıntılı ilerleme", "pricing.15": "Repertuvarın tamamı", "pricing.16": "Premium'a geç", "faq.1": "Sorular", "faq.2": "Başlamadan önce.", "faq.3": "Nota bilmem gerekir mi?", "faq.4": "Hayır. By Ear baştan sona dinlemek ve çalmak üzerine kurulu. Ortada yazılı hiçbir şey yok, duyduğuna isim vermen de gerekmez.", "faq.5": "Neyle çalarım?", "faq.6": "Ekrandaki klavyeyle: fareyle, dokunmatik ekranla ya da bilgisayar tuşlarınla. Bir MIDI klavye bağlarsan By Ear onu dinler.", "faq.7": "Hangi seviyeye uygun?", "faq.8": "Her seviyeye. Daha önce hiç kulaktan ezgi bulmadıysan ilk ezgiler üç dört ses uzunluğunda olur. Yıllardır çalıyorsan motor, ezgiler gerçekten zorlaşana kadar tavanı yükseltir — kimse bir seviyede takılıp kalmaz.", "faq.9": "Hangi tür müzikler var?", "faq.10": "Klasik ve geleneksel repertuvar: Bach temalarından halk havalarına binlerce ezgi.", "faq.11": "Adaptive Ear Engine™ nasıl çalışır?", "faq.12": "Nasıl çaldığını birkaç açıdan inceler — perde, aralık, bellek, sıçrama — ve çıkan profile göre sıradaki ezgileri seçer.", "sec.6": "Kulağını eğitmeye hazır mısın?", "sec.7": "Ücretsiz başla", "footer.1": "SSS", "footer.2": "Fiyatlar", "footer.3": "Gizlilik", "footer.4": "Koşullar", "footer.5": "İletişim", "footer.6": "Dinle. Çal. İlerle.", "demo.listening": "Ezgi çalıyor — dinle", "demo.yourturn": "Sıra sende — şimdi çal", "demo.complete": "Ezgi tamam", "demo.choosing": "Sıradaki ezgi seçiliyor", "composer.traditional": "Anonim", "lang.label": "Dil"}, "zh": {"nav.1": "怎么练", "nav.2": "自适应引擎", "nav.3": "曲目", "nav.4": "价格", "nav.5": "免费开始", "sec.2": "<em>耳朵</em>是练出来的。<br/>一次一条旋律。", "sec.3": "听一段旋律，取自古典与传统曲目。把它弹回来。By Ear 看你弹得如何，据此调整训练。", "sec.4": "免费开始练耳", "sec.5": "什么水平都能练。不讲乐理，不必纠结练什么。听，然后弹。", "demo.1": "练习 · 旋律 12", "demo.2": "听", "demo.3": "弹", "demo.4": "反馈", "demo.5": "下一条", "demo.6": "✓ 全对", "experience.1": "一次练习", "experience.2": "一条旋律，四步。", "experience.3": "By Ear · 练习", "experience.4": "第 12 条，共 20 条", "experience.5": "自适应", "experience.6": "重听 ⟳", "experience.7": "8 个音", "experience.8": "音程准确度", "experience.10": "旋律记忆", "experience.13": "听旋律", "experience.14": "旋律播一遍。想再听，随时可以重来。", "experience.16": "找到音", "experience.17": "在屏幕键盘上把旋律弹回来。接了 MIDI 键盘，就用 MIDI 键盘弹。", "experience.19": "看反馈", "experience.20": "每弹完一条立刻分析：音高、音程、记忆、跳进。", "experience.22": "继续练", "experience.23": "下一条由 By Ear 挑好。练什么，不用再想。", "difference.1": "不一样在哪", "difference.2": "耳朵各不相同，<br/>练法也该不同。", "difference.3": "By Ear 一直在听你怎么弹，接下来给什么旋律，也跟着变。<span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.5": "因人而异", "difference.6": "难度对着当下的水平来，不是别人排好的固定课程。", "difference.8": "随你而变", "difference.9": "哪里强、哪里弱，决定下一条旋律的样子。", "difference.11": "10,000+ 条旋律", "difference.12": "曲目取自古典与传统，是真曲子，不是生成的习题。", "engine.2": "它在学你怎么听。", "engine.3": "每弹一条旋律，By Ear 就更懂这双耳朵一分。Adaptive Ear Engine™ 据此不断调整训练。", "engine.4": "弹完一条", "engine.5": "By Ear 分析", "engine.6": "听觉档案更新", "engine.7": "选出下一批", "engine.8": "耳朵变准", "engine.9": "听觉档案", "engine.10": "每条旋律后更新", "engine.11": "音高", "engine.13": "音程", "engine.15": "记忆", "engine.17": "旋律跳进", "engine.19": "接下来会多给<b>更宽的音程与更大的跳进</b>——这两样，耳朵还没吃透。", "progression.1": "进阶", "progression.2": "不会太轻松，<br/>也不会太吃力。", "progression.3": "难度小步跟上来。你感觉到的不是等级在涨，而是音乐越来越有意思。", "progression.4": "起步", "progression.5": "旋律平稳", "progression.6": "级进与小音程", "progression.7": "短乐句", "progression.8": "调性中心明确", "progression.9": "发展", "progression.10": "音程变宽", "progression.11": "更大的跳进", "progression.12": "更长、更复杂的乐句", "progression.13": "旋律频繁转向", "progression.14": "挑战", "progression.15": "半音与大跳", "progression.16": "半音进行", "progression.17": "大跨度的旋律跳进", "progression.18": "长旋律，全靠记忆", "progression.19": "从没凭耳朵弹过", "progression.20": "资深乐手", "repertoire.1": "曲目", "repertoire.2": "练的是真曲子。", "repertoire.3": "练的不是随机生成的习题，是音乐——几千条旋律，被人弹了几百年。", "repertoire.4": "古典", "repertoire.5": "似曾相识的主题", "repertoire.12": "传统", "repertoire.13": "口耳相传的旋律", "repertoire.14": "民歌", "repertoire.15": "传统歌谣", "repertoire.16": "地方曲目", "repertoire.17": "舞曲", "repertoire.18": "不看谱，不预习。只有旋律。", "results.1": "练出什么", "results.2": "听见。<br/>找到。<br/>弹出。", "results.3": "<span class=\"res-mark\">01</span>旋律听得更清楚", "results.4": "<span class=\"res-mark\">02</span>音程自然认得出", "results.5": "<span class=\"res-mark\">03</span>旋律记得更牢", "results.6": "<span class=\"res-mark\">04</span>听到什么，就敢弹什么", "pricing.1": "价格", "pricing.2": "今天就开始练耳。", "pricing.3": "免费版", "pricing.4": "永久免费", "pricing.5": "每天 5 条旋律", "pricing.6": "难度因人而异", "pricing.7": "基础进度记录", "pricing.8": "免费开始", "pricing.9": "高级版", "pricing.10": "全部开放，不限量", "pricing.11": "练习不限量", "pricing.12": "完整 Adaptive Ear Engine™", "pricing.13": "10,000+ 条旋律", "pricing.14": "详细进度分析", "pricing.15": "完整曲目", "pricing.16": "升级高级版", "faq.1": "常见问题", "faq.2": "开始之前。", "faq.3": "要会看谱吗？", "faq.4": "不用。By Ear 只做两件事：听，然后弹。全程没有谱子，也不用说出听到的是什么音。", "faq.5": "用什么弹？", "faq.6": "屏幕上的键盘，鼠标、触屏、电脑按键都行。接上 MIDI 键盘，By Ear 就改听 MIDI 键盘。", "faq.7": "什么水平能练？", "faq.8": "都能。从没凭耳朵找过旋律，头几条只有三四个音；弹了很多年，引擎会一路把上限往高抬，直到旋律真的难起来。没人会卡在一个水平上。", "faq.9": "收录哪些音乐？", "faq.10": "古典与传统曲目，几千条旋律，从巴赫的主题到各地民歌。", "faq.11": "Adaptive Ear Engine™ 怎么运作？", "faq.12": "它从几个方面看你的旋律听觉——音高、音程、记忆、旋律跳进——再据此挑出下一个挑战。", "sec.6": "耳朵练起来。", "sec.7": "免费开始", "footer.1": "常见问题", "footer.2": "价格", "footer.3": "隐私政策", "footer.4": "使用条款", "footer.5": "联系我们", "footer.6": "听，弹，进步。", "demo.listening": "播放中，注意听", "demo.yourturn": "该你了，弹回来", "demo.complete": "这条完成", "demo.choosing": "正在挑下一条", "composer.traditional": "传统", "lang.label": "语言"}};
+  var EN    = {"nav.1": "How it works", "nav.2": "Adaptive engine", "nav.3": "Repertoire", "nav.4": "Pricing", "nav.5": "Start free", "sec.1": "By Ear", "sec.2": "Train your <em>ear</em>.<br/>One melody at a time.", "sec.3": "Listen to a melody from the classical and traditional repertoire. Play it back. By Ear adapts your training to you.", "sec.4": "Start training for free", "sec.5": "Any level. No theory. No guessing what to practice. Just listen and play.", "demo.1": "SESSION · MELODY 12", "demo.2": "Listen", "demo.3": "Play", "demo.4": "Feedback", "demo.5": "Next", "demo.6": "✓ Perfect", "experience.1": "Inside a session", "experience.2": "How does it work?", "experience.3": "By Ear · Session", "experience.4": "Melody 12 of 20", "experience.5": "ADAPTIVE", "experience.6": "Replay ⟳", "experience.7": "8 notes", "experience.8": "Interval accuracy", "experience.9": "92%", "experience.10": "Melodic memory", "experience.11": "74%", "experience.12": "1", "experience.13": "Listen", "experience.14": "A melody is played once, or several times if you ask for it.", "experience.15": "2", "experience.16": "Find the notes", "experience.17": "Play the melody back on the keyboard, on screen or on your MIDI keyboard.", "experience.18": "3", "experience.19": "Get feedback", "experience.20": "Your performance is analysed instantly — pitch, intervals, memory, jumps.", "experience.21": "4", "experience.22": "Keep going", "experience.23": "The next melody is chosen for you. You never have to decide what to practise.", "difference.1": "The difference", "difference.2": "Your ear is unique.<br/>Your training should be too.", "difference.3": "By Ear analyses how you perform and continuously adapts the melodies you receive. <span class=\"tm\" style=\"margin-left:6px\">Adaptive Ear Engine™</span>", "difference.4": "◎", "difference.5": "Personalised", "difference.6": "The right challenge for your current level — not a fixed curriculum somebody else designed.", "difference.7": "◈", "difference.8": "Adaptive", "difference.9": "Your strengths and weaknesses shape what comes next, melody after melody.", "difference.10": "♪", "difference.11": "10,000+ melodies", "difference.12": "Explore melodies from the classical and traditional repertoire, not generated exercises.", "engine.1": "Adaptive Ear Engine™", "engine.2": "It learns how you hear.", "engine.3": "Every melody you play gives By Ear more information about your ear. The Adaptive Ear Engine™ uses that information to continuously shape your training.", "engine.4": "Your performance", "engine.5": "By Ear analyses it", "engine.6": "Your ear profile updates", "engine.7": "Next melodies selected", "engine.8": "You improve", "engine.9": "Your ear profile", "engine.10": "UPDATED AFTER EVERY MELODY", "engine.11": "Pitch", "engine.12": "82%", "engine.13": "Intervals", "engine.14": "67%", "engine.15": "Memory", "engine.16": "74%", "engine.17": "Melodic jumps", "engine.18": "51%", "engine.19": "Next melodies favour <b>wider intervals and larger jumps</b> — the two things your ear is still working out.", "progression.1": "Progression", "progression.2": "Never too easy.<br/>Never overwhelming.", "progression.3": "Difficulty moves with you, in small steps. You feel it as music getting more interesting — not as a level number going up.", "progression.4": "Start", "progression.5": "Simple movement", "progression.6": "Steps and small intervals", "progression.7": "Short phrases", "progression.8": "One clear key centre", "progression.9": "Develop", "progression.10": "Wider intervals", "progression.11": "Larger leaps", "progression.12": "Longer, more complex phrases", "progression.13": "Melodies that change direction", "progression.14": "Challenge", "progression.15": "Chromatic & wide", "progression.16": "Chromatic movement", "progression.17": "Wide melodic jumps", "progression.18": "Long melodies held in memory", "progression.19": "Never played by ear", "progression.20": "Advanced musician", "repertoire.1": "Repertoire", "repertoire.2": "Train with real music.", "repertoire.3": "You're not training with random exercises. You're training with music — thousands of melodies people have been playing for centuries.", "repertoire.4": "Classical", "repertoire.5": "Themes you already half-know", "repertoire.6": "Bach", "repertoire.7": "Mozart", "repertoire.8": "Beethoven", "repertoire.9": "Schubert", "repertoire.10": "Haydn", "repertoire.11": "Chopin", "repertoire.12": "Traditional", "repertoire.13": "Melodies passed on by ear", "repertoire.14": "Folk melodies", "repertoire.15": "Traditional songs", "repertoire.16": "Regional repertoire", "repertoire.17": "Dance tunes", "repertoire.18": "No score to read. Nothing to know in advance. Only the melody.", "results.1": "What changes", "results.2": "Hear it.<br/>Find it.<br/>Play it.", "results.3": "<span class=\"res-mark\">01</span>Hear melodies more clearly", "results.4": "<span class=\"res-mark\">02</span>Recognise intervals naturally", "results.5": "<span class=\"res-mark\">03</span>Build melodic memory", "results.6": "<span class=\"res-mark\">04</span>Play what you hear with confidence", "pricing.1": "Pricing", "pricing.2": "Start training your ear today.", "pricing.3": "Free", "pricing.4": "Always free", "pricing.5": "A daily set of 5 melodies", "pricing.6": "Personalised difficulty", "pricing.7": "Basic progress tracking", "pricing.8": "Start for free", "pricing.9": "Premium", "pricing.10": "Everything, unlimited", "pricing.11": "Unlimited training", "pricing.12": "Full Adaptive Ear Engine™", "pricing.13": "10,000+ melodies", "pricing.14": "Detailed progress", "pricing.15": "Full repertoire", "pricing.16": "Go Premium", "faq.1": "Questions", "faq.2": "Before you start.", "faq.3": "Do I need to read music?", "faq.4": "No. By Ear is built around listening and playing. Nothing is written down, and you never have to name what you hear.", "faq.5": "What do I play on?", "faq.6": "The on-screen keyboard, with your mouse, your touchscreen or your computer keys. If you plug in a MIDI keyboard, By Ear listens to that instead.", "faq.7": "What level is it for?", "faq.8": "Every level. If you've never found a melody by ear, the first ones are three or four notes long. If you've been playing for years, the engine keeps raising the ceiling until the melodies are genuinely hard — nobody is stuck at a level.", "faq.9": "What kind of music is included?", "faq.10": "Classical and traditional repertoire: thousands of melodies, from Bach themes to folk tunes.", "faq.11": "How does the Adaptive Ear Engine™ work?", "faq.12": "It analyses your performance across several aspects of melodic hearing — pitch, intervals, memory, melodic jumps — and uses that profile to choose your next challenges.", "sec.6": "Ready to train your ear?", "sec.7": "Start for free", "footer.1": "FAQ", "footer.2": "Pricing", "footer.3": "Privacy", "footer.4": "Terms", "footer.5": "Contact", "footer.6": "Listen. Play. Improve.", "demo.listening": "Listening — melody plays", "demo.yourturn": "Your turn — play it back", "demo.complete": "Melody complete", "demo.choosing": "Choosing your next melody", "composer.traditional": "Traditional", "lang.label": "Language"};
+  var STORE = "byear.lang";
+
+  function dict(code){ return I18N[code] || {}; }
+  var cur = "en";
+
+  function T(key){
+    var d = dict(cur);
+    return (d[key] !== undefined ? d[key] : EN[key]);
+  }
+  window.BE_T = T;
+
+  var listeners = [];
+  window.BE_onLang = function(fn){ listeners.push(fn); };
+
+  function apply(code){
+    cur = code;
+    document.documentElement.lang = code;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var v = T(el.getAttribute("data-i18n"));
+      if(v !== undefined) el.textContent = v;
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach(function(el){
+      var v = T(el.getAttribute("data-i18n-html"));
+      if(v !== undefined) el.innerHTML = v;
+    });
+    var meta = LANGS.filter(function(l){ return l[0] === code; })[0] || LANGS[0];
+    var f = document.getElementById("langFlag"), c = document.getElementById("langCode");
+    if(f) f.textContent = meta[1];
+    if(c) c.textContent = code.toUpperCase();
+    document.querySelectorAll("#langMenu button").forEach(function(b){
+      b.setAttribute("aria-selected", b.dataset.code === code ? "true" : "false");
+    });
+    listeners.forEach(function(fn){ try{ fn(code); }catch(e){} });
+  }
+
+  function detect(){
+    var saved = null;
+    try { saved = localStorage.getItem(STORE); } catch(e){}
+    if(saved && I18N[saved]) return saved;
+    var navs = (navigator.languages && navigator.languages.length) ? navigator.languages
+             : [navigator.language || "en"];
+    for(var i=0;i<navs.length;i++){
+      var p = String(navs[i]).toLowerCase().split("-")[0];
+      if(p === "zh") return "zh";
+      if(I18N[p]) return p;
+    }
+    return "en";
+  }
+
+  // menu
+  var menu = document.getElementById("langMenu");
+  var btn  = document.getElementById("langBtn");
+  if(menu && btn){
+    LANGS.forEach(function(l){
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button"; b.dataset.code = l[0]; b.setAttribute("role","option");
+      b.innerHTML = '<span class="lang-flag">' + l[1] + '</span>' + l[2];
+      b.addEventListener("click", function(){
+        try { localStorage.setItem(STORE, l[0]); } catch(e){}
+        apply(l[0]); close();
+      });
+      li.appendChild(b); menu.appendChild(li);
+    });
+    function open(){ menu.classList.add("open"); btn.setAttribute("aria-expanded","true"); }
+    function close(){ menu.classList.remove("open"); btn.setAttribute("aria-expanded","false"); }
+    btn.addEventListener("click", function(e){
+      e.stopPropagation();
+      menu.classList.contains("open") ? close() : open();
+    });
+    document.addEventListener("click", function(e){
+      if(!menu.contains(e.target)) close();
+    });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape") close(); });
+  }
+
+  apply(detect());
+})();
+</script>
+
+<script>
+(function(){
+  var WHITE=[60,62,64,65,67,69,71,72,74,76,77,79,81,83,84];
+  var BLACK=[[0,61],[1,63],[3,66],[4,68],[5,70],[7,73],[8,75],[10,78],[11,80],[12,82]];
+
+  function buildKeyboard(el){
+    el.innerHTML="";
+    var w=document.createElement("div"); w.className="kb-white";
+    WHITE.forEach(function(m){
+      var k=document.createElement("div"); k.className="key key-w"; k.dataset.note=m; w.appendChild(k);
+    });
+    el.appendChild(w);
+    var b=document.createElement("div"); b.className="kb-black";
+    BLACK.forEach(function(pair){
+      var k=document.createElement("div"); k.className="key key-b"; k.dataset.note=pair[1];
+      k.style.left=(((pair[0]+1)/WHITE.length)*100)+"%";
+      b.appendChild(k);
+    });
+    el.appendChild(b);
+  }
+
+  // static keyboards
+  document.querySelectorAll(".kb[data-lit],.kb[data-ok]").forEach(function(el){
+    buildKeyboard(el);
+    (el.dataset.lit||"").split(",").filter(Boolean).forEach(function(n){
+      var k=el.querySelector('[data-note="'+n.trim()+'"]'); if(k) k.classList.add("lit");
+    });
+    (el.dataset.ok||"").split(",").filter(Boolean).forEach(function(n){
+      var k=el.querySelector('[data-note="'+n.trim()+'"]'); if(k) k.classList.add("ok");
+    });
+  });
+
+  // waveform bars
+  var wave=document.querySelector(".wave");
+  if(wave){
+    var hs=[30,58,42,78,54,92,66,44,80,36,70,50,86,40,62,74,48,58,34,66];
+    hs.forEach(function(h){ var i=document.createElement("i"); i.style.height=h+"%"; wave.appendChild(i); });
+  }
+
+  // reveal on scroll
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  },{threshold:.15});
+  document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
+
+  // ear profile meters
+  var profile=document.getElementById("profile");
+  if(profile){
+    var pio=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.querySelectorAll(".m-fill").forEach(function(f,i){
+            setTimeout(function(){ f.style.width=f.dataset.v+"%"; }, 120*i);
+          });
+          pio.unobserve(e.target);
+        }
+      });
+    },{threshold:.4});
+    pio.observe(profile);
+  }
+
+  // ===== hero performance =====
+  var MELODIES=[
+    {t:"Ode to Joy", c:"Beethoven", n:[64,64,65,67,67,65,64,62,60,60,62,64,64,62,62]},
+    {t:"Minuet in G", c:"Bach", n:[74,67,69,71,72,74,67,67]},
+    {t:"Ah! vous dirai-je, maman", c:"Traditional", n:[60,60,67,67,69,69,67,65,65,64,64,62,62,60]},
+    {t:"Greensleeves", c:"Traditional", n:[69,72,74,76,77,76,74,71,67,69,71,72,69,69]},
+    {t:"Ave Maria", c:"Schubert", n:[65,65,65,67,69,69,67,65,69,72,72,71,69]}
+  ];
+
+  var kb=document.getElementById("kbHero");
+  var pips=document.getElementById("pips");
+  var rail=document.getElementById("rail");
+  var label=document.getElementById("stageLabel");
+  var reveal=document.getElementById("reveal");
+  var verdict=document.getElementById("verdict");
+  if(!kb) return;
+  buildKeyboard(kb);
+
+  // --- localised demo strings -------------------------------------------
+  var curLabelKey="demo.listening", curMel=null;
+  function setLabel(k){ curLabelKey=k; label.textContent=window.BE_T(k); }
+  function setReveal(m){
+    curMel=m;
+    var c = (m.c==="Traditional") ? window.BE_T("composer.traditional") : m.c;
+    reveal.innerHTML = m.t + "<span>" + c + "</span>";
+  }
+  window.BE_onLang(function(){
+    if(curLabelKey) setLabel(curLabelKey);
+    if(curMel) setReveal(curMel);
+  });
+
+  var hwave=document.getElementById("hwave");
+  if(hwave){
+    var pattern=[52,74,38,88,60,96,44,70,34,82,56,64,90,42,76,50,86,36,68,58,94,46,72,40,80,54,66,84,48,78,62,92,40,70,56,88,44,66,36,82,58,74,50,90,42,68,60,86];
+    pattern.forEach(function(h,idx){
+      var i=document.createElement("i");
+      i.style.setProperty("--h",h+"%");
+      i.style.animationDelay=(idx*0.045)+"s";
+      hwave.appendChild(i);
+    });
+  }
+
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var visible=true;
+  var vio=new IntersectionObserver(function(e){ visible=e[0].isIntersecting; },{threshold:.15});
+  vio.observe(document.getElementById("demo"));
+
+  function keys(n){ return kb.querySelectorAll('[data-note="'+n+'"]'); }
+  function clearKeys(){ kb.querySelectorAll(".key").forEach(function(k){ k.classList.remove("lit","ok"); }); }
+  function hit(n,cls,ms){
+    keys(n).forEach(function(k){
+      k.classList.add(cls);
+      if(cls==="lit") setTimeout(function(){ k.classList.remove("lit"); }, ms);
+    });
+  }
+  function setPhase(p){
+    rail.querySelectorAll(".phase").forEach(function(el){ el.classList.toggle("on", +el.dataset.p===p); });
+  }
+  function buildPips(count){
+    pips.innerHTML="";
+    for(var i=0;i<count;i++){
+      var d=document.createElement("span"); d.className="note-pip"; pips.appendChild(d);
+    }
+  }
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+  async function idle(){ while(!visible || document.hidden){ await sleep(400); } }
+
+  if(reduce){
+    var m=MELODIES[0];
+    setPhase(2); buildPips(m.n.length);
+    pips.querySelectorAll(".note-pip").forEach(function(p){ p.classList.add("on"); });
+    [64,65,67].forEach(function(n){ keys(n).forEach(function(k){ k.classList.add("ok"); }); });
+    setLabel("demo.complete");
+    reveal.innerHTML="Ode to Joy<span>Beethoven — classical repertoire</span>";
+    reveal.classList.add("on"); verdict.classList.add("on");
+  } else {
+    (async function run(){
+      var i=0;
+      while(true){
+        var m=MELODIES[i++ % MELODIES.length];
+        await idle();
+
+        // 1. LISTEN
+        setPhase(0); clearKeys(); buildPips(m.n.length);
+        reveal.classList.remove("on"); verdict.classList.remove("on");
+        hwave.classList.add("on");
+        setLabel("demo.listening");
+        await sleep(650);
+        for(var a=0;a<m.n.length;a++){
+          hit(m.n[a],"lit",300);
+          pips.children[a].classList.add("on","ghost");
+          await sleep(330);
+        }
+        await sleep(550);
+
+        // 2. PLAY
+        setPhase(1);
+        setLabel("demo.yourturn");
+        Array.prototype.forEach.call(pips.children,function(p){ p.classList.remove("on","ghost"); });
+        await sleep(500);
+        for(var b=0;b<m.n.length;b++){
+          hit(m.n[b],"ok",0);
+          pips.children[b].classList.add("on");
+          await sleep(300);
+        }
+        await sleep(450);
+
+        // 3. FEEDBACK
+        setPhase(2);
+        setLabel("demo.complete");
+        hwave.classList.remove("on");
+        setReveal(m);
+        reveal.classList.add("on"); verdict.classList.add("on");
+        await sleep(2400);
+
+        // 4. NEXT
+        setPhase(3);
+        setLabel("demo.choosing");
+        verdict.classList.remove("on");
+        clearKeys();
+        await sleep(1100);
+      }
+    })();
+  }
+})();
+</script>
