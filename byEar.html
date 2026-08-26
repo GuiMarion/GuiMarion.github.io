@@ -91,6 +91,42 @@ main>*{min-width:0}
 .stage-head{display:flex;flex-wrap:wrap;gap:.5rem 1.9rem;align-items:baseline;margin-bottom:1rem}
 .stage-head .k{font-family:"IBM Plex Mono",monospace;font-size:.62rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.18em}
 .stage-head .v{font-family:"IBM Plex Mono",monospace;font-size:1.05rem;font-weight:500;font-variant-numeric:tabular-nums;margin-top:.15rem}
+/* ---------- le record ----------
+   Une pastille discrète tant que la phrase en cours ne vaut pas plus que le
+   record, qui s'allume dès qu'elle le vaut : c'est ce moment-là qui donne envie
+   d'aller la chercher proprement. */
+/* petit tableau de score : ton record d'un cote, ce que vaut la phrase posee
+   devant toi de l'autre. Meme typographie que la ligne de stats juste a gauche,
+   pour que ce soit lu comme la suite naturelle et non comme un ornement. */
+.rec{margin-left:auto;align-self:center;display:flex;align-items:center;gap:.85rem;
+  padding:.42rem .9rem;border-radius:var(--r);border:1px solid var(--line);
+  background:var(--sunk);font-family:"IBM Plex Mono",monospace;line-height:1;
+  transition:background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .2s ease}
+.rec[hidden]{display:none}
+.rec .rc{display:flex;flex-direction:column;gap:.28rem}
+.rec .rk{font-size:.58rem;text-transform:uppercase;letter-spacing:.17em;color:var(--ink-3);
+  transition:color .3s ease}
+.rec .rv{font-size:1.05rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink-2);
+  transition:color .3s ease,font-weight .3s ease}
+.rec .rsep{width:1px;align-self:stretch;background:var(--line);transition:background .3s ease}
+/* au repos : la phrase en cours est indiquee, sans insister */
+.rec .rnow .rv{color:var(--ink-2)}
+/* elle vaut plus que le record : c'est la qu'on attire l'oeil */
+.rec.hot{background:var(--acc-soft);border-color:var(--acc);
+  animation:recpulse 2.6s ease-in-out infinite}
+.rec.hot .rsep{background:var(--acc-glow)}
+.rec.hot .rnow .rk{color:var(--acc)}
+.rec.hot .rnow .rv{color:var(--acc);font-weight:600}
+@keyframes recpulse{
+  0%,100%{box-shadow:0 0 0 0 var(--acc-soft)}
+  50%{box-shadow:0 0 0 7px var(--acc-soft)}}
+.rec.win{animation:recpop .85s cubic-bezier(.2,1.5,.4,1)}
+@keyframes recpop{
+  0%{transform:scale(1);box-shadow:0 0 0 0 var(--acc-glow)}
+  30%{transform:scale(1.18);box-shadow:0 0 0 14px transparent}
+  100%{transform:scale(1);box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){ .rec.hot,.rec.win{animation:none} }
+@media (max-width:560px){ .rec{margin-left:0} }
 
 /* ---------- score ---------- */
 .score{overflow-x:auto;margin-top:.35rem;padding:.15rem .3rem;
@@ -210,10 +246,130 @@ kbd{font-family:"IBM Plex Mono",monospace;font-size:.72em;background:var(--sunk)
 #bReset:hover{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
 .hidden{display:none !important}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.001ms !important;animation-duration:.001ms !important}}
+/* le clavier est gelé pendant que l'app donne une note : on ne veut pas
+   qu'une touche enfoncée en même temps soit comptée */
+.kb.gel{opacity:.45;pointer-events:none;transition:opacity .12s ease}
+
+
+/* ---------- panneau des regles ----------
+   Trois etapes illustrees, les trois facons de jouer, et le clavier dessine avec
+   ses lettres. Tout en SVG inline : le fichier reste autonome. */
+.calib-box.ins{width:min(38rem,100%);max-height:calc(100vh - 2rem);overflow-y:auto;
+  padding:1.4rem 1.4rem 1.2rem}
+.ins-hi{margin:0 0 1rem;font-size:1.35rem;font-weight:600;letter-spacing:-.01em;color:var(--ink);text-align:center}
+.ins-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1rem}
+.ins-step{display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center;
+  padding:.75rem .5rem;border-radius:var(--r);background:var(--sunk);border:1px solid var(--line-soft)}
+.ins-step > span:last-child{font-size:.82rem;line-height:1.4;color:var(--ink-2)}
+.ins-ico{position:relative;display:block}
+.ins-ico b{position:absolute;right:-4px;bottom:-3px;width:19px;height:19px;border-radius:50%;
+  background:var(--acc);color:var(--on-acc);font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.ins-svg{width:52px;height:52px;display:block}
+.ins-svg .s1{fill:none;stroke:var(--acc);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ins-svg .s2{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ins-svg .s3{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-linecap:round;opacity:.45}
+.ins-svg .f1{fill:var(--acc)}
+.ins-svg .f2{fill:var(--acc-soft);stroke:var(--acc);stroke-width:1.6}
+.ins-svg .pw{fill:var(--key-w);stroke:var(--key-w-edge);stroke-width:1.4}
+.ins-svg .pe{fill:none;stroke:var(--key-w-edge);stroke-width:1.2}
+.ins-svg .pb{fill:var(--key-b)}
+
+.ins-kb{padding:.85rem .9rem .8rem;border-radius:var(--r);border:1px solid var(--line-soft);
+  background:var(--sunk);margin-bottom:.9rem}
+.ins-lab{margin:0 0 .75rem;font-family:"IBM Plex Mono",monospace;font-size:.6rem;
+  text-transform:uppercase;letter-spacing:.18em;color:var(--ink-3);text-align:center}
+.ins-ways{display:flex;justify-content:center;flex-wrap:wrap;gap:.5rem 1.3rem;margin-bottom:.95rem}
+.ins-way{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--ink-2)}
+.ins-way i{font-style:normal}
+.ins-mini{width:30px;height:21px;flex:none}
+.ins-mini .s2{fill:none;stroke:var(--ink-3);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ins-mini .f1{fill:var(--acc)}
+.ins-mini .kc{font-family:"IBM Plex Mono",monospace;font-size:8px;text-anchor:middle;fill:var(--ink-3)}
+
+.ins-piano{display:block;width:min(272px,100%);height:auto;margin:0 auto;overflow:visible}
+.ins-piano .kw{fill:var(--key-w);stroke:var(--key-w-edge);stroke-width:1}
+.ins-piano .kb2{fill:var(--key-b)}
+.ins-piano .kl{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  text-anchor:middle;fill:#3A3346}
+.ins-piano .kln{fill:#FCFBF9}
+
+/* Les deux dernières lignes forment une paire : même taille, même couleur, même
+   gouttière d'icône, pour qu'aucune ne pèse plus que l'autre. Ni fond ni cadre,
+   le bouton reste le seul élément rempli du panneau. */
+.ins-note{display:flex;align-items:flex-start;gap:.6rem;margin:0 0 .7rem;
+  font-size:.83rem;line-height:1.5;color:var(--ink-2)}
+.ins-note:last-of-type{margin-bottom:1.1rem}
+.ins-pic{flex:none;width:19px;display:flex;justify-content:center;padding-top:.06rem}
+.ins-pic svg{width:16px;height:19px;display:block}
+.ins-pic .s2{fill:none;stroke:var(--acc);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ins-go{display:block;width:100%;padding:.8rem;font:inherit;font-size:.98rem;font-weight:600;
+  color:var(--on-acc);background:var(--acc);border:0;border-radius:11px;cursor:pointer;
+  box-shadow:var(--shadow-btn);transition:background .16s ease,transform .16s ease}
+.ins-go:hover{background:var(--acc-2);transform:translateY(-1px)}
+.ins-go:active{transform:translateY(0)}
+.ins-go:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+@media (max-width:520px){
+  .ins-steps{grid-template-columns:1fr;gap:.6rem}
+  .ins-step{flex-direction:row;text-align:left;gap:.85rem}
+}
+
+/* ---------- question d'entree ---------- */
+.calib{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+  padding:1.5rem;background:var(--ground);animation:cfade .28s ease}
+.calib[hidden]{display:none}
+@keyframes cfade{from{opacity:0}to{opacity:1}}
+.calib-box{width:min(30rem,100%);background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--shadow-s);padding:1.6rem 1.5rem 1.3rem;
+  background-image:radial-gradient(120% 62% at 50% -28%,var(--acc-soft),transparent 60%)}
+.calib-q{font-size:1.06rem;line-height:1.45;margin:0 0 1.15rem;color:var(--ink);font-weight:500}
+.calib-opt{display:block;width:100%;text-align:left;margin:0 0 .55rem;padding:.72rem .9rem;
+  font:inherit;font-size:.95rem;color:var(--ink);background:var(--sunk);cursor:pointer;
+  border:1px solid var(--line);border-radius:10px;
+  transition:background .16s ease,border-color .16s ease,transform .16s ease}
+.calib-opt:hover{background:var(--acc-soft);border-color:var(--acc-glow);transform:translateY(-1px)}
+.calib-opt:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.calib-note{margin:1rem 0 0;font-size:.78rem;line-height:1.5;color:var(--ink-3)}
+.calib-p{margin:0 0 .8rem;font-size:.9rem;line-height:1.55;color:var(--ink-2)}
+.calib-p kbd{font-family:"IBM Plex Mono",monospace;font-size:.82em;background:var(--sunk);
+  border:1px solid var(--line);border-radius:4px;padding:.05em .35em}
+.calib-go{margin-top:1.1rem;text-align:center;font-weight:500}
 </style>
 </head>
 <body>
 
+<div class="calib" id="instr" hidden>
+  <div class="calib-box ins">
+    <p class="ins-hi" data-t="insHi"></p>
+    <div class="ins-steps">
+      <div class="ins-step"><span class="ins-ico"><svg viewBox="0 0 44 44" class="ins-svg" aria-hidden="true"><path d="M8 17h6l8-7v24l-8-7H8z" class="f2"/><path d="M27 15a10 10 0 0 1 0 14" class="s1"/><path d="M32 10a17 17 0 0 1 0 24" class="s3"/></svg><b>1</b></span><span data-t="insS1"></span></div>
+      <div class="ins-step"><span class="ins-ico"><svg viewBox="0 0 44 44" class="ins-svg" aria-hidden="true"><path d="M12 20a7 7 0 0 1 11.6-5.3A6.5 6.5 0 0 1 34 20a6 6 0 0 1-6 6H18a6 6 0 0 1-6-6z" class="f2"/><circle cx="19.4" cy="21.4" r="2.3" class="f1"/><path d="M21.7 21.4v-6.6l4.8 1.5" class="s1"/><circle cx="13" cy="31" r="2.2" class="s2"/><circle cx="9.5" cy="36.5" r="1.5" class="s2"/></svg><b>2</b></span><span data-t="insS2"></span></div>
+      <div class="ins-step"><span class="ins-ico"><svg viewBox="0 0 44 44" class="ins-svg" aria-hidden="true"><rect x="5" y="22" width="34" height="17" rx="2.5" class="pw"/><path d="M13.5 22v17M22 22v17M30.5 22v17" class="pe"/><rect x="22" y="22" width="8.5" height="17" rx="1" class="f2"/><rect x="10.6" y="22" width="5.4" height="10" rx="1.2" class="pb"/><rect x="19.3" y="22" width="5.4" height="10" rx="1.2" class="pb"/><rect x="27.9" y="22" width="5.4" height="10" rx="1.2" class="pb"/><path d="M26.2 6v10" class="s1"/><path d="M22.4 12.5l3.8 4.5 3.8-4.5" class="s1"/></svg><b>3</b></span><span data-t="insS3"></span></div>
+    </div>
+    <div class="ins-kb">
+      <p class="ins-lab" data-t="insWays"></p>
+      <div class="ins-ways">
+        <span class="ins-way"><svg viewBox="0 0 34 24" class="ins-mini" aria-hidden="true"><circle cx="10.5" cy="12" r="8.5" class="s2"/><circle cx="6.8" cy="12.6" r="1.3" class="f1"/><circle cx="10.5" cy="8.2" r="1.3" class="f1"/><circle cx="14.2" cy="12.6" r="1.3" class="f1"/><circle cx="7.9" cy="9" r="1.3" class="f1"/><circle cx="13.1" cy="9" r="1.3" class="f1"/><path d="M19.5 12h11" class="s2"/></svg><i data-t="insW1"></i></span>
+        <span class="ins-way"><svg viewBox="0 0 34 24" class="ins-mini" aria-hidden="true"><rect x="2.5" y="5.5" width="21" height="14" rx="1.5" class="s2"/><path d="M9 5.5v14M15.5 5.5v14" class="s2"/><path d="M18.5 8v11.5l2.7-2.9 2 4.2 2.3-1.1-2.1-4 3.9-.6z" class="f1"/></svg><i data-t="insW2"></i></span>
+        <span class="ins-way"><svg viewBox="0 0 34 24" class="ins-mini" aria-hidden="true"><rect x="1.5" y="6.5" width="9.5" height="11" rx="2.4" class="s2"/><rect x="12.2" y="6.5" width="9.5" height="11" rx="2.4" class="s2"/><rect x="22.9" y="6.5" width="9.5" height="11" rx="2.4" class="s2"/><text x="6.2" y="15" class="kc">q</text><text x="16.9" y="15" class="kc">s</text><text x="27.6" y="15" class="kc">d</text></svg><i data-t="insW3"></i></span>
+      </div>
+      <svg class="ins-piano" viewBox="0 0 208 74" role="img" aria-hidden="true"><rect x="0" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="12.2" y="63" class="kl">q</text><rect x="26" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="38.2" y="63" class="kl">s</text><rect x="52" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="64.2" y="63" class="kl">d</text><rect x="78" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="90.2" y="63" class="kl">f</text><rect x="104" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="116.2" y="63" class="kl">g</text><rect x="130" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="142.2" y="63" class="kl">h</text><rect x="156" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="168.2" y="63" class="kl">j</text><rect x="182" y="0" width="24.5" height="74" rx="3" class="kw"/><text x="194.2" y="63" class="kl">k</text><rect x="18.2" y="0" width="14" height="45" rx="2.5" class="kb2"/><text x="25.2" y="36" class="kl kln">z</text><rect x="44.2" y="0" width="14" height="45" rx="2.5" class="kb2"/><text x="51.2" y="36" class="kl kln">e</text><rect x="96.2" y="0" width="14" height="45" rx="2.5" class="kb2"/><text x="103.2" y="36" class="kl kln">t</text><rect x="122.2" y="0" width="14" height="45" rx="2.5" class="kb2"/><text x="129.2" y="36" class="kl kln">y</text><rect x="148.2" y="0" width="14" height="45" rx="2.5" class="kb2"/><text x="155.2" y="36" class="kl kln">u</text></svg>
+    </div>
+    <p class="ins-note"><span class="ins-pic" aria-hidden="true"><svg viewBox="0 0 20 24"><path d="M10 2.5a6.2 6.2 0 0 0-3.6 11.3 3.2 3.2 0 0 1 1.3 2.4h4.6a3.2 3.2 0 0 1 1.3-2.4A6.2 6.2 0 0 0 10 2.5z" class="s2"/><path d="M7.7 18.7h4.6M8.6 21.3h2.8" class="s2"/></svg></span><span data-t="insTip"></span></p>
+    <p class="ins-note"><span class="ins-pic" aria-hidden="true"><svg viewBox="0 0 20 24"><path d="M6 3v9a4 4 0 0 0 8 0V3" class="s2"/><path d="M10 16v5" class="s2"/></svg></span><span data-t="insDo"></span></p>
+    <button class="ins-go" type="button" id="bGo" data-t="insGo"></button>
+  </div>
+</div>
+
+<div class="calib" id="calib" hidden>
+  <div class="calib-box">
+    <p class="calib-q" data-t="calibQ"></p>
+    <button class="calib-opt" type="button" data-lvl="0" data-t="calib1"></button>
+    <button class="calib-opt" type="button" data-lvl="1" data-t="calib2"></button>
+    <button class="calib-opt" type="button" data-lvl="2" data-t="calib3"></button>
+    <p class="calib-note" data-t="calibNote"></p>
+  </div>
+</div>
 
 
 <div class="wrap">
@@ -245,6 +401,11 @@ kbd{font-family:"IBM Plex Mono",monospace;font-size:.72em;background:var(--sunk)
         <div><div class="k" data-t="notes">Notes</div><div class="v" id="sNotes">—</div></div>
         <div><div class="k" data-t="played">Played</div><div class="v" id="sPlayed">0</div></div>
         <div><div class="k" data-t="listens">Listens</div><div class="v" id="sPlays">0</div></div>
+        <div class="rec" id="rec" hidden>
+          <div class="rc"><span class="rk" data-t="bestRow">Best</span><span class="rv" id="recVal">0</span></div>
+          <span class="rsep" aria-hidden="true"></span>
+          <div class="rc rnow"><span class="rk" data-t="worth">Worth</span><span class="rv" id="recNow">—</span></div>
+        </div>
       </div>
       <div class="score" id="score"></div>
       <div class="controls">
@@ -279,9 +440,11 @@ kbd{font-family:"IBM Plex Mono",monospace;font-size:.72em;background:var(--sunk)
         <div class="row"><span data-t="progress">Progress</span><b id="stGain">—</b></div>
         <div class="row"><span data-t="levelReached">Level reached</span><b id="stLvl">1</b></div>
         <div class="row"><span data-t="weakest">Interval to work on</span><b id="stWeak">—</b></div>
+        <div class="row"><span data-t="tonLevel">Keys</span><b id="stTon">—</b></div>
       </div>
       <div class="spark" id="spark"></div>
       <p class="mini" data-t="sparkNote"></p>
+      <button id="bLog"><span data-t="dlLog">Download the log</span> <span class="mono" id="bLogN">0</span></button>
       <button id="bReset" data-t="reset">Erase my progress</button>
       </div>
     </details>
@@ -302,7 +465,7 @@ const NOTE_SETS = {
   let: ['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'],
   de:  ['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B','H']
 };
-const TR = {"fr": {"weakest": "Intervalle à travailler","difficulty": "Difficulté","warmup": "Amorce","warmupN": "Amorce · {n} notes","levelN": "Palier {n} · {name}","beforeL1": "avant le palier 1","ceiling": "plafond {v} %","melody": "Mélodie","notes": "Notes","played": "Jouées","listens": "Écoutes","starts": "Départs","listen": "Écouter","listenAgain": "Réécouter","refDo": "Do de repère","skip": "Passer","reveal": "Montrer","msgStart": "Branche ton clavier MIDI, puis appuie sur Écouter.","msgClick": "Clique n’importe où pour lancer la séance.","msgThisIsC": "Ceci est un do.","msgKeepIt": "Tu ne l’entendras plus de la séance : garde-le en tête.","msgNew": "Nouvelle mélodie, {n} notes. Écoute-la puis rejoue-la d’un trait.","msgYourTurn": "À toi. Il faut la jouer entière, sans faute, d’un seul trait.","v1": "D’un seul trait, du premier coup.","v2": "Passée au deuxième essai.","vN": "Passée après {n} départs.","easeDiff": "Aisance {e} % · difficulté {d} pt","revealed": "La voilà, en clair.","skipped": "Passée.","warmFound": "Trouvée en {n} notes · aisance {e} %","warmProg": "{k} sur {t} sans faute","warmProgFail": "sans faute : toujours {k} sur {t}","warmDone": "Amorce terminée.","warmDone2": "On passe au vrai répertoire.","drillOk": "{iv} est acquis.","drillOk2": "On repart sur les mélodies.","drillRight": "Juste.","drillWrong": "Raté, on refait.","drillCount": "{k} sur {t} · ces exercices ne comptent pas","midiIn": "Entrée MIDI","searching": "Recherche…","noDevice": "Aucun appareil","notAvail": "Non disponible","denied": "Refusé","connected": "Connecté : {name}","midiNone": "Aucun clavier détecté. Branche-le puis recharge, ou joue au clavier d’ordinateur.","midiNoApi": "Web MIDI n’est pas disponible ici. Ouvre le fichier dans Chrome, ou joue à la souris.","midiDenied": "Accès MIDI refusé ou bloqué dans cette page.","midiWait": "En attente de l’autorisation MIDI du navigateur.","soundOn": "Son quand je joue","session": "Séance","doneN": "Mélodies réussies","avgEase": "Aisance moyenne","progress": "Progression","levelReached": "Palier atteint","sparkNote": "Chaque barre est l’aisance d’une mélodie : nombre de notes divisé par le nombre de notes jouées.","reset": "Effacer ma progression","kbHint": "Clavier d’ordinateur : {w} blanches, {b} noires, ← → octave","newIv": "Nouvel intervalle","up": "montant","down": "descendant","after": "après {iv}","afterDown": "après {iv}, vers le bas","alone": "seul, {dir}","theC": "Le do","warmTitle": "Amorce, {n} notes","levels": ["Par degrés, très court","Par degrés, court","Premiers sauts, court","Par degrés, phrase entière","Petits sauts, phrase entière","Sauts jusqu’à la sixte","Par degrés, phrase longue","Sauts moyens, phrase longue","Sauts larges, court","Phrases très longues","Sauts larges, phrase longue","Très disjoint"],"ivs": {"2": "la seconde","3": "la tierce mineure","4": "la tierce majeure","5": "la quarte","6": "le triton","7": "la quinte","8": "la sixte mineure","9": "la sixte majeure","10": "la septième mineure","11": "la septième majeure","12": "l’octave"}},"en": {"weakest": "Interval to work on","difficulty": "Difficulty","warmup": "Warm-up","warmupN": "Warm-up · {n} notes","levelN": "Level {n} · {name}","beforeL1": "before level 1","ceiling": "ceiling {v} %","melody": "Melody","notes": "Notes","played": "Played","listens": "Listens","starts": "Restarts","listen": "Listen","listenAgain": "Listen again","refDo": "Reference C","skip": "Skip","reveal": "Reveal","msgStart": "Plug in your MIDI keyboard, then press Listen.","msgClick": "Click anywhere to start the session.","msgThisIsC": "This is a C.","msgKeepIt": "You won’t hear it again this session — keep it in mind.","msgNew": "New melody, {n} notes. Listen, then play it back in one go.","msgYourTurn": "Your turn. Play it whole, faultless, in one run.","v1": "One clean run, first try.","v2": "Got it on the second attempt.","vN": "Got it after {n} restarts.","easeDiff": "Ease {e} % · difficulty {d} pt","revealed": "Here it is.","skipped": "Skipped.","warmFound": "Found in {n} notes · ease {e} %","warmProg": "{k} of {t} faultless","warmProgFail": "faultless: still {k} of {t}","warmDone": "Warm-up complete.","warmDone2": "On to the real repertoire.","drillOk": "{iv} is learned.","drillOk2": "Back to the melodies.","drillRight": "Right.","drillWrong": "Missed, again.","drillCount": "{k} of {t} · these don’t count towards your score","midiIn": "MIDI input","searching": "Searching…","noDevice": "No device","notAvail": "Unavailable","denied": "Denied","connected": "Connected: {name}","midiNone": "No keyboard found. Plug one in and reload, or use the computer keyboard.","midiNoApi": "Web MIDI isn’t available here. Open the file in Chrome, or play with the mouse.","midiDenied": "MIDI access denied or blocked on this page.","midiWait": "Waiting for the browser’s MIDI permission.","soundOn": "Sound as I play","session": "Session","doneN": "Melodies solved","avgEase": "Average ease","progress": "Progress","levelReached": "Level reached","sparkNote": "Each bar is one melody’s ease: notes in the melody divided by notes you played.","reset": "Erase my progress","kbHint": "Computer keyboard: {w} white, {b} black, ← → octave","newIv": "New interval","up": "ascending","down": "descending","after": "after {iv}","afterDown": "after {iv}, downwards","alone": "alone, {dir}","theC": "The C","warmTitle": "Warm-up, {n} notes","levels": ["Stepwise, very short","Stepwise, short","First leaps, short","Stepwise, full phrase","Small leaps, full phrase","Leaps up to a sixth","Stepwise, long phrase","Medium leaps, long phrase","Wide leaps, short","Very long phrases","Wide leaps, long phrase","Highly disjunct"],"ivs": {"2": "the second","3": "the minor third","4": "the major third","5": "the fourth","6": "the tritone","7": "the fifth","8": "the minor sixth","9": "the major sixth","10": "the minor seventh","11": "the major seventh","12": "the octave"}},"de": {"weakest": "Zu übendes Intervall","difficulty": "Schwierigkeit","warmup": "Einstieg","warmupN": "Einstieg · {n} Töne","levelN": "Stufe {n} · {name}","beforeL1": "vor Stufe 1","ceiling": "Obergrenze {v} %","melody": "Melodie","notes": "Töne","played": "Gespielt","listens": "Anhören","starts": "Neustarts","listen": "Anhören","listenAgain": "Nochmal hören","refDo": "Referenz-C","skip": "Überspringen","reveal": "Zeigen","msgStart": "MIDI-Keyboard anschließen, dann auf Anhören drücken.","msgClick": "Irgendwohin klicken, um zu beginnen.","msgThisIsC": "Das ist ein C.","msgKeepIt": "Du hörst es in dieser Sitzung nicht wieder — merk es dir.","msgNew": "Neue Melodie, {n} Töne. Anhören, dann in einem Zug nachspielen.","msgYourTurn": "Du bist dran. Ganz, fehlerfrei, in einem Zug.","v1": "In einem Zug, beim ersten Versuch.","v2": "Beim zweiten Versuch geschafft.","vN": "Nach {n} Neustarts geschafft.","easeDiff": "Leichtigkeit {e} % · Schwierigkeit {d} Pkt","revealed": "Hier ist sie.","skipped": "Übersprungen.","warmFound": "Gefunden in {n} Tönen · Leichtigkeit {e} %","warmProg": "{k} von {t} fehlerfrei","warmProgFail": "fehlerfrei: weiterhin {k} von {t}","warmDone": "Einstieg abgeschlossen.","warmDone2": "Weiter zum echten Repertoire.","drillOk": "{iv} sitzt.","drillOk2": "Zurück zu den Melodien.","drillRight": "Richtig.","drillWrong": "Daneben, nochmal.","drillCount": "{k} von {t} · zählt nicht für die Wertung","midiIn": "MIDI-Eingang","searching": "Suche…","noDevice": "Kein Gerät","notAvail": "Nicht verfügbar","denied": "Abgelehnt","connected": "Verbunden: {name}","midiNone": "Kein Keyboard gefunden. Anschließen und neu laden, oder die Computertastatur nutzen.","midiNoApi": "Web MIDI ist hier nicht verfügbar. Datei in Chrome öffnen oder mit der Maus spielen.","midiDenied": "MIDI-Zugriff verweigert oder auf dieser Seite blockiert.","midiWait": "Warte auf die MIDI-Freigabe des Browsers.","soundOn": "Ton beim Spielen","session": "Sitzung","doneN": "Gelöste Melodien","avgEase": "Durchschnittliche Leichtigkeit","progress": "Fortschritt","levelReached": "Erreichte Stufe","sparkNote": "Jeder Balken ist die Leichtigkeit einer Melodie: Töne der Melodie geteilt durch gespielte Töne.","reset": "Fortschritt löschen","kbHint": "Computertastatur: {w} weiß, {b} schwarz, ← → Oktave","newIv": "Neues Intervall","up": "aufwärts","down": "abwärts","after": "nach {iv}","afterDown": "nach {iv}, abwärts","alone": "allein, {dir}","theC": "Das C","warmTitle": "Einstieg, {n} Töne","levels": ["Schrittweise, sehr kurz","Schrittweise, kurz","Erste Sprünge, kurz","Schrittweise, ganze Phrase","Kleine Sprünge, ganze Phrase","Sprünge bis zur Sexte","Schrittweise, lange Phrase","Mittlere Sprünge, lange Phrase","Weite Sprünge, kurz","Sehr lange Phrasen","Weite Sprünge, lange Phrase","Stark disjunkt"],"ivs": {"2": "die Sekunde","3": "die kleine Terz","4": "die große Terz","5": "die Quarte","6": "der Tritonus","7": "die Quinte","8": "die kleine Sexte","9": "die große Sexte","10": "die kleine Septime","11": "die große Septime","12": "die Oktave"}},"es": {"weakest": "Intervalo a trabajar","difficulty": "Dificultad","warmup": "Inicio","warmupN": "Inicio · {n} notas","levelN": "Nivel {n} · {name}","beforeL1": "antes del nivel 1","ceiling": "techo {v} %","melody": "Melodía","notes": "Notas","played": "Tocadas","listens": "Escuchas","starts": "Reinicios","listen": "Escuchar","listenAgain": "Volver a escuchar","refDo": "Do de referencia","skip": "Saltar","reveal": "Mostrar","msgStart": "Conecta tu teclado MIDI y pulsa Escuchar.","msgClick": "Haz clic en cualquier sitio para empezar.","msgThisIsC": "Esto es un do.","msgKeepIt": "No volverás a oírlo en la sesión: tenlo en mente.","msgNew": "Nueva melodía, {n} notas. Escúchala y tócala de una sola vez.","msgYourTurn": "Te toca. Entera, sin fallos, de una sola vez.","v1": "De una sola vez, a la primera.","v2": "Conseguida al segundo intento.","vN": "Conseguida tras {n} reinicios.","easeDiff": "Soltura {e} % · dificultad {d} pt","revealed": "Aquí está.","skipped": "Saltada.","warmFound": "Encontrada en {n} notas · soltura {e} %","warmProg": "{k} de {t} sin fallos","warmProgFail": "sin fallos: sigues en {k} de {t}","warmDone": "Inicio completado.","warmDone2": "Pasamos al repertorio real.","drillOk": "{iv} está adquirida.","drillOk2": "Volvemos a las melodías.","drillRight": "Correcto.","drillWrong": "Fallo, otra vez.","drillCount": "{k} de {t} · esto no cuenta para la puntuación","midiIn": "Entrada MIDI","searching": "Buscando…","noDevice": "Ningún dispositivo","notAvail": "No disponible","denied": "Denegado","connected": "Conectado: {name}","midiNone": "No se detecta ningún teclado. Conéctalo y recarga, o usa el teclado del ordenador.","midiNoApi": "Web MIDI no está disponible aquí. Abre el archivo en Chrome o toca con el ratón.","midiDenied": "Acceso MIDI denegado o bloqueado en esta página.","midiWait": "Esperando el permiso MIDI del navegador.","soundOn": "Sonido al tocar","session": "Sesión","doneN": "Melodías resueltas","avgEase": "Soltura media","progress": "Progreso","levelReached": "Nivel alcanzado","sparkNote": "Cada barra es la soltura de una melodía: notas de la melodía divididas por notas tocadas.","reset": "Borrar mi progreso","kbHint": "Teclado del ordenador: {w} blancas, {b} negras, ← → octava","newIv": "Nuevo intervalo","up": "ascendente","down": "descendente","after": "tras {iv}","afterDown": "tras {iv}, hacia abajo","alone": "solo, {dir}","theC": "El do","warmTitle": "Inicio, {n} notas","levels": ["Por grados, muy corta","Por grados, corta","Primeros saltos, corta","Por grados, frase entera","Saltos pequeños, frase entera","Saltos hasta la sexta","Por grados, frase larga","Saltos medios, frase larga","Saltos amplios, corta","Frases muy largas","Saltos amplios, frase larga","Muy disjunta"],"ivs": {"2": "la segunda","3": "la tercera menor","4": "la tercera mayor","5": "la cuarta","6": "el tritono","7": "la quinta","8": "la sexta menor","9": "la sexta mayor","10": "la séptima menor","11": "la séptima mayor","12": "la octava"}},"it": {"weakest": "Intervallo da lavorare","difficulty": "Difficoltà","warmup": "Avvio","warmupN": "Avvio · {n} note","levelN": "Livello {n} · {name}","beforeL1": "prima del livello 1","ceiling": "soglia {v} %","melody": "Melodia","notes": "Note","played": "Suonate","listens": "Ascolti","starts": "Ripartenze","listen": "Ascolta","listenAgain": "Riascolta","refDo": "Do di riferimento","skip": "Salta","reveal": "Mostra","msgStart": "Collega la tastiera MIDI, poi premi Ascolta.","msgClick": "Clicca ovunque per iniziare la sessione.","msgThisIsC": "Questo è un do.","msgKeepIt": "Non lo sentirai più in questa sessione: tienilo a mente.","msgNew": "Nuova melodia, {n} note. Ascoltala e risuonala di seguito.","msgYourTurn": "Tocca a te. Intera, senza errori, di seguito.","v1": "Di seguito, al primo colpo.","v2": "Presa al secondo tentativo.","vN": "Presa dopo {n} ripartenze.","easeDiff": "Scioltezza {e} % · difficoltà {d} pt","revealed": "Eccola.","skipped": "Saltata.","warmFound": "Trovata in {n} note · scioltezza {e} %","warmProg": "{k} su {t} senza errori","warmProgFail": "senza errori: ancora {k} su {t}","warmDone": "Avvio completato.","warmDone2": "Si passa al repertorio vero.","drillOk": "{iv} è acquisito.","drillOk2": "Torniamo alle melodie.","drillRight": "Giusto.","drillWrong": "Sbagliato, si rifà.","drillCount": "{k} su {t} · non contano per il punteggio","midiIn": "Ingresso MIDI","searching": "Ricerca…","noDevice": "Nessun dispositivo","notAvail": "Non disponibile","denied": "Negato","connected": "Collegato: {name}","midiNone": "Nessuna tastiera rilevata. Collegala e ricarica, oppure usa la tastiera del computer.","midiNoApi": "Web MIDI non è disponibile qui. Apri il file in Chrome o suona col mouse.","midiDenied": "Accesso MIDI negato o bloccato in questa pagina.","midiWait": "In attesa dell’autorizzazione MIDI del browser.","soundOn": "Suono mentre suono","session": "Sessione","doneN": "Melodie risolte","avgEase": "Scioltezza media","progress": "Progresso","levelReached": "Livello raggiunto","sparkNote": "Ogni barra è la scioltezza di una melodia: note della melodia divise per note suonate.","reset": "Cancella i progressi","kbHint": "Tastiera del computer: {w} bianchi, {b} neri, ← → ottava","newIv": "Nuovo intervallo","up": "ascendente","down": "discendente","after": "dopo {iv}","afterDown": "dopo {iv}, verso il basso","alone": "solo, {dir}","theC": "Il do","warmTitle": "Avvio, {n} note","levels": ["Per gradi, molto breve","Per gradi, breve","Primi salti, breve","Per gradi, frase intera","Salti piccoli, frase intera","Salti fino alla sesta","Per gradi, frase lunga","Salti medi, frase lunga","Salti ampi, breve","Frasi molto lunghe","Salti ampi, frase lunga","Molto disgiunta"],"ivs": {"2": "la seconda","3": "la terza minore","4": "la terza maggiore","5": "la quarta","6": "il tritono","7": "la quinta","8": "la sesta minore","9": "la sesta maggiore","10": "la settima minore","11": "la settima maggiore","12": "l’ottava"}},"pt": {"weakest": "Intervalo a trabalhar","difficulty": "Dificuldade","warmup": "Início","warmupN": "Início · {n} notas","levelN": "Nível {n} · {name}","beforeL1": "antes do nível 1","ceiling": "teto {v} %","melody": "Melodia","notes": "Notas","played": "Tocadas","listens": "Escutas","starts": "Recomeços","listen": "Ouvir","listenAgain": "Ouvir de novo","refDo": "Dó de referência","skip": "Passar","reveal": "Mostrar","msgStart": "Liga o teu teclado MIDI e carrega em Ouvir.","msgClick": "Clica em qualquer sítio para começar.","msgThisIsC": "Isto é um dó.","msgKeepIt": "Não o voltas a ouvir nesta sessão: guarda-o de cabeça.","msgNew": "Nova melodia, {n} notas. Ouve e toca de uma vez.","msgYourTurn": "É a tua vez. Inteira, sem falhas, de uma só vez.","v1": "De uma só vez, à primeira.","v2": "Conseguida à segunda tentativa.","vN": "Conseguida após {n} recomeços.","easeDiff": "Desenvoltura {e} % · dificuldade {d} pt","revealed": "Aqui está.","skipped": "Passada.","warmFound": "Encontrada em {n} notas · desenvoltura {e} %","warmProg": "{k} de {t} sem falhas","warmProgFail": "sem falhas: ainda {k} de {t}","warmDone": "Início concluído.","warmDone2": "Passamos ao repertório a sério.","drillOk": "{iv} está adquirido.","drillOk2": "Voltamos às melodias.","drillRight": "Certo.","drillWrong": "Falhou, repete.","drillCount": "{k} de {t} · não contam para a pontuação","midiIn": "Entrada MIDI","searching": "A procurar…","noDevice": "Nenhum dispositivo","notAvail": "Indisponível","denied": "Recusado","connected": "Ligado: {name}","midiNone": "Nenhum teclado detetado. Liga-o e recarrega, ou usa o teclado do computador.","midiNoApi": "Web MIDI não está disponível aqui. Abre o ficheiro no Chrome ou toca com o rato.","midiDenied": "Acesso MIDI recusado ou bloqueado nesta página.","midiWait": "À espera da autorização MIDI do navegador.","soundOn": "Som ao tocar","session": "Sessão","doneN": "Melodias resolvidas","avgEase": "Desenvoltura média","progress": "Progresso","levelReached": "Nível atingido","sparkNote": "Cada barra é a desenvoltura de uma melodia: notas da melodia a dividir pelas notas tocadas.","reset": "Apagar o meu progresso","kbHint": "Teclado do computador: {w} brancas, {b} pretas, ← → oitava","newIv": "Novo intervalo","up": "ascendente","down": "descendente","after": "após {iv}","afterDown": "após {iv}, para baixo","alone": "sozinho, {dir}","theC": "O dó","warmTitle": "Início, {n} notas","levels": ["Por graus, muito curta","Por graus, curta","Primeiros saltos, curta","Por graus, frase inteira","Saltos pequenos, frase inteira","Saltos até à sexta","Por graus, frase longa","Saltos médios, frase longa","Saltos largos, curta","Frases muito longas","Saltos largos, frase longa","Muito disjunta"],"ivs": {"2": "a segunda","3": "a terceira menor","4": "a terceira maior","5": "a quarta","6": "o trítono","7": "a quinta","8": "a sexta menor","9": "a sexta maior","10": "a sétima menor","11": "a sétima maior","12": "a oitava"}},"nl": {"weakest": "Interval om te oefenen","difficulty": "Moeilijkheid","warmup": "Opstart","warmupN": "Opstart · {n} noten","levelN": "Niveau {n} · {name}","beforeL1": "voor niveau 1","ceiling": "plafond {v} %","melody": "Melodie","notes": "Noten","played": "Gespeeld","listens": "Beluisterd","starts": "Herstarts","listen": "Luisteren","listenAgain": "Opnieuw luisteren","refDo": "Referentie-C","skip": "Overslaan","reveal": "Tonen","msgStart": "Sluit je MIDI-keyboard aan en druk op Luisteren.","msgClick": "Klik ergens om de sessie te starten.","msgThisIsC": "Dit is een C.","msgKeepIt": "Je hoort hem deze sessie niet meer — onthoud hem.","msgNew": "Nieuwe melodie, {n} noten. Luister en speel hem in één keer na.","msgYourTurn": "Jouw beurt. Helemaal, foutloos, in één keer.","v1": "In één keer, meteen goed.","v2": "Bij de tweede poging gelukt.","vN": "Gelukt na {n} herstarts.","easeDiff": "Gemak {e} % · moeilijkheid {d} pt","revealed": "Hier is hij.","skipped": "Overgeslagen.","warmFound": "Gevonden in {n} noten · gemak {e} %","warmProg": "{k} van {t} foutloos","warmProgFail": "foutloos: nog steeds {k} van {t}","warmDone": "Opstart voltooid.","warmDone2": "Door naar het echte repertoire.","drillOk": "{iv} zit erin.","drillOk2": "Terug naar de melodieën.","drillRight": "Goed.","drillWrong": "Mis, opnieuw.","drillCount": "{k} van {t} · deze tellen niet mee","midiIn": "MIDI-ingang","searching": "Zoeken…","noDevice": "Geen apparaat","notAvail": "Niet beschikbaar","denied": "Geweigerd","connected": "Verbonden: {name}","midiNone": "Geen keyboard gevonden. Sluit er een aan en herlaad, of gebruik het computertoetsenbord.","midiNoApi": "Web MIDI is hier niet beschikbaar. Open het bestand in Chrome of speel met de muis.","midiDenied": "MIDI-toegang geweigerd of geblokkeerd op deze pagina.","midiWait": "Wachten op MIDI-toestemming van de browser.","soundOn": "Geluid tijdens spelen","session": "Sessie","doneN": "Opgeloste melodieën","avgEase": "Gemiddeld gemak","progress": "Voortgang","levelReached": "Bereikt niveau","sparkNote": "Elke balk is het gemak van één melodie: noten van de melodie gedeeld door gespeelde noten.","reset": "Voortgang wissen","kbHint": "Computertoetsenbord: {w} wit, {b} zwart, ← → octaaf","newIv": "Nieuw interval","up": "stijgend","down": "dalend","after": "na {iv}","afterDown": "na {iv}, omlaag","alone": "alleen, {dir}","theC": "De C","warmTitle": "Opstart, {n} noten","levels": ["Trapsgewijs, zeer kort","Trapsgewijs, kort","Eerste sprongen, kort","Trapsgewijs, hele frase","Kleine sprongen, hele frase","Sprongen tot de sext","Trapsgewijs, lange frase","Middelgrote sprongen, lange frase","Wijde sprongen, kort","Zeer lange frases","Wijde sprongen, lange frase","Sterk disjunct"],"ivs": {"2": "de secunde","3": "de kleine terts","4": "de grote terts","5": "de kwart","6": "de tritonus","7": "de kwint","8": "de kleine sext","9": "de grote sext","10": "de kleine septiem","11": "de grote septiem","12": "het octaaf"}},"ja": {"weakest": "重点的に練習する音程","difficulty": "難易度","warmup": "ウォームアップ","warmupN": "ウォームアップ · {n} 音","levelN": "レベル {n} · {name}","beforeL1": "レベル1の前","ceiling": "上限 {v} %","melody": "メロディ","notes": "音数","played": "弾いた数","listens": "再生回数","starts": "やり直し","listen": "聴く","listenAgain": "もう一度聴く","refDo": "基準のド","skip": "スキップ","reveal": "答えを見る","msgStart": "MIDIキーボードを接続して「聴く」を押してください。","msgClick": "どこかをクリックしてセッションを開始してください。","msgThisIsC": "これがドです。","msgKeepIt": "このセッションでは二度と鳴りません。覚えておいてください。","msgNew": "新しいメロディ、{n} 音。聴いてから一息で弾いてください。","msgYourTurn": "どうぞ。最後まで、間違えずに、一息で。","v1": "一息で、一発正解。","v2": "二回目で正解。","vN": "{n} 回のやり直しの後に正解。","easeDiff": "余裕度 {e} % · 難易度 {d} pt","revealed": "これが答えです。","skipped": "スキップしました。","warmFound": "{n} 音で正解 · 余裕度 {e} %","warmProg": "ノーミス {k} / {t}","warmProgFail": "ノーミス：まだ {k} / {t}","warmDone": "ウォームアップ終了。","warmDone2": "本物のレパートリーへ。","drillOk": "{iv} を習得しました。","drillOk2": "メロディに戻ります。","drillRight": "正解。","drillWrong": "ミス、もう一度。","drillCount": "{k} / {t} · この練習はスコアに入りません","midiIn": "MIDI入力","searching": "検索中…","noDevice": "デバイスなし","notAvail": "利用できません","denied": "拒否されました","connected": "接続済み：{name}","midiNone": "キーボードが見つかりません。接続して再読み込みするか、パソコンのキーボードで弾いてください。","midiNoApi": "ここではWeb MIDIが使えません。Chromeでファイルを開くか、マウスで弾いてください。","midiDenied": "このページでMIDIアクセスが拒否またはブロックされています。","midiWait": "ブラウザのMIDI許可を待っています。","soundOn": "弾いた音を鳴らす","session": "セッション","doneN": "正解したメロディ","avgEase": "平均余裕度","progress": "進み具合","levelReached": "到達レベル","sparkNote": "各バーは一曲の余裕度です。メロディの音数を、弾いた音数で割った値。","reset": "進捗を消去","kbHint": "パソコンのキーボード：{w} 白鍵、{b} 黒鍵、← → オクターブ","newIv": "新しい音程","up": "上行","down": "下行","after": "{iv} のあと","afterDown": "{iv} のあと、下行で","alone": "単独、{dir}","theC": "ド","warmTitle": "ウォームアップ、{n} 音","levels": ["順次進行、とても短い","順次進行、短い","最初の跳躍、短い","順次進行、フレーズ全体","小さい跳躍、フレーズ全体","6度までの跳躍","順次進行、長いフレーズ","中くらいの跳躍、長いフレーズ","大きい跳躍、短い","とても長いフレーズ","大きい跳躍、長いフレーズ","跳躍が非常に多い"],"ivs": {"2": "2度","3": "短3度","4": "長3度","5": "4度","6": "三全音","7": "5度","8": "短6度","9": "長6度","10": "短7度","11": "長7度","12": "オクターブ"}},"ko": {"weakest": "연습할 음정","difficulty": "난이도","warmup": "워밍업","warmupN": "워밍업 · {n}음","levelN": "레벨 {n} · {name}","beforeL1": "레벨 1 이전","ceiling": "상한 {v}%","melody": "멜로디","notes": "음 수","played": "친 음","listens": "들은 횟수","starts": "다시 시작","listen": "듣기","listenAgain": "다시 듣기","refDo": "기준 도","skip": "넘기기","reveal": "정답 보기","msgStart": "MIDI 키보드를 연결한 뒤 듣기를 누르세요.","msgClick": "아무 곳이나 클릭해 세션을 시작하세요.","msgThisIsC": "이것이 도입니다.","msgKeepIt": "이번 세션에서는 다시 들려주지 않습니다. 기억해 두세요.","msgNew": "새 멜로디, {n}음. 듣고 나서 한 번에 쳐 보세요.","msgYourTurn": "당신 차례입니다. 끝까지, 틀리지 않고, 한 번에.","v1": "한 번에, 첫 시도로 성공.","v2": "두 번째 시도에 성공.","vN": "{n}번 다시 시작한 뒤 성공.","easeDiff": "여유도 {e}% · 난이도 {d}pt","revealed": "정답입니다.","skipped": "넘겼습니다.","warmFound": "{n}음 만에 성공 · 여유도 {e}%","warmProg": "무실수 {k} / {t}","warmProgFail": "무실수: 아직 {k} / {t}","warmDone": "워밍업 완료.","warmDone2": "본 레퍼토리로 넘어갑니다.","drillOk": "{iv} 습득 완료.","drillOk2": "멜로디로 돌아갑니다.","drillRight": "정답.","drillWrong": "틀렸습니다, 다시.","drillCount": "{k} / {t} · 이 연습은 점수에 반영되지 않습니다","midiIn": "MIDI 입력","searching": "검색 중…","noDevice": "장치 없음","notAvail": "사용 불가","denied": "거부됨","connected": "연결됨: {name}","midiNone": "키보드를 찾을 수 없습니다. 연결 후 새로고침하거나 컴퓨터 자판으로 연주하세요.","midiNoApi": "여기서는 Web MIDI를 쓸 수 없습니다. Chrome에서 파일을 열거나 마우스로 연주하세요.","midiDenied": "이 페이지에서 MIDI 접근이 거부되었거나 차단되었습니다.","midiWait": "브라우저의 MIDI 권한을 기다리는 중입니다.","soundOn": "연주할 때 소리 내기","session": "세션","doneN": "맞힌 멜로디","avgEase": "평균 여유도","progress": "진행","levelReached": "도달 레벨","sparkNote": "각 막대는 한 멜로디의 여유도입니다. 멜로디의 음 수를 친 음 수로 나눈 값.","reset": "진행 기록 지우기","kbHint": "컴퓨터 자판: {w} 흰건반, {b} 검은건반, ← → 옥타브","newIv": "새 음정","up": "상행","down": "하행","after": "{iv} 다음","afterDown": "{iv} 다음, 하행으로","alone": "단독, {dir}","theC": "도","warmTitle": "워밍업, {n}음","levels": ["순차진행, 아주 짧게","순차진행, 짧게","첫 도약, 짧게","순차진행, 한 악구","작은 도약, 한 악구","6도까지의 도약","순차진행, 긴 악구","중간 도약, 긴 악구","넓은 도약, 짧게","아주 긴 악구","넓은 도약, 긴 악구","도약이 매우 많음"],"ivs": {"2": "2도","3": "단3도","4": "장3도","5": "4도","6": "트라이톤","7": "5도","8": "단6도","9": "장6도","10": "단7도","11": "장7도","12": "옥타브"}},"zh": {"weakest": "需要练习的音程","difficulty": "难度","warmup": "热身","warmupN": "热身 · {n} 个音","levelN": "第 {n} 级 · {name}","beforeL1": "第 1 级之前","ceiling": "上限 {v}%","melody": "旋律","notes": "音数","played": "已弹","listens": "试听","starts": "重来","listen": "听","listenAgain": "再听一次","refDo": "基准音 C","skip": "跳过","reveal": "显示答案","msgStart": "接上 MIDI 键盘，然后按「听」。","msgClick": "点击任意位置开始本次练习。","msgThisIsC": "这是 C。","msgKeepIt": "本次练习不会再响起，请记住它。","msgNew": "新旋律，{n} 个音。听完后一口气弹出来。","msgYourTurn": "到你了。完整、无错、一次弹完。","v1": "一次弹完，第一次就对。","v2": "第二次尝试成功。","vN": "重来 {n} 次后成功。","easeDiff": "从容度 {e}% · 难度 {d} 点","revealed": "答案在此。","skipped": "已跳过。","warmFound": "{n} 个音就找到了 · 从容度 {e}%","warmProg": "无错 {k} / {t}","warmProgFail": "无错：仍是 {k} / {t}","warmDone": "热身完成。","warmDone2": "进入正式曲目。","drillOk": "{iv} 已掌握。","drillOk2": "回到旋律。","drillRight": "正确。","drillWrong": "错了，再来。","drillCount": "{k} / {t} · 这些练习不计入成绩","midiIn": "MIDI 输入","searching": "搜索中…","noDevice": "没有设备","notAvail": "不可用","denied": "被拒绝","connected": "已连接：{name}","midiNone": "未检测到键盘。接上后重新加载，或用电脑键盘弹奏。","midiNoApi": "此处无法使用 Web MIDI。请在 Chrome 中打开文件，或用鼠标弹奏。","midiDenied": "本页面的 MIDI 访问被拒绝或阻止。","midiWait": "正在等待浏览器授予 MIDI 权限。","soundOn": "弹奏时发声","session": "本次练习","doneN": "完成的旋律","avgEase": "平均从容度","progress": "进展","levelReached": "已达级别","sparkNote": "每根柱子代表一条旋律的从容度：旋律音数除以你弹的音数。","reset": "清除我的进度","kbHint": "电脑键盘：{w} 白键，{b} 黑键，← → 八度","newIv": "新音程","up": "上行","down": "下行","after": "在{iv}之后","afterDown": "在{iv}之后，下行","alone": "单独，{dir}","theC": "C","warmTitle": "热身，{n} 个音","levels": ["级进，很短","级进，短","初次跳进，短","级进，完整乐句","小跳进，完整乐句","不超过六度的跳进","级进，长乐句","中等跳进，长乐句","大跳进，短","很长的乐句","大跳进，长乐句","跳进极多"],"ivs": {"2": "二度","3": "小三度","4": "大三度","5": "四度","6": "三全音","7": "五度","8": "小六度","9": "大六度","10": "小七度","11": "大七度","12": "八度"}},"cs": {"weakest": "Interval k procvičení","difficulty": "Obtížnost","warmup": "Rozehrání","warmupN": "Rozehrání · {n} tónů","levelN": "Úroveň {n} · {name}","beforeL1": "před úrovní 1","ceiling": "strop {v} %","melody": "Melodie","notes": "Tónů","played": "Zahráno","listens": "Přehrání","starts": "Restartů","listen": "Poslech","listenAgain": "Poslechnout znovu","refDo": "Referenční C","skip": "Přeskočit","reveal": "Ukázat","msgStart": "Připoj MIDI klávesy a stiskni Poslech.","msgClick": "Klikni kamkoli a sezení začne.","msgThisIsC": "Toto je C.","msgKeepIt": "V tomto sezení ho už neuslyšíš — zapamatuj si ho.","msgNew": "Nová melodie, {n} tónů. Poslechni si ji a zahraj ji vcelku.","msgYourTurn": "Teď ty. Celou, bez chyby, na jeden zátah.","v1": "Na jeden zátah, hned napoprvé.","v2": "Podařilo se na druhý pokus.","vN": "Podařilo se po {n} restartech.","easeDiff": "Lehkost {e} % · obtížnost {d} b","revealed": "Tady je.","skipped": "Přeskočeno.","warmFound": "Nalezena za {n} tónů · lehkost {e} %","warmProg": "{k} z {t} bez chyby","warmProgFail": "bez chyby: stále {k} z {t}","warmDone": "Rozehrání hotovo.","warmDone2": "Jdeme na skutečný repertoár.","drillOk": "{iv} je zvládnuta.","drillOk2": "Zpět k melodiím.","drillRight": "Správně.","drillWrong": "Chyba, znovu.","drillCount": "{k} z {t} · tato cvičení se nepočítají","midiIn": "MIDI vstup","searching": "Hledám…","noDevice": "Žádné zařízení","notAvail": "Nedostupné","denied": "Odmítnuto","connected": "Připojeno: {name}","midiNone": "Klávesy nenalezeny. Připoj je a načti stránku znovu, nebo hraj na počítačové klávesnici.","midiNoApi": "Web MIDI zde není dostupné. Otevři soubor v Chrome, nebo hraj myší.","midiDenied": "Přístup k MIDI byl na této stránce odmítnut nebo blokován.","midiWait": "Čekám na povolení MIDI od prohlížeče.","soundOn": "Zvuk při hraní","session": "Sezení","doneN": "Zvládnuté melodie","avgEase": "Průměrná lehkost","progress": "Postup","levelReached": "Dosažená úroveň","sparkNote": "Každý sloupec je lehkost jedné melodie: počet tónů melodie dělený počtem zahraných tónů.","reset": "Smazat můj postup","kbHint": "Počítačová klávesnice: {w} bílé, {b} černé, ← → oktáva","newIv": "Nový interval","up": "vzestupně","down": "sestupně","after": "po {iv}","afterDown": "po {iv}, dolů","alone": "samostatně, {dir}","theC": "C","warmTitle": "Rozehrání, {n} tónů","levels": ["Po stupních, velmi krátké","Po stupních, krátké","První skoky, krátké","Po stupních, celá fráze","Malé skoky, celá fráze","Skoky do sexty","Po stupních, dlouhá fráze","Střední skoky, dlouhá fráze","Široké skoky, krátké","Velmi dlouhé fráze","Široké skoky, dlouhá fráze","Velmi nesouvislé"],"ivs": {"2": "sekunda","3": "malá tercie","4": "velká tercie","5": "kvarta","6": "tritonus","7": "kvinta","8": "malá sexta","9": "velká sexta","10": "malá septima","11": "velká septima","12": "oktáva"}},"hu": {"weakest": "Gyakorlandó hangköz","difficulty": "Nehézség","warmup": "Bemelegítés","warmupN": "Bemelegítés · {n} hang","levelN": "{n}. szint · {name}","beforeL1": "az 1. szint előtt","ceiling": "plafon {v} %","melody": "Dallam","notes": "Hangok","played": "Lejátszva","listens": "Meghallgatás","starts": "Újrakezdés","listen": "Meghallgatás","listenAgain": "Újra meghallgatom","refDo": "Referencia C","skip": "Kihagyás","reveal": "Megmutat","msgStart": "Csatlakoztasd a MIDI-billentyűzetet, majd nyomd meg a Meghallgatás gombot.","msgClick": "Kattints bárhová az indításhoz.","msgThisIsC": "Ez egy C.","msgKeepIt": "Ebben a menetben többé nem hallod — tartsd fejben.","msgNew": "Új dallam, {n} hang. Hallgasd meg, majd játszd le egy menetben.","msgYourTurn": "Te jössz. Végig, hibátlanul, egyetlen menetben.","v1": "Egy menetben, elsőre.","v2": "Másodszorra sikerült.","vN": "{n} újrakezdés után sikerült.","easeDiff": "Könnyedség {e} % · nehézség {d} pt","revealed": "Íme.","skipped": "Kihagyva.","warmFound": "{n} hangból megvan · könnyedség {e} %","warmProg": "{k} / {t} hibátlan","warmProgFail": "hibátlan: még mindig {k} / {t}","warmDone": "Bemelegítés kész.","warmDone2": "Jöhet az igazi repertoár.","drillOk": "{iv} megvan.","drillOk2": "Vissza a dallamokhoz.","drillRight": "Helyes.","drillWrong": "Hiba, újra.","drillCount": "{k} / {t} · ezek nem számítanak a pontszámba","midiIn": "MIDI bemenet","searching": "Keresés…","noDevice": "Nincs eszköz","notAvail": "Nem elérhető","denied": "Elutasítva","connected": "Csatlakoztatva: {name}","midiNone": "Nem található billentyűzet. Csatlakoztasd és tölts újra, vagy játssz a számítógép billentyűzetén.","midiNoApi": "A Web MIDI itt nem érhető el. Nyisd meg a fájlt Chrome-ban, vagy játssz egérrel.","midiDenied": "A MIDI-hozzáférés ezen az oldalon elutasítva vagy letiltva.","midiWait": "Várakozás a böngésző MIDI-engedélyére.","soundOn": "Hang játék közben","session": "Menet","doneN": "Megoldott dallamok","avgEase": "Átlagos könnyedség","progress": "Haladás","levelReached": "Elért szint","sparkNote": "Minden oszlop egy dallam könnyedsége: a dallam hangjainak száma osztva a lejátszott hangokkal.","reset": "Haladás törlése","kbHint": "Számítógép-billentyűzet: {w} fehér, {b} fekete, ← → oktáv","newIv": "Új hangköz","up": "felfelé","down": "lefelé","after": "{iv} után","afterDown": "{iv} után, lefelé","alone": "önmagában, {dir}","theC": "A C","warmTitle": "Bemelegítés, {n} hang","levels": ["Lépésenként, nagyon rövid","Lépésenként, rövid","Első ugrások, rövid","Lépésenként, teljes frázis","Kis ugrások, teljes frázis","Ugrások szextig","Lépésenként, hosszú frázis","Közepes ugrások, hosszú frázis","Nagy ugrások, rövid","Nagyon hosszú frázisok","Nagy ugrások, hosszú frázis","Erősen ugráló"],"ivs": {"2": "a szekund","3": "a kis terc","4": "a nagy terc","5": "a kvart","6": "a tritonusz","7": "a kvint","8": "a kis szext","9": "a nagy szext","10": "a kis szeptim","11": "a nagy szeptim","12": "az oktáv"}},"ro": {"weakest": "Interval de exersat","difficulty": "Dificultate","warmup": "Încălzire","warmupN": "Încălzire · {n} note","levelN": "Nivelul {n} · {name}","beforeL1": "înainte de nivelul 1","ceiling": "plafon {v} %","melody": "Melodie","notes": "Note","played": "Cântate","listens": "Ascultări","starts": "Reluări","listen": "Ascultă","listenAgain": "Ascultă din nou","refDo": "Do de referință","skip": "Sari peste","reveal": "Arată","msgStart": "Conectează claviatura MIDI și apasă Ascultă.","msgClick": "Dă clic oriunde pentru a începe sesiunea.","msgThisIsC": "Acesta este un do.","msgKeepIt": "Nu îl vei mai auzi în această sesiune — ține-l minte.","msgNew": "Melodie nouă, {n} note. Ascult-o, apoi cânt-o dintr-o suflare.","msgYourTurn": "E rândul tău. Întreagă, fără greșeală, dintr-o suflare.","v1": "Dintr-o suflare, din prima.","v2": "Reușită la a doua încercare.","vN": "Reușită după {n} reluări.","easeDiff": "Ușurință {e} % · dificultate {d} pt","revealed": "Iat-o.","skipped": "Sărită.","warmFound": "Găsită în {n} note · ușurință {e} %","warmProg": "{k} din {t} fără greșeală","warmProgFail": "fără greșeală: tot {k} din {t}","warmDone": "Încălzire terminată.","warmDone2": "Trecem la repertoriul propriu-zis.","drillOk": "{iv} este însușită.","drillOk2": "Înapoi la melodii.","drillRight": "Corect.","drillWrong": "Greșit, o luăm de la capăt.","drillCount": "{k} din {t} · aceste exerciții nu contează la punctaj","midiIn": "Intrare MIDI","searching": "Se caută…","noDevice": "Niciun dispozitiv","notAvail": "Indisponibil","denied": "Refuzat","connected": "Conectat: {name}","midiNone": "Nicio claviatură detectată. Conectează una și reîncarcă, sau cântă de la tastatură.","midiNoApi": "Web MIDI nu este disponibil aici. Deschide fișierul în Chrome sau cântă cu mouse-ul.","midiDenied": "Accesul MIDI a fost refuzat sau blocat pe această pagină.","midiWait": "Se așteaptă permisiunea MIDI a browserului.","soundOn": "Sunet când cânt","session": "Sesiune","doneN": "Melodii rezolvate","avgEase": "Ușurință medie","progress": "Progres","levelReached": "Nivel atins","sparkNote": "Fiecare bară este ușurința unei melodii: numărul de note împărțit la notele cântate.","reset": "Șterge progresul","kbHint": "Tastatura calculatorului: {w} albe, {b} negre, ← → octavă","newIv": "Interval nou","up": "ascendent","down": "descendent","after": "după {iv}","afterDown": "după {iv}, în jos","alone": "singur, {dir}","theC": "Do-ul","warmTitle": "Încălzire, {n} note","levels": ["Prin trepte, foarte scurtă","Prin trepte, scurtă","Primele salturi, scurtă","Prin trepte, frază întreagă","Salturi mici, frază întreagă","Salturi până la sextă","Prin trepte, frază lungă","Salturi medii, frază lungă","Salturi mari, scurtă","Fraze foarte lungi","Salturi mari, frază lungă","Foarte disjunctă"],"ivs": {"2": "secunda","3": "terța mică","4": "terța mare","5": "cvarta","6": "tritonul","7": "cvinta","8": "sexta mică","9": "sexta mare","10": "septima mică","11": "septima mare","12": "octava"}},"tr": {"weakest": "Çalışılacak aralık","difficulty": "Zorluk","warmup": "Isınma","warmupN": "Isınma · {n} nota","levelN": "Seviye {n} · {name}","beforeL1": "1. seviyeden önce","ceiling": "tavan %{v}","melody": "Ezgi","notes": "Nota","played": "Çalınan","listens": "Dinleme","starts": "Yeniden başlama","listen": "Dinle","listenAgain": "Tekrar dinle","refDo": "Referans do","skip": "Atla","reveal": "Göster","msgStart": "MIDI klavyeni bağla, sonra Dinle'ye bas.","msgClick": "Oturumu başlatmak için herhangi bir yere tıkla.","msgThisIsC": "Bu bir do.","msgKeepIt": "Bu oturumda bir daha duymayacaksın — aklında tut.","msgNew": "Yeni ezgi, {n} nota. Dinle, sonra tek seferde çal.","msgYourTurn": "Sıra sende. Baştan sona, hatasız, tek seferde.","v1": "Tek seferde, ilk denemede.","v2": "İkinci denemede oldu.","vN": "{n} yeniden başlamadan sonra oldu.","easeDiff": "Rahatlık %{e} · zorluk {d} p","revealed": "İşte bu.","skipped": "Atlandı.","warmFound": "{n} notada bulundu · rahatlık %{e}","warmProg": "{t} taneden {k} hatasız","warmProgFail": "hatasız: hâlâ {t} taneden {k}","warmDone": "Isınma tamam.","warmDone2": "Asıl dağarcığa geçiyoruz.","drillOk": "{iv} öğrenildi.","drillOk2": "Ezgilere dönüyoruz.","drillRight": "Doğru.","drillWrong": "Hata, tekrar.","drillCount": "{t} taneden {k} · bu alıştırmalar puana katılmaz","midiIn": "MIDI girişi","searching": "Aranıyor…","noDevice": "Cihaz yok","notAvail": "Kullanılamıyor","denied": "Reddedildi","connected": "Bağlandı: {name}","midiNone": "Klavye bulunamadı. Bağlayıp sayfayı yenile ya da bilgisayar klavyesiyle çal.","midiNoApi": "Web MIDI burada kullanılamıyor. Dosyayı Chrome'da aç veya fareyle çal.","midiDenied": "Bu sayfada MIDI erişimi reddedildi veya engellendi.","midiWait": "Tarayıcının MIDI iznini bekliyor.","soundOn": "Çalarken ses","session": "Oturum","doneN": "Çözülen ezgiler","avgEase": "Ortalama rahatlık","progress": "İlerleme","levelReached": "Ulaşılan seviye","sparkNote": "Her çubuk bir ezginin rahatlığıdır: ezginin nota sayısı bölü çaldığın nota sayısı.","reset": "İlerlememi sil","kbHint": "Bilgisayar klavyesi: {w} beyaz, {b} siyah, ← → oktav","newIv": "Yeni aralık","up": "çıkıcı","down": "inici","after": "{iv} sonrası","afterDown": "{iv} sonrası, aşağı","alone": "tek başına, {dir}","theC": "Do","warmTitle": "Isınma, {n} nota","levels": ["Komşu seslerle, çok kısa","Komşu seslerle, kısa","İlk sıçramalar, kısa","Komşu seslerle, tam cümle","Küçük sıçramalar, tam cümle","Altılıya kadar sıçrama","Komşu seslerle, uzun cümle","Orta sıçramalar, uzun cümle","Geniş sıçramalar, kısa","Çok uzun cümleler","Geniş sıçramalar, uzun cümle","Çok sıçramalı"],"ivs": {"2": "ikili","3": "küçük üçlü","4": "büyük üçlü","5": "dörtlü","6": "triton","7": "beşli","8": "küçük altılı","9": "büyük altılı","10": "küçük yedili","11": "büyük yedili","12": "oktav"}}};
+const TR = {"fr":{"weakest":"Intervalle \u00e0 travailler","difficulty":"Difficult\u00e9","warmup":"Amorce","warmupN":"Amorce \u00b7 {n} notes","levelN":"Palier {n} \u00b7 {name}","beforeL1":"avant le palier 1","ceiling":"plafond {v} %","melody":"M\u00e9lodie","notes":"Notes","played":"Jou\u00e9es","listens":"\u00c9coutes","starts":"D\u00e9parts","listen":"\u00c9couter","listenAgain":"R\u00e9\u00e9couter","refDo":"Do de rep\u00e8re","skip":"Passer","reveal":"Montrer","msgStart":"Branche ton clavier MIDI, puis appuie sur \u00c9couter.","msgClick":"Clique n\u2019importe o\u00f9 pour lancer la s\u00e9ance.","msgThisIsC":"Ceci est un do.","msgKeepIt":"Tu ne l\u2019entendras plus de la s\u00e9ance : garde-le en t\u00eate.","msgNew":"Nouvelle m\u00e9lodie, {n} notes. \u00c9coute-la puis rejoue-la d\u2019un trait.","msgYourTurn":"\u00c0 toi. Il faut la jouer enti\u00e8re, sans faute, d\u2019un seul trait.","v1":"D\u2019un seul trait, du premier coup.","v2":"Pass\u00e9e au deuxi\u00e8me essai.","vN":"Pass\u00e9e apr\u00e8s {n} d\u00e9parts.","easeDiff":"Aisance {e} % \u00b7 difficult\u00e9 {d} pt","revealed":"La voil\u00e0, en clair.","skipped":"Pass\u00e9e.","warmFound":"Trouv\u00e9e en {n} notes \u00b7 aisance {e} %","warmProg":"{k} sur {t} sans faute","warmProgFail":"sans faute : toujours {k} sur {t}","warmDone":"Amorce termin\u00e9e.","warmDone2":"On passe au vrai r\u00e9pertoire.","drillOk":"{iv} est acquis.","drillOk2":"On repart sur les m\u00e9lodies.","drillRight":"Juste.","drillWrong":"Rat\u00e9, on refait.","drillCount":"{k} sur {t} \u00b7 ces exercices ne comptent pas","midiIn":"Entr\u00e9e MIDI","searching":"Recherche\u2026","noDevice":"Aucun appareil","notAvail":"Non disponible","denied":"Refus\u00e9","connected":"Connect\u00e9 : {name}","midiNone":"Aucun clavier d\u00e9tect\u00e9. Branche-le puis recharge, ou joue au clavier d\u2019ordinateur.","midiNoApi":"Web MIDI n\u2019est pas disponible ici. Ouvre le fichier dans Chrome, ou joue \u00e0 la souris.","midiDenied":"Acc\u00e8s MIDI refus\u00e9 ou bloqu\u00e9 dans cette page.","midiWait":"En attente de l\u2019autorisation MIDI du navigateur.","soundOn":"Son quand je joue","session":"S\u00e9ance","doneN":"M\u00e9lodies r\u00e9ussies","avgEase":"Aisance moyenne","progress":"Progression","levelReached":"Niveau m\u00e9lodie","sparkNote":"Chaque barre est l\u2019aisance d\u2019une m\u00e9lodie : nombre de notes divis\u00e9 par le nombre de notes jou\u00e9es.","reset":"Effacer ma progression","kbHint":"Clavier d\u2019ordinateur : {w} blanches, {b} noires, \u2190 \u2192 octave","newIv":"Nouvel intervalle","up":"montant","down":"descendant","after":"apr\u00e8s {iv}","afterDown":"apr\u00e8s {iv}, vers le bas","alone":"seul, {dir}","theC":"Le do","warmTitle":"Amorce, {n} notes","levels":["Par degr\u00e9s, tr\u00e8s court","Par degr\u00e9s, court","Premiers sauts, court","Par degr\u00e9s, phrase enti\u00e8re","Petits sauts, phrase enti\u00e8re","Sauts jusqu\u2019\u00e0 la sixte","Par degr\u00e9s, phrase longue","Sauts moyens, phrase longue","Sauts larges, court","Phrases tr\u00e8s longues","Sauts larges, phrase longue","Tr\u00e8s disjoint"],"ivs":{"2":"la seconde","3":"la tierce mineure","4":"la tierce majeure","5":"la quarte","6":"le triton","7":"la quinte","8":"la sixte mineure","9":"la sixte majeure","10":"la septi\u00e8me mineure","11":"la septi\u00e8me majeure","12":"l\u2019octave"},"calibQ":"Est-ce que tu es d\u00e9j\u00e0 \u00e0 l'aise pour retrouver une m\u00e9lodie \u00e0 l'oreille ?","calib1":"Pas du tout, je d\u00e9bute","calib2":"Un peu, je joue parfois d'oreille","calib3":"Oui, j'ai une formation","calibNote":"Juste pour choisir le point de d\u00e9part. L'app se recale toute seule en quelques m\u00e9lodies.","rescue":"On la reprend par morceaux.","rescueN":"Les {n} premi\u00e8res notes.","rescueOk":"Voil\u00e0.","rescueAll":"Maintenant la phrase enti\u00e8re.","rescueDone":"Elle est pass\u00e9e, au rattrapage.","genTitle":"Ligne libre","beyond":"Au-del\u00e0 du r\u00e9pertoire","aim":"vis\u00e9e {v} %","anchor":"La voil\u00e0, ta premi\u00e8re note.","almost":"Presque. Rejoue-la depuis le d\u00e9but, sans faute.","dlLog":"T\u00e9l\u00e9charger le journal","almost1":"Presque. Une fausse note. Rejoue-la depuis le d\u00e9but.","almostN":"Presque. {n} fausses notes. Rejoue-la depuis le d\u00e9but.","tonLevel":"Tonalit\u00e9","tonC":"do seulement","tonN":"{n} alt\u00e9rations","rescueBit":"Ce fragment, {n} notes.","theNote":"Voil\u00e0 la note.","best":"record {v}","newBest":"Record : {v}.","insGo":"Commencer","bestRow":"Record","worth":"Valeur","insHi":"Comment \u00e7a marche","insS1":"L'app te joue une m\u00e9lodie.","insS2":"Chante-la dans ta t\u00eate et place-la sur le clavier.","insS3":"Rejoue-la : enti\u00e8re, sans faute, d'un seul trait.","insWays":"Trois fa\u00e7ons de la rejouer","insW1":"Clavier MIDI","insW2":"La souris","insW3":"Ton clavier","insTip":"Ne cherche pas au hasard. C'est en te repr\u00e9sentant la m\u00e9lodie avant de la chercher que tu progresses vraiment.","insDo":"Tu vas d'abord entendre un do de r\u00e9f\u00e9rence. Il te sera rejou\u00e9 \u00e0 chaque ouverture de l'application."},"en":{"weakest":"Interval to work on","difficulty":"Difficulty","warmup":"Warm-up","warmupN":"Warm-up \u00b7 {n} notes","levelN":"Level {n} \u00b7 {name}","beforeL1":"before level 1","ceiling":"ceiling {v} %","melody":"Melody","notes":"Notes","played":"Played","listens":"Listens","starts":"Restarts","listen":"Listen","listenAgain":"Listen again","refDo":"Reference C","skip":"Skip","reveal":"Reveal","msgStart":"Plug in your MIDI keyboard, then press Listen.","msgClick":"Click anywhere to start the session.","msgThisIsC":"This is a C.","msgKeepIt":"You won\u2019t hear it again this session \u2014 keep it in mind.","msgNew":"New melody, {n} notes. Listen, then play it back in one go.","msgYourTurn":"Your turn. Play it whole, faultless, in one run.","v1":"One clean run, first try.","v2":"Got it on the second attempt.","vN":"Got it after {n} restarts.","easeDiff":"Ease {e} % \u00b7 difficulty {d} pt","revealed":"Here it is.","skipped":"Skipped.","warmFound":"Found in {n} notes \u00b7 ease {e} %","warmProg":"{k} of {t} faultless","warmProgFail":"faultless: still {k} of {t}","warmDone":"Warm-up complete.","warmDone2":"On to the real repertoire.","drillOk":"{iv} is learned.","drillOk2":"Back to the melodies.","drillRight":"Right.","drillWrong":"Missed, again.","drillCount":"{k} of {t} \u00b7 these don\u2019t count towards your score","midiIn":"MIDI input","searching":"Searching\u2026","noDevice":"No device","notAvail":"Unavailable","denied":"Denied","connected":"Connected: {name}","midiNone":"No keyboard found. Plug one in and reload, or use the computer keyboard.","midiNoApi":"Web MIDI isn\u2019t available here. Open the file in Chrome, or play with the mouse.","midiDenied":"MIDI access denied or blocked on this page.","midiWait":"Waiting for the browser\u2019s MIDI permission.","soundOn":"Sound as I play","session":"Session","doneN":"Melodies solved","avgEase":"Average ease","progress":"Progress","levelReached":"Melodic level","sparkNote":"Each bar is one melody\u2019s ease: notes in the melody divided by notes you played.","reset":"Erase my progress","kbHint":"Computer keyboard: {w} white, {b} black, \u2190 \u2192 octave","newIv":"New interval","up":"ascending","down":"descending","after":"after {iv}","afterDown":"after {iv}, downwards","alone":"alone, {dir}","theC":"The C","warmTitle":"Warm-up, {n} notes","levels":["Stepwise, very short","Stepwise, short","First leaps, short","Stepwise, full phrase","Small leaps, full phrase","Leaps up to a sixth","Stepwise, long phrase","Medium leaps, long phrase","Wide leaps, short","Very long phrases","Wide leaps, long phrase","Highly disjunct"],"ivs":{"2":"the second","3":"the minor third","4":"the major third","5":"the fourth","6":"the tritone","7":"the fifth","8":"the minor sixth","9":"the major sixth","10":"the minor seventh","11":"the major seventh","12":"the octave"},"calibQ":"Are you already comfortable picking out melodies by ear?","calib1":"Not at all, I'm starting out","calib2":"A little, I sometimes play by ear","calib3":"Yes, I'm trained","calibNote":"Only to pick a starting point. The app recalibrates itself within a few melodies.","rescue":"Let's take it in pieces.","rescueN":"The first {n} notes.","rescueOk":"There.","rescueAll":"Now the whole phrase.","rescueDone":"Got there, with help.","genTitle":"Free line","beyond":"Beyond the repertoire","aim":"aiming {v} %","anchor":"There it is, your first note.","almost":"Almost. Play it again from the top, faultless.","dlLog":"Download the log","almost1":"Almost. One wrong note. Play it again from the top.","almostN":"Almost. {n} wrong notes. Play it again from the top.","tonLevel":"Keys","tonC":"C only","tonN":"{n} accidentals","rescueBit":"This bit, {n} notes.","theNote":"Here's the note.","best":"best {v}","newBest":"New best: {v}.","insGo":"Start","bestRow":"Best","worth":"Worth","insHi":"How it works","insS1":"The app plays you a melody.","insS2":"Sing it in your head and picture it on the keyboard.","insS3":"Play it back: whole, faultless, in one run.","insWays":"Three ways to play it back","insW1":"MIDI keyboard","insW2":"Your mouse","insW3":"Your keyboard","insTip":"Don't hunt at random. You improve by picturing the melody before you go looking for it.","insDo":"You'll hear a reference C first. It plays every time you open the app."},"de":{"weakest":"Zu \u00fcbendes Intervall","difficulty":"Schwierigkeit","warmup":"Einstieg","warmupN":"Einstieg \u00b7 {n} T\u00f6ne","levelN":"Stufe {n} \u00b7 {name}","beforeL1":"vor Stufe 1","ceiling":"Obergrenze {v} %","melody":"Melodie","notes":"T\u00f6ne","played":"Gespielt","listens":"Anh\u00f6ren","starts":"Neustarts","listen":"Anh\u00f6ren","listenAgain":"Nochmal h\u00f6ren","refDo":"Referenz-C","skip":"\u00dcberspringen","reveal":"Zeigen","msgStart":"MIDI-Keyboard anschlie\u00dfen, dann auf Anh\u00f6ren dr\u00fccken.","msgClick":"Irgendwohin klicken, um zu beginnen.","msgThisIsC":"Das ist ein C.","msgKeepIt":"Du h\u00f6rst es in dieser Sitzung nicht wieder \u2014 merk es dir.","msgNew":"Neue Melodie, {n} T\u00f6ne. Anh\u00f6ren, dann in einem Zug nachspielen.","msgYourTurn":"Du bist dran. Ganz, fehlerfrei, in einem Zug.","v1":"In einem Zug, beim ersten Versuch.","v2":"Beim zweiten Versuch geschafft.","vN":"Nach {n} Neustarts geschafft.","easeDiff":"Leichtigkeit {e} % \u00b7 Schwierigkeit {d} Pkt","revealed":"Hier ist sie.","skipped":"\u00dcbersprungen.","warmFound":"Gefunden in {n} T\u00f6nen \u00b7 Leichtigkeit {e} %","warmProg":"{k} von {t} fehlerfrei","warmProgFail":"fehlerfrei: weiterhin {k} von {t}","warmDone":"Einstieg abgeschlossen.","warmDone2":"Weiter zum echten Repertoire.","drillOk":"{iv} sitzt.","drillOk2":"Zur\u00fcck zu den Melodien.","drillRight":"Richtig.","drillWrong":"Daneben, nochmal.","drillCount":"{k} von {t} \u00b7 z\u00e4hlt nicht f\u00fcr die Wertung","midiIn":"MIDI-Eingang","searching":"Suche\u2026","noDevice":"Kein Ger\u00e4t","notAvail":"Nicht verf\u00fcgbar","denied":"Abgelehnt","connected":"Verbunden: {name}","midiNone":"Kein Keyboard gefunden. Anschlie\u00dfen und neu laden, oder die Computertastatur nutzen.","midiNoApi":"Web MIDI ist hier nicht verf\u00fcgbar. Datei in Chrome \u00f6ffnen oder mit der Maus spielen.","midiDenied":"MIDI-Zugriff verweigert oder auf dieser Seite blockiert.","midiWait":"Warte auf die MIDI-Freigabe des Browsers.","soundOn":"Ton beim Spielen","session":"Sitzung","doneN":"Gel\u00f6ste Melodien","avgEase":"Durchschnittliche Leichtigkeit","progress":"Fortschritt","levelReached":"Melodisches Niveau","sparkNote":"Jeder Balken ist die Leichtigkeit einer Melodie: T\u00f6ne der Melodie geteilt durch gespielte T\u00f6ne.","reset":"Fortschritt l\u00f6schen","kbHint":"Computertastatur: {w} wei\u00df, {b} schwarz, \u2190 \u2192 Oktave","newIv":"Neues Intervall","up":"aufw\u00e4rts","down":"abw\u00e4rts","after":"nach {iv}","afterDown":"nach {iv}, abw\u00e4rts","alone":"allein, {dir}","theC":"Das C","warmTitle":"Einstieg, {n} T\u00f6ne","levels":["Schrittweise, sehr kurz","Schrittweise, kurz","Erste Spr\u00fcnge, kurz","Schrittweise, ganze Phrase","Kleine Spr\u00fcnge, ganze Phrase","Spr\u00fcnge bis zur Sexte","Schrittweise, lange Phrase","Mittlere Spr\u00fcnge, lange Phrase","Weite Spr\u00fcnge, kurz","Sehr lange Phrasen","Weite Spr\u00fcnge, lange Phrase","Stark disjunkt"],"ivs":{"2":"die Sekunde","3":"die kleine Terz","4":"die gro\u00dfe Terz","5":"die Quarte","6":"der Tritonus","7":"die Quinte","8":"die kleine Sexte","9":"die gro\u00dfe Sexte","10":"die kleine Septime","11":"die gro\u00dfe Septime","12":"die Oktave"},"calibQ":"Kannst du Melodien schon nach Geh\u00f6r heraush\u00f6ren?","calib1":"\u00dcberhaupt nicht, ich fange an","calib2":"Ein wenig, manchmal spiele ich nach Geh\u00f6r","calib3":"Ja, ich habe eine Ausbildung","calibNote":"Nur f\u00fcr den Startpunkt. Die App justiert sich nach wenigen Melodien selbst.","rescue":"Nehmen wir sie St\u00fcck f\u00fcr St\u00fcck.","rescueN":"Die ersten {n} T\u00f6ne.","rescueOk":"So.","rescueAll":"Jetzt die ganze Phrase.","rescueDone":"Geschafft, mit Hilfe.","genTitle":"Freie Linie","beyond":"Jenseits des Repertoires","aim":"Ziel {v} %","anchor":"Da ist er, dein erster Ton.","almost":"Fast. Spiel sie noch einmal von vorn, fehlerfrei.","dlLog":"Protokoll herunterladen","almost1":"Fast. Ein falscher Ton. Spiel sie noch einmal von vorn.","almostN":"Fast. {n} falsche T\u00f6ne. Spiel sie noch einmal von vorn.","tonLevel":"Tonart","tonC":"nur C","tonN":"{n} Vorzeichen","rescueBit":"Dieser Ausschnitt, {n} T\u00f6ne.","theNote":"Hier ist der Ton.","best":"Rekord {v}","newBest":"Neuer Rekord: {v}.","insGo":"Start","bestRow":"Rekord","worth":"Wert","insHi":"So funktioniert es","insS1":"Die App spielt dir eine Melodie vor.","insS2":"Singe sie innerlich und verorte sie auf der Klaviatur.","insS3":"Spiel sie nach: ganz, fehlerfrei, in einem Zug.","insWays":"Drei Wege zum Nachspielen","insW1":"MIDI-Keyboard","insW2":"Die Maus","insW3":"Deine Tastatur","insTip":"Such nicht aufs Geratewohl. Fortschritte macht, wer sich die Melodie vorstellt, bevor er sie sucht.","insDo":"Zuerst h\u00f6rst du ein Referenz-C. Es erklingt bei jedem \u00d6ffnen der App."},"es":{"weakest":"Intervalo a trabajar","difficulty":"Dificultad","warmup":"Inicio","warmupN":"Inicio \u00b7 {n} notas","levelN":"Nivel {n} \u00b7 {name}","beforeL1":"antes del nivel 1","ceiling":"techo {v} %","melody":"Melod\u00eda","notes":"Notas","played":"Tocadas","listens":"Escuchas","starts":"Reinicios","listen":"Escuchar","listenAgain":"Volver a escuchar","refDo":"Do de referencia","skip":"Saltar","reveal":"Mostrar","msgStart":"Conecta tu teclado MIDI y pulsa Escuchar.","msgClick":"Haz clic en cualquier sitio para empezar.","msgThisIsC":"Esto es un do.","msgKeepIt":"No volver\u00e1s a o\u00edrlo en la sesi\u00f3n: tenlo en mente.","msgNew":"Nueva melod\u00eda, {n} notas. Esc\u00fachala y t\u00f3cala de una sola vez.","msgYourTurn":"Te toca. Entera, sin fallos, de una sola vez.","v1":"De una sola vez, a la primera.","v2":"Conseguida al segundo intento.","vN":"Conseguida tras {n} reinicios.","easeDiff":"Soltura {e} % \u00b7 dificultad {d} pt","revealed":"Aqu\u00ed est\u00e1.","skipped":"Saltada.","warmFound":"Encontrada en {n} notas \u00b7 soltura {e} %","warmProg":"{k} de {t} sin fallos","warmProgFail":"sin fallos: sigues en {k} de {t}","warmDone":"Inicio completado.","warmDone2":"Pasamos al repertorio real.","drillOk":"{iv} est\u00e1 adquirida.","drillOk2":"Volvemos a las melod\u00edas.","drillRight":"Correcto.","drillWrong":"Fallo, otra vez.","drillCount":"{k} de {t} \u00b7 esto no cuenta para la puntuaci\u00f3n","midiIn":"Entrada MIDI","searching":"Buscando\u2026","noDevice":"Ning\u00fan dispositivo","notAvail":"No disponible","denied":"Denegado","connected":"Conectado: {name}","midiNone":"No se detecta ning\u00fan teclado. Con\u00e9ctalo y recarga, o usa el teclado del ordenador.","midiNoApi":"Web MIDI no est\u00e1 disponible aqu\u00ed. Abre el archivo en Chrome o toca con el rat\u00f3n.","midiDenied":"Acceso MIDI denegado o bloqueado en esta p\u00e1gina.","midiWait":"Esperando el permiso MIDI del navegador.","soundOn":"Sonido al tocar","session":"Sesi\u00f3n","doneN":"Melod\u00edas resueltas","avgEase":"Soltura media","progress":"Progreso","levelReached":"Nivel mel\u00f3dico","sparkNote":"Cada barra es la soltura de una melod\u00eda: notas de la melod\u00eda divididas por notas tocadas.","reset":"Borrar mi progreso","kbHint":"Teclado del ordenador: {w} blancas, {b} negras, \u2190 \u2192 octava","newIv":"Nuevo intervalo","up":"ascendente","down":"descendente","after":"tras {iv}","afterDown":"tras {iv}, hacia abajo","alone":"solo, {dir}","theC":"El do","warmTitle":"Inicio, {n} notas","levels":["Por grados, muy corta","Por grados, corta","Primeros saltos, corta","Por grados, frase entera","Saltos peque\u00f1os, frase entera","Saltos hasta la sexta","Por grados, frase larga","Saltos medios, frase larga","Saltos amplios, corta","Frases muy largas","Saltos amplios, frase larga","Muy disjunta"],"ivs":{"2":"la segunda","3":"la tercera menor","4":"la tercera mayor","5":"la cuarta","6":"el tritono","7":"la quinta","8":"la sexta menor","9":"la sexta mayor","10":"la s\u00e9ptima menor","11":"la s\u00e9ptima mayor","12":"la octava"},"calibQ":"\u00bfYa te resulta f\u00e1cil sacar melod\u00edas de o\u00eddo?","calib1":"Nada, estoy empezando","calib2":"Un poco, a veces toco de o\u00eddo","calib3":"S\u00ed, tengo formaci\u00f3n","calibNote":"Solo para elegir el punto de partida. La app se recalibra sola en unas pocas melod\u00edas.","rescue":"La retomamos por partes.","rescueN":"Las primeras {n} notas.","rescueOk":"Ah\u00ed est\u00e1.","rescueAll":"Ahora la frase entera.","rescueDone":"Sali\u00f3, con ayuda.","genTitle":"L\u00ednea libre","beyond":"M\u00e1s all\u00e1 del repertorio","aim":"objetivo {v} %","anchor":"Ah\u00ed est\u00e1, tu primera nota.","almost":"Casi. T\u00f3cala otra vez desde el principio, sin fallos.","dlLog":"Descargar el registro","almost1":"Casi. Una nota falsa. T\u00f3cala otra vez desde el principio.","almostN":"Casi. {n} notas falsas. T\u00f3cala otra vez desde el principio.","tonLevel":"Tonalidad","tonC":"solo do","tonN":"{n} alteraciones","rescueBit":"Este fragmento, {n} notas.","theNote":"Aqu\u00ed est\u00e1 la nota.","best":"r\u00e9cord {v}","newBest":"Nuevo r\u00e9cord: {v}.","insGo":"Empezar","bestRow":"R\u00e9cord","worth":"Valor","insHi":"C\u00f3mo funciona","insS1":"La app te toca una melod\u00eda.","insS2":"C\u00e1ntala mentalmente y sit\u00faala en el teclado.","insS3":"T\u00f3cala de nuevo: entera, sin fallos, de una vez.","insWays":"Tres formas de tocarla","insW1":"Teclado MIDI","insW2":"El rat\u00f3n","insW3":"Tu teclado","insTip":"No busques al azar. Se progresa represent\u00e1ndose la melod\u00eda antes de buscarla.","insDo":"Primero oir\u00e1s un do de referencia. Sonar\u00e1 cada vez que abras la aplicaci\u00f3n."},"it":{"weakest":"Intervallo da lavorare","difficulty":"Difficolt\u00e0","warmup":"Avvio","warmupN":"Avvio \u00b7 {n} note","levelN":"Livello {n} \u00b7 {name}","beforeL1":"prima del livello 1","ceiling":"soglia {v} %","melody":"Melodia","notes":"Note","played":"Suonate","listens":"Ascolti","starts":"Ripartenze","listen":"Ascolta","listenAgain":"Riascolta","refDo":"Do di riferimento","skip":"Salta","reveal":"Mostra","msgStart":"Collega la tastiera MIDI, poi premi Ascolta.","msgClick":"Clicca ovunque per iniziare la sessione.","msgThisIsC":"Questo \u00e8 un do.","msgKeepIt":"Non lo sentirai pi\u00f9 in questa sessione: tienilo a mente.","msgNew":"Nuova melodia, {n} note. Ascoltala e risuonala di seguito.","msgYourTurn":"Tocca a te. Intera, senza errori, di seguito.","v1":"Di seguito, al primo colpo.","v2":"Presa al secondo tentativo.","vN":"Presa dopo {n} ripartenze.","easeDiff":"Scioltezza {e} % \u00b7 difficolt\u00e0 {d} pt","revealed":"Eccola.","skipped":"Saltata.","warmFound":"Trovata in {n} note \u00b7 scioltezza {e} %","warmProg":"{k} su {t} senza errori","warmProgFail":"senza errori: ancora {k} su {t}","warmDone":"Avvio completato.","warmDone2":"Si passa al repertorio vero.","drillOk":"{iv} \u00e8 acquisito.","drillOk2":"Torniamo alle melodie.","drillRight":"Giusto.","drillWrong":"Sbagliato, si rif\u00e0.","drillCount":"{k} su {t} \u00b7 non contano per il punteggio","midiIn":"Ingresso MIDI","searching":"Ricerca\u2026","noDevice":"Nessun dispositivo","notAvail":"Non disponibile","denied":"Negato","connected":"Collegato: {name}","midiNone":"Nessuna tastiera rilevata. Collegala e ricarica, oppure usa la tastiera del computer.","midiNoApi":"Web MIDI non \u00e8 disponibile qui. Apri il file in Chrome o suona col mouse.","midiDenied":"Accesso MIDI negato o bloccato in questa pagina.","midiWait":"In attesa dell\u2019autorizzazione MIDI del browser.","soundOn":"Suono mentre suono","session":"Sessione","doneN":"Melodie risolte","avgEase":"Scioltezza media","progress":"Progresso","levelReached":"Livello melodico","sparkNote":"Ogni barra \u00e8 la scioltezza di una melodia: note della melodia divise per note suonate.","reset":"Cancella i progressi","kbHint":"Tastiera del computer: {w} bianchi, {b} neri, \u2190 \u2192 ottava","newIv":"Nuovo intervallo","up":"ascendente","down":"discendente","after":"dopo {iv}","afterDown":"dopo {iv}, verso il basso","alone":"solo, {dir}","theC":"Il do","warmTitle":"Avvio, {n} note","levels":["Per gradi, molto breve","Per gradi, breve","Primi salti, breve","Per gradi, frase intera","Salti piccoli, frase intera","Salti fino alla sesta","Per gradi, frase lunga","Salti medi, frase lunga","Salti ampi, breve","Frasi molto lunghe","Salti ampi, frase lunga","Molto disgiunta"],"ivs":{"2":"la seconda","3":"la terza minore","4":"la terza maggiore","5":"la quarta","6":"il tritono","7":"la quinta","8":"la sesta minore","9":"la sesta maggiore","10":"la settima minore","11":"la settima maggiore","12":"l\u2019ottava"},"calibQ":"Riesci gi\u00e0 a ricavare le melodie a orecchio?","calib1":"Per niente, sto iniziando","calib2":"Un po', a volte suono a orecchio","calib3":"S\u00ec, ho studiato","calibNote":"Serve solo a scegliere il punto di partenza. L'app si ricalibra da sola in poche melodie.","rescue":"La riprendiamo a pezzi.","rescueN":"Le prime {n} note.","rescueOk":"Ecco.","rescueAll":"Ora la frase intera.","rescueDone":"Presa, con aiuto.","genTitle":"Linea libera","beyond":"Oltre il repertorio","aim":"obiettivo {v} %","anchor":"Eccola, la tua prima nota.","almost":"Quasi. Rifalla da capo, senza errori.","dlLog":"Scarica il registro","almost1":"Quasi. Una nota sbagliata. Rifalla da capo.","almostN":"Quasi. {n} note sbagliate. Rifalla da capo.","tonLevel":"Tonalit\u00e0","tonC":"solo do","tonN":"{n} alterazioni","rescueBit":"Questo frammento, {n} note.","theNote":"Ecco la nota.","best":"record {v}","newBest":"Nuovo record: {v}.","insGo":"Inizia","bestRow":"Record","worth":"Valore","insHi":"Come funziona","insS1":"L'app ti suona una melodia.","insS2":"Cantala nella testa e collocala sulla tastiera.","insS3":"Risuonala: intera, senza errori, in un fiato.","insWays":"Tre modi per risuonarla","insW1":"Tastiera MIDI","insW2":"Il mouse","insW3":"La tua tastiera","insTip":"Non cercare a caso. Si progredisce rappresentandosi la melodia prima di cercarla.","insDo":"Prima sentirai un do di riferimento. Verr\u00e0 suonato a ogni apertura dell'app."},"pt":{"weakest":"Intervalo a trabalhar","difficulty":"Dificuldade","warmup":"In\u00edcio","warmupN":"In\u00edcio \u00b7 {n} notas","levelN":"N\u00edvel {n} \u00b7 {name}","beforeL1":"antes do n\u00edvel 1","ceiling":"teto {v} %","melody":"Melodia","notes":"Notas","played":"Tocadas","listens":"Escutas","starts":"Recome\u00e7os","listen":"Ouvir","listenAgain":"Ouvir de novo","refDo":"D\u00f3 de refer\u00eancia","skip":"Passar","reveal":"Mostrar","msgStart":"Liga o teu teclado MIDI e carrega em Ouvir.","msgClick":"Clica em qualquer s\u00edtio para come\u00e7ar.","msgThisIsC":"Isto \u00e9 um d\u00f3.","msgKeepIt":"N\u00e3o o voltas a ouvir nesta sess\u00e3o: guarda-o de cabe\u00e7a.","msgNew":"Nova melodia, {n} notas. Ouve e toca de uma vez.","msgYourTurn":"\u00c9 a tua vez. Inteira, sem falhas, de uma s\u00f3 vez.","v1":"De uma s\u00f3 vez, \u00e0 primeira.","v2":"Conseguida \u00e0 segunda tentativa.","vN":"Conseguida ap\u00f3s {n} recome\u00e7os.","easeDiff":"Desenvoltura {e} % \u00b7 dificuldade {d} pt","revealed":"Aqui est\u00e1.","skipped":"Passada.","warmFound":"Encontrada em {n} notas \u00b7 desenvoltura {e} %","warmProg":"{k} de {t} sem falhas","warmProgFail":"sem falhas: ainda {k} de {t}","warmDone":"In\u00edcio conclu\u00eddo.","warmDone2":"Passamos ao repert\u00f3rio a s\u00e9rio.","drillOk":"{iv} est\u00e1 adquirido.","drillOk2":"Voltamos \u00e0s melodias.","drillRight":"Certo.","drillWrong":"Falhou, repete.","drillCount":"{k} de {t} \u00b7 n\u00e3o contam para a pontua\u00e7\u00e3o","midiIn":"Entrada MIDI","searching":"A procurar\u2026","noDevice":"Nenhum dispositivo","notAvail":"Indispon\u00edvel","denied":"Recusado","connected":"Ligado: {name}","midiNone":"Nenhum teclado detetado. Liga-o e recarrega, ou usa o teclado do computador.","midiNoApi":"Web MIDI n\u00e3o est\u00e1 dispon\u00edvel aqui. Abre o ficheiro no Chrome ou toca com o rato.","midiDenied":"Acesso MIDI recusado ou bloqueado nesta p\u00e1gina.","midiWait":"\u00c0 espera da autoriza\u00e7\u00e3o MIDI do navegador.","soundOn":"Som ao tocar","session":"Sess\u00e3o","doneN":"Melodias resolvidas","avgEase":"Desenvoltura m\u00e9dia","progress":"Progresso","levelReached":"N\u00edvel mel\u00f3dico","sparkNote":"Cada barra \u00e9 a desenvoltura de uma melodia: notas da melodia a dividir pelas notas tocadas.","reset":"Apagar o meu progresso","kbHint":"Teclado do computador: {w} brancas, {b} pretas, \u2190 \u2192 oitava","newIv":"Novo intervalo","up":"ascendente","down":"descendente","after":"ap\u00f3s {iv}","afterDown":"ap\u00f3s {iv}, para baixo","alone":"sozinho, {dir}","theC":"O d\u00f3","warmTitle":"In\u00edcio, {n} notas","levels":["Por graus, muito curta","Por graus, curta","Primeiros saltos, curta","Por graus, frase inteira","Saltos pequenos, frase inteira","Saltos at\u00e9 \u00e0 sexta","Por graus, frase longa","Saltos m\u00e9dios, frase longa","Saltos largos, curta","Frases muito longas","Saltos largos, frase longa","Muito disjunta"],"ivs":{"2":"a segunda","3":"a terceira menor","4":"a terceira maior","5":"a quarta","6":"o tr\u00edtono","7":"a quinta","8":"a sexta menor","9":"a sexta maior","10":"a s\u00e9tima menor","11":"a s\u00e9tima maior","12":"a oitava"},"calibQ":"J\u00e1 consegues tirar melodias de ouvido?","calib1":"Nada, estou a come\u00e7ar","calib2":"Um pouco, \u00e0s vezes toco de ouvido","calib3":"Sim, tenho forma\u00e7\u00e3o","calibNote":"Serve apenas para escolher o ponto de partida. A app recalibra-se sozinha em poucas melodias.","rescue":"Vamos por partes.","rescueN":"As primeiras {n} notas.","rescueOk":"Assim.","rescueAll":"Agora a frase inteira.","rescueDone":"Saiu, com ajuda.","genTitle":"Linha livre","beyond":"Para al\u00e9m do repert\u00f3rio","aim":"alvo {v} %","anchor":"Aqui est\u00e1, a tua primeira nota.","almost":"Quase. Toca-a outra vez desde o in\u00edcio, sem falhas.","dlLog":"Descarregar o registo","almost1":"Quase. Uma nota errada. Toca-a outra vez desde o in\u00edcio.","almostN":"Quase. {n} notas erradas. Toca-a outra vez desde o in\u00edcio.","tonLevel":"Tonalidade","tonC":"s\u00f3 d\u00f3","tonN":"{n} acidentes","rescueBit":"Este fragmento, {n} notas.","theNote":"Aqui est\u00e1 a nota.","best":"recorde {v}","newBest":"Novo recorde: {v}.","insGo":"Come\u00e7ar","bestRow":"Recorde","worth":"Valor","insHi":"Como funciona","insS1":"A app toca-te uma melodia.","insS2":"Canta-a de cabe\u00e7a e coloca-a no teclado.","insS3":"Toca-a de novo: inteira, sem falhas, de uma vez.","insWays":"Tr\u00eas formas de a tocar","insW1":"Teclado MIDI","insW2":"O rato","insW3":"O teu teclado","insTip":"N\u00e3o procures ao acaso. Progride-se representando a melodia antes de a procurar.","insDo":"Vais ouvir primeiro um d\u00f3 de refer\u00eancia. Toca sempre que abres a aplica\u00e7\u00e3o."},"nl":{"weakest":"Interval om te oefenen","difficulty":"Moeilijkheid","warmup":"Opstart","warmupN":"Opstart \u00b7 {n} noten","levelN":"Niveau {n} \u00b7 {name}","beforeL1":"voor niveau 1","ceiling":"plafond {v} %","melody":"Melodie","notes":"Noten","played":"Gespeeld","listens":"Beluisterd","starts":"Herstarts","listen":"Luisteren","listenAgain":"Opnieuw luisteren","refDo":"Referentie-C","skip":"Overslaan","reveal":"Tonen","msgStart":"Sluit je MIDI-keyboard aan en druk op Luisteren.","msgClick":"Klik ergens om de sessie te starten.","msgThisIsC":"Dit is een C.","msgKeepIt":"Je hoort hem deze sessie niet meer \u2014 onthoud hem.","msgNew":"Nieuwe melodie, {n} noten. Luister en speel hem in \u00e9\u00e9n keer na.","msgYourTurn":"Jouw beurt. Helemaal, foutloos, in \u00e9\u00e9n keer.","v1":"In \u00e9\u00e9n keer, meteen goed.","v2":"Bij de tweede poging gelukt.","vN":"Gelukt na {n} herstarts.","easeDiff":"Gemak {e} % \u00b7 moeilijkheid {d} pt","revealed":"Hier is hij.","skipped":"Overgeslagen.","warmFound":"Gevonden in {n} noten \u00b7 gemak {e} %","warmProg":"{k} van {t} foutloos","warmProgFail":"foutloos: nog steeds {k} van {t}","warmDone":"Opstart voltooid.","warmDone2":"Door naar het echte repertoire.","drillOk":"{iv} zit erin.","drillOk2":"Terug naar de melodie\u00ebn.","drillRight":"Goed.","drillWrong":"Mis, opnieuw.","drillCount":"{k} van {t} \u00b7 deze tellen niet mee","midiIn":"MIDI-ingang","searching":"Zoeken\u2026","noDevice":"Geen apparaat","notAvail":"Niet beschikbaar","denied":"Geweigerd","connected":"Verbonden: {name}","midiNone":"Geen keyboard gevonden. Sluit er een aan en herlaad, of gebruik het computertoetsenbord.","midiNoApi":"Web MIDI is hier niet beschikbaar. Open het bestand in Chrome of speel met de muis.","midiDenied":"MIDI-toegang geweigerd of geblokkeerd op deze pagina.","midiWait":"Wachten op MIDI-toestemming van de browser.","soundOn":"Geluid tijdens spelen","session":"Sessie","doneN":"Opgeloste melodie\u00ebn","avgEase":"Gemiddeld gemak","progress":"Voortgang","levelReached":"Melodisch niveau","sparkNote":"Elke balk is het gemak van \u00e9\u00e9n melodie: noten van de melodie gedeeld door gespeelde noten.","reset":"Voortgang wissen","kbHint":"Computertoetsenbord: {w} wit, {b} zwart, \u2190 \u2192 octaaf","newIv":"Nieuw interval","up":"stijgend","down":"dalend","after":"na {iv}","afterDown":"na {iv}, omlaag","alone":"alleen, {dir}","theC":"De C","warmTitle":"Opstart, {n} noten","levels":["Trapsgewijs, zeer kort","Trapsgewijs, kort","Eerste sprongen, kort","Trapsgewijs, hele frase","Kleine sprongen, hele frase","Sprongen tot de sext","Trapsgewijs, lange frase","Middelgrote sprongen, lange frase","Wijde sprongen, kort","Zeer lange frases","Wijde sprongen, lange frase","Sterk disjunct"],"ivs":{"2":"de secunde","3":"de kleine terts","4":"de grote terts","5":"de kwart","6":"de tritonus","7":"de kwint","8":"de kleine sext","9":"de grote sext","10":"de kleine septiem","11":"de grote septiem","12":"het octaaf"},"calibQ":"Kun je melodie\u00ebn al op het gehoor uitzoeken?","calib1":"Helemaal niet, ik begin net","calib2":"Een beetje, ik speel soms op gehoor","calib3":"Ja, ik heb een opleiding","calibNote":"Alleen om een startpunt te kiezen. De app stelt zichzelf binnen enkele melodie\u00ebn bij.","rescue":"We pakken hem stukje voor stukje.","rescueN":"De eerste {n} noten.","rescueOk":"Zo.","rescueAll":"Nu de hele frase.","rescueDone":"Gelukt, met hulp.","genTitle":"Vrije lijn","beyond":"Voorbij het repertoire","aim":"doel {v} %","anchor":"Daar is hij, je eerste noot.","almost":"Bijna. Speel hem opnieuw vanaf het begin, foutloos.","dlLog":"Logboek downloaden","almost1":"Bijna. E\u00e9n foute noot. Speel hem opnieuw vanaf het begin.","almostN":"Bijna. {n} foute noten. Speel hem opnieuw vanaf het begin.","tonLevel":"Toonsoort","tonC":"alleen C","tonN":"{n} voortekens","rescueBit":"Dit stukje, {n} noten.","theNote":"Hier is de noot.","best":"record {v}","newBest":"Nieuw record: {v}.","insGo":"Beginnen","bestRow":"Record","worth":"Waarde","insHi":"Hoe het werkt","insS1":"De app speelt je een melodie voor.","insS2":"Zing hem in je hoofd en plaats hem op het klavier.","insS3":"Speel hem na: helemaal, foutloos, in \u00e9\u00e9n keer.","insWays":"Drie manieren om te spelen","insW1":"MIDI-keyboard","insW2":"De muis","insW3":"Je toetsenbord","insTip":"Zoek niet lukraak. Je gaat vooruit door je de melodie voor te stellen v\u00f3\u00f3r je gaat zoeken.","insDo":"Je hoort eerst een referentie-C. Die klinkt telkens als je de app opent."},"ja":{"weakest":"\u91cd\u70b9\u7684\u306b\u7df4\u7fd2\u3059\u308b\u97f3\u7a0b","difficulty":"\u96e3\u6613\u5ea6","warmup":"\u30a6\u30a9\u30fc\u30e0\u30a2\u30c3\u30d7","warmupN":"\u30a6\u30a9\u30fc\u30e0\u30a2\u30c3\u30d7 \u00b7 {n} \u97f3","levelN":"\u30ec\u30d9\u30eb {n} \u00b7 {name}","beforeL1":"\u30ec\u30d9\u30eb1\u306e\u524d","ceiling":"\u4e0a\u9650 {v} %","melody":"\u30e1\u30ed\u30c7\u30a3","notes":"\u97f3\u6570","played":"\u5f3e\u3044\u305f\u6570","listens":"\u518d\u751f\u56de\u6570","starts":"\u3084\u308a\u76f4\u3057","listen":"\u8074\u304f","listenAgain":"\u3082\u3046\u4e00\u5ea6\u8074\u304f","refDo":"\u57fa\u6e96\u306e\u30c9","skip":"\u30b9\u30ad\u30c3\u30d7","reveal":"\u7b54\u3048\u3092\u898b\u308b","msgStart":"MIDI\u30ad\u30fc\u30dc\u30fc\u30c9\u3092\u63a5\u7d9a\u3057\u3066\u300c\u8074\u304f\u300d\u3092\u62bc\u3057\u3066\u304f\u3060\u3055\u3044\u3002","msgClick":"\u3069\u3053\u304b\u3092\u30af\u30ea\u30c3\u30af\u3057\u3066\u30bb\u30c3\u30b7\u30e7\u30f3\u3092\u958b\u59cb\u3057\u3066\u304f\u3060\u3055\u3044\u3002","msgThisIsC":"\u3053\u308c\u304c\u30c9\u3067\u3059\u3002","msgKeepIt":"\u3053\u306e\u30bb\u30c3\u30b7\u30e7\u30f3\u3067\u306f\u4e8c\u5ea6\u3068\u9cf4\u308a\u307e\u305b\u3093\u3002\u899a\u3048\u3066\u304a\u3044\u3066\u304f\u3060\u3055\u3044\u3002","msgNew":"\u65b0\u3057\u3044\u30e1\u30ed\u30c7\u30a3\u3001{n} \u97f3\u3002\u8074\u3044\u3066\u304b\u3089\u4e00\u606f\u3067\u5f3e\u3044\u3066\u304f\u3060\u3055\u3044\u3002","msgYourTurn":"\u3069\u3046\u305e\u3002\u6700\u5f8c\u307e\u3067\u3001\u9593\u9055\u3048\u305a\u306b\u3001\u4e00\u606f\u3067\u3002","v1":"\u4e00\u606f\u3067\u3001\u4e00\u767a\u6b63\u89e3\u3002","v2":"\u4e8c\u56de\u76ee\u3067\u6b63\u89e3\u3002","vN":"{n} \u56de\u306e\u3084\u308a\u76f4\u3057\u306e\u5f8c\u306b\u6b63\u89e3\u3002","easeDiff":"\u4f59\u88d5\u5ea6 {e} % \u00b7 \u96e3\u6613\u5ea6 {d} pt","revealed":"\u3053\u308c\u304c\u7b54\u3048\u3067\u3059\u3002","skipped":"\u30b9\u30ad\u30c3\u30d7\u3057\u307e\u3057\u305f\u3002","warmFound":"{n} \u97f3\u3067\u6b63\u89e3 \u00b7 \u4f59\u88d5\u5ea6 {e} %","warmProg":"\u30ce\u30fc\u30df\u30b9 {k} / {t}","warmProgFail":"\u30ce\u30fc\u30df\u30b9\uff1a\u307e\u3060 {k} / {t}","warmDone":"\u30a6\u30a9\u30fc\u30e0\u30a2\u30c3\u30d7\u7d42\u4e86\u3002","warmDone2":"\u672c\u7269\u306e\u30ec\u30d1\u30fc\u30c8\u30ea\u30fc\u3078\u3002","drillOk":"{iv} \u3092\u7fd2\u5f97\u3057\u307e\u3057\u305f\u3002","drillOk2":"\u30e1\u30ed\u30c7\u30a3\u306b\u623b\u308a\u307e\u3059\u3002","drillRight":"\u6b63\u89e3\u3002","drillWrong":"\u30df\u30b9\u3001\u3082\u3046\u4e00\u5ea6\u3002","drillCount":"{k} / {t} \u00b7 \u3053\u306e\u7df4\u7fd2\u306f\u30b9\u30b3\u30a2\u306b\u5165\u308a\u307e\u305b\u3093","midiIn":"MIDI\u5165\u529b","searching":"\u691c\u7d22\u4e2d\u2026","noDevice":"\u30c7\u30d0\u30a4\u30b9\u306a\u3057","notAvail":"\u5229\u7528\u3067\u304d\u307e\u305b\u3093","denied":"\u62d2\u5426\u3055\u308c\u307e\u3057\u305f","connected":"\u63a5\u7d9a\u6e08\u307f\uff1a{name}","midiNone":"\u30ad\u30fc\u30dc\u30fc\u30c9\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3002\u63a5\u7d9a\u3057\u3066\u518d\u8aad\u307f\u8fbc\u307f\u3059\u308b\u304b\u3001\u30d1\u30bd\u30b3\u30f3\u306e\u30ad\u30fc\u30dc\u30fc\u30c9\u3067\u5f3e\u3044\u3066\u304f\u3060\u3055\u3044\u3002","midiNoApi":"\u3053\u3053\u3067\u306fWeb MIDI\u304c\u4f7f\u3048\u307e\u305b\u3093\u3002Chrome\u3067\u30d5\u30a1\u30a4\u30eb\u3092\u958b\u304f\u304b\u3001\u30de\u30a6\u30b9\u3067\u5f3e\u3044\u3066\u304f\u3060\u3055\u3044\u3002","midiDenied":"\u3053\u306e\u30da\u30fc\u30b8\u3067MIDI\u30a2\u30af\u30bb\u30b9\u304c\u62d2\u5426\u307e\u305f\u306f\u30d6\u30ed\u30c3\u30af\u3055\u308c\u3066\u3044\u307e\u3059\u3002","midiWait":"\u30d6\u30e9\u30a6\u30b6\u306eMIDI\u8a31\u53ef\u3092\u5f85\u3063\u3066\u3044\u307e\u3059\u3002","soundOn":"\u5f3e\u3044\u305f\u97f3\u3092\u9cf4\u3089\u3059","session":"\u30bb\u30c3\u30b7\u30e7\u30f3","doneN":"\u6b63\u89e3\u3057\u305f\u30e1\u30ed\u30c7\u30a3","avgEase":"\u5e73\u5747\u4f59\u88d5\u5ea6","progress":"\u9032\u307f\u5177\u5408","levelReached":"\u65cb\u5f8b\u30ec\u30d9\u30eb","sparkNote":"\u5404\u30d0\u30fc\u306f\u4e00\u66f2\u306e\u4f59\u88d5\u5ea6\u3067\u3059\u3002\u30e1\u30ed\u30c7\u30a3\u306e\u97f3\u6570\u3092\u3001\u5f3e\u3044\u305f\u97f3\u6570\u3067\u5272\u3063\u305f\u5024\u3002","reset":"\u9032\u6357\u3092\u6d88\u53bb","kbHint":"\u30d1\u30bd\u30b3\u30f3\u306e\u30ad\u30fc\u30dc\u30fc\u30c9\uff1a{w} \u767d\u9375\u3001{b} \u9ed2\u9375\u3001\u2190 \u2192 \u30aa\u30af\u30bf\u30fc\u30d6","newIv":"\u65b0\u3057\u3044\u97f3\u7a0b","up":"\u4e0a\u884c","down":"\u4e0b\u884c","after":"{iv} \u306e\u3042\u3068","afterDown":"{iv} \u306e\u3042\u3068\u3001\u4e0b\u884c\u3067","alone":"\u5358\u72ec\u3001{dir}","theC":"\u30c9","warmTitle":"\u30a6\u30a9\u30fc\u30e0\u30a2\u30c3\u30d7\u3001{n} \u97f3","levels":["\u9806\u6b21\u9032\u884c\u3001\u3068\u3066\u3082\u77ed\u3044","\u9806\u6b21\u9032\u884c\u3001\u77ed\u3044","\u6700\u521d\u306e\u8df3\u8e8d\u3001\u77ed\u3044","\u9806\u6b21\u9032\u884c\u3001\u30d5\u30ec\u30fc\u30ba\u5168\u4f53","\u5c0f\u3055\u3044\u8df3\u8e8d\u3001\u30d5\u30ec\u30fc\u30ba\u5168\u4f53","6\u5ea6\u307e\u3067\u306e\u8df3\u8e8d","\u9806\u6b21\u9032\u884c\u3001\u9577\u3044\u30d5\u30ec\u30fc\u30ba","\u4e2d\u304f\u3089\u3044\u306e\u8df3\u8e8d\u3001\u9577\u3044\u30d5\u30ec\u30fc\u30ba","\u5927\u304d\u3044\u8df3\u8e8d\u3001\u77ed\u3044","\u3068\u3066\u3082\u9577\u3044\u30d5\u30ec\u30fc\u30ba","\u5927\u304d\u3044\u8df3\u8e8d\u3001\u9577\u3044\u30d5\u30ec\u30fc\u30ba","\u8df3\u8e8d\u304c\u975e\u5e38\u306b\u591a\u3044"],"ivs":{"2":"2\u5ea6","3":"\u77ed3\u5ea6","4":"\u95773\u5ea6","5":"4\u5ea6","6":"\u4e09\u5168\u97f3","7":"5\u5ea6","8":"\u77ed6\u5ea6","9":"\u95776\u5ea6","10":"\u77ed7\u5ea6","11":"\u95777\u5ea6","12":"\u30aa\u30af\u30bf\u30fc\u30d6"},"calibQ":"\u8033\u3067\u30e1\u30ed\u30c7\u30a3\u30fc\u3092\u8074\u304d\u53d6\u308b\u306e\u306f\u6163\u308c\u3066\u3044\u307e\u3059\u304b\uff1f","calib1":"\u307e\u3063\u305f\u304f\u3001\u521d\u3081\u3066\u3067\u3059","calib2":"\u5c11\u3057\u3001\u305f\u307e\u306b\u8033\u30b3\u30d4\u3057\u307e\u3059","calib3":"\u306f\u3044\u3001\u5c02\u9580\u7684\u306b\u5b66\u3073\u307e\u3057\u305f","calibNote":"\u958b\u59cb\u4f4d\u7f6e\u3092\u6c7a\u3081\u308b\u305f\u3081\u3060\u3051\u306e\u8cea\u554f\u3067\u3059\u3002\u6570\u66f2\u3067\u81ea\u52d5\u7684\u306b\u8abf\u6574\u3055\u308c\u307e\u3059\u3002","rescue":"\u5c11\u3057\u305a\u3064\u5206\u3051\u3066\u307f\u307e\u3057\u3087\u3046\u3002","rescueN":"\u6700\u521d\u306e{n}\u97f3\u3002","rescueOk":"\u306f\u3044\u3002","rescueAll":"\u3067\u306f\u5168\u4f53\u3092\u3002","rescueDone":"\u52a9\u3051\u3092\u501f\u308a\u3066\u901a\u308a\u307e\u3057\u305f\u3002","genTitle":"\u81ea\u7531\u306a\u65cb\u5f8b","beyond":"\u30ec\u30d1\u30fc\u30c8\u30ea\u30fc\u306e\u5148\u3078","aim":"\u76ee\u6a19 {v} %","anchor":"\u3053\u308c\u304c\u6700\u521d\u306e\u97f3\u3067\u3059\u3002","almost":"\u60dc\u3057\u3044\u3002\u6700\u521d\u304b\u3089\u3082\u3046\u4e00\u5ea6\u3001\u9593\u9055\u3048\u305a\u306b\u3002","dlLog":"\u30ed\u30b0\u3092\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9","almost1":"\u60dc\u3057\u3044\u3002\u8aa4\u308a\u304c1\u3064\u3002\u6700\u521d\u304b\u3089\u3082\u3046\u4e00\u5ea6\u3002","almostN":"\u60dc\u3057\u3044\u3002\u8aa4\u308a\u304c{n}\u3064\u3002\u6700\u521d\u304b\u3089\u3082\u3046\u4e00\u5ea6\u3002","tonLevel":"\u8abf","tonC":"\u30cf\u9577\u8abf\u306e\u307f","tonN":"\u5909\u5316\u8a18\u53f7 {n}","rescueBit":"\u3053\u306e\u65ad\u7247\u3001{n}\u97f3\u3002","theNote":"\u3053\u306e\u97f3\u3067\u3059\u3002","best":"\u8a18\u9332 {v}","newBest":"\u81ea\u5df1\u30d9\u30b9\u30c8 {v}\u3002","insGo":"\u958b\u59cb","bestRow":"\u8a18\u9332","worth":"\u4fa1\u5024","insHi":"\u904a\u3073\u304b\u305f","insS1":"\u30a2\u30d7\u30ea\u304c\u30e1\u30ed\u30c7\u30a3\u30fc\u3092\u5f3e\u304d\u307e\u3059\u3002","insS2":"\u982d\u306e\u4e2d\u3067\u6b4c\u3044\u3001\u9375\u76e4\u306e\u4e0a\u306b\u7f6e\u3044\u3066\u307f\u307e\u3057\u3087\u3046\u3002","insS3":"\u5f3e\u304d\u8fd4\u3057\u307e\u3059\u3002\u6700\u5f8c\u307e\u3067\u3001\u9593\u9055\u3048\u305a\u3001\u4e00\u6c17\u306b\u3002","insWays":"\u5f3e\u304f\u65b9\u6cd5\u306f\u4e09\u3064","insW1":"MIDI\u30ad\u30fc\u30dc\u30fc\u30c9","insW2":"\u30de\u30a6\u30b9","insW3":"\u30d1\u30bd\u30b3\u30f3\u306e\u9375\u76e4","insTip":"\u5f53\u3066\u305a\u3063\u307d\u3046\u306f\u3084\u3081\u307e\u3057\u3087\u3046\u3002\u63a2\u3059\u524d\u306b\u601d\u3044\u63cf\u304f\u3053\u3068\u3067\u4e0a\u9054\u3057\u307e\u3059\u3002","insDo":"\u307e\u305a\u57fa\u6e96\u306e\u30c9\u304c\u9cf4\u308a\u307e\u3059\u3002\u30a2\u30d7\u30ea\u3092\u958b\u304f\u305f\u3073\u306b\u9cf4\u308a\u307e\u3059\u3002"},"ko":{"weakest":"\uc5f0\uc2b5\ud560 \uc74c\uc815","difficulty":"\ub09c\uc774\ub3c4","warmup":"\uc6cc\ubc0d\uc5c5","warmupN":"\uc6cc\ubc0d\uc5c5 \u00b7 {n}\uc74c","levelN":"\ub808\ubca8 {n} \u00b7 {name}","beforeL1":"\ub808\ubca8 1 \uc774\uc804","ceiling":"\uc0c1\ud55c {v}%","melody":"\uba5c\ub85c\ub514","notes":"\uc74c \uc218","played":"\uce5c \uc74c","listens":"\ub4e4\uc740 \ud69f\uc218","starts":"\ub2e4\uc2dc \uc2dc\uc791","listen":"\ub4e3\uae30","listenAgain":"\ub2e4\uc2dc \ub4e3\uae30","refDo":"\uae30\uc900 \ub3c4","skip":"\ub118\uae30\uae30","reveal":"\uc815\ub2f5 \ubcf4\uae30","msgStart":"MIDI \ud0a4\ubcf4\ub4dc\ub97c \uc5f0\uacb0\ud55c \ub4a4 \ub4e3\uae30\ub97c \ub204\ub974\uc138\uc694.","msgClick":"\uc544\ubb34 \uacf3\uc774\ub098 \ud074\ub9ad\ud574 \uc138\uc158\uc744 \uc2dc\uc791\ud558\uc138\uc694.","msgThisIsC":"\uc774\uac83\uc774 \ub3c4\uc785\ub2c8\ub2e4.","msgKeepIt":"\uc774\ubc88 \uc138\uc158\uc5d0\uc11c\ub294 \ub2e4\uc2dc \ub4e4\ub824\uc8fc\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \uae30\uc5b5\ud574 \ub450\uc138\uc694.","msgNew":"\uc0c8 \uba5c\ub85c\ub514, {n}\uc74c. \ub4e3\uace0 \ub098\uc11c \ud55c \ubc88\uc5d0 \uccd0 \ubcf4\uc138\uc694.","msgYourTurn":"\ub2f9\uc2e0 \ucc28\ub840\uc785\ub2c8\ub2e4. \ub05d\uae4c\uc9c0, \ud2c0\ub9ac\uc9c0 \uc54a\uace0, \ud55c \ubc88\uc5d0.","v1":"\ud55c \ubc88\uc5d0, \uccab \uc2dc\ub3c4\ub85c \uc131\uacf5.","v2":"\ub450 \ubc88\uc9f8 \uc2dc\ub3c4\uc5d0 \uc131\uacf5.","vN":"{n}\ubc88 \ub2e4\uc2dc \uc2dc\uc791\ud55c \ub4a4 \uc131\uacf5.","easeDiff":"\uc5ec\uc720\ub3c4 {e}% \u00b7 \ub09c\uc774\ub3c4 {d}pt","revealed":"\uc815\ub2f5\uc785\ub2c8\ub2e4.","skipped":"\ub118\uacbc\uc2b5\ub2c8\ub2e4.","warmFound":"{n}\uc74c \ub9cc\uc5d0 \uc131\uacf5 \u00b7 \uc5ec\uc720\ub3c4 {e}%","warmProg":"\ubb34\uc2e4\uc218 {k} / {t}","warmProgFail":"\ubb34\uc2e4\uc218: \uc544\uc9c1 {k} / {t}","warmDone":"\uc6cc\ubc0d\uc5c5 \uc644\ub8cc.","warmDone2":"\ubcf8 \ub808\ud37c\ud1a0\ub9ac\ub85c \ub118\uc5b4\uac11\ub2c8\ub2e4.","drillOk":"{iv} \uc2b5\ub4dd \uc644\ub8cc.","drillOk2":"\uba5c\ub85c\ub514\ub85c \ub3cc\uc544\uac11\ub2c8\ub2e4.","drillRight":"\uc815\ub2f5.","drillWrong":"\ud2c0\ub838\uc2b5\ub2c8\ub2e4, \ub2e4\uc2dc.","drillCount":"{k} / {t} \u00b7 \uc774 \uc5f0\uc2b5\uc740 \uc810\uc218\uc5d0 \ubc18\uc601\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4","midiIn":"MIDI \uc785\ub825","searching":"\uac80\uc0c9 \uc911\u2026","noDevice":"\uc7a5\uce58 \uc5c6\uc74c","notAvail":"\uc0ac\uc6a9 \ubd88\uac00","denied":"\uac70\ubd80\ub428","connected":"\uc5f0\uacb0\ub428: {name}","midiNone":"\ud0a4\ubcf4\ub4dc\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. \uc5f0\uacb0 \ud6c4 \uc0c8\ub85c\uace0\uce68\ud558\uac70\ub098 \ucef4\ud4e8\ud130 \uc790\ud310\uc73c\ub85c \uc5f0\uc8fc\ud558\uc138\uc694.","midiNoApi":"\uc5ec\uae30\uc11c\ub294 Web MIDI\ub97c \uc4f8 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. Chrome\uc5d0\uc11c \ud30c\uc77c\uc744 \uc5f4\uac70\ub098 \ub9c8\uc6b0\uc2a4\ub85c \uc5f0\uc8fc\ud558\uc138\uc694.","midiDenied":"\uc774 \ud398\uc774\uc9c0\uc5d0\uc11c MIDI \uc811\uadfc\uc774 \uac70\ubd80\ub418\uc5c8\uac70\ub098 \ucc28\ub2e8\ub418\uc5c8\uc2b5\ub2c8\ub2e4.","midiWait":"\ube0c\ub77c\uc6b0\uc800\uc758 MIDI \uad8c\ud55c\uc744 \uae30\ub2e4\ub9ac\ub294 \uc911\uc785\ub2c8\ub2e4.","soundOn":"\uc5f0\uc8fc\ud560 \ub54c \uc18c\ub9ac \ub0b4\uae30","session":"\uc138\uc158","doneN":"\ub9de\ud78c \uba5c\ub85c\ub514","avgEase":"\ud3c9\uade0 \uc5ec\uc720\ub3c4","progress":"\uc9c4\ud589","levelReached":"\uc120\uc728 \uc218\uc900","sparkNote":"\uac01 \ub9c9\ub300\ub294 \ud55c \uba5c\ub85c\ub514\uc758 \uc5ec\uc720\ub3c4\uc785\ub2c8\ub2e4. \uba5c\ub85c\ub514\uc758 \uc74c \uc218\ub97c \uce5c \uc74c \uc218\ub85c \ub098\ub208 \uac12.","reset":"\uc9c4\ud589 \uae30\ub85d \uc9c0\uc6b0\uae30","kbHint":"\ucef4\ud4e8\ud130 \uc790\ud310: {w} \ud770\uac74\ubc18, {b} \uac80\uc740\uac74\ubc18, \u2190 \u2192 \uc625\ud0c0\ube0c","newIv":"\uc0c8 \uc74c\uc815","up":"\uc0c1\ud589","down":"\ud558\ud589","after":"{iv} \ub2e4\uc74c","afterDown":"{iv} \ub2e4\uc74c, \ud558\ud589\uc73c\ub85c","alone":"\ub2e8\ub3c5, {dir}","theC":"\ub3c4","warmTitle":"\uc6cc\ubc0d\uc5c5, {n}\uc74c","levels":["\uc21c\ucc28\uc9c4\ud589, \uc544\uc8fc \uc9e7\uac8c","\uc21c\ucc28\uc9c4\ud589, \uc9e7\uac8c","\uccab \ub3c4\uc57d, \uc9e7\uac8c","\uc21c\ucc28\uc9c4\ud589, \ud55c \uc545\uad6c","\uc791\uc740 \ub3c4\uc57d, \ud55c \uc545\uad6c","6\ub3c4\uae4c\uc9c0\uc758 \ub3c4\uc57d","\uc21c\ucc28\uc9c4\ud589, \uae34 \uc545\uad6c","\uc911\uac04 \ub3c4\uc57d, \uae34 \uc545\uad6c","\ub113\uc740 \ub3c4\uc57d, \uc9e7\uac8c","\uc544\uc8fc \uae34 \uc545\uad6c","\ub113\uc740 \ub3c4\uc57d, \uae34 \uc545\uad6c","\ub3c4\uc57d\uc774 \ub9e4\uc6b0 \ub9ce\uc74c"],"ivs":{"2":"2\ub3c4","3":"\ub2e83\ub3c4","4":"\uc7a53\ub3c4","5":"4\ub3c4","6":"\ud2b8\ub77c\uc774\ud1a4","7":"5\ub3c4","8":"\ub2e86\ub3c4","9":"\uc7a56\ub3c4","10":"\ub2e87\ub3c4","11":"\uc7a57\ub3c4","12":"\uc625\ud0c0\ube0c"},"calibQ":"\uadc0\ub85c \uba5c\ub85c\ub514\ub97c \ub530\ub294 \uac83\uc5d0 \uc774\ubbf8 \uc775\uc219\ud558\uc2e0\uac00\uc694?","calib1":"\uc804\ud600\uc694, \uc774\uc81c \uc2dc\uc791\ud569\ub2c8\ub2e4","calib2":"\uc870\uae08\uc694, \uac00\ub054 \uadc0\ub85c \uce69\ub2c8\ub2e4","calib3":"\ub124, \uc804\uacf5\ud588\uc2b5\ub2c8\ub2e4","calibNote":"\uc2dc\uc791 \uc9c0\uc810\uc744 \uc815\ud558\uae30 \uc704\ud55c \uc9c8\ubb38\uc77c \ubfd0\uc785\ub2c8\ub2e4. \uba87 \uace1\uc774\uba74 \uc571\uc774 \uc54c\uc544\uc11c \ub9de\ucda5\ub2c8\ub2e4.","rescue":"\ub098\ub220\uc11c \ub2e4\uc2dc \ud574\ubd05\uc2dc\ub2e4.","rescueN":"\ucc98\uc74c {n}\uc74c.","rescueOk":"\uc88b\uc544\uc694.","rescueAll":"\uc774\uc81c \uc804\uccb4 \uc545\uad6c\ub97c.","rescueDone":"\ub3c4\uc6c0\uc744 \ubc1b\uc544 \ud1b5\uacfc\ud588\uc2b5\ub2c8\ub2e4.","genTitle":"\uc790\uc720 \uc120\uc728","beyond":"\ub808\ud37c\ud1a0\ub9ac \ub108\uba38","aim":"\ubaa9\ud45c {v} %","anchor":"\uc774\uac83\uc774 \uccab \uc74c\uc785\ub2c8\ub2e4.","almost":"\uac70\uc758 \ub2e4 \uc654\uc2b5\ub2c8\ub2e4. \ucc98\uc74c\ubd80\ud130 \ub2e4\uc2dc, \uc2e4\uc218 \uc5c6\uc774.","dlLog":"\ub85c\uadf8 \ub0b4\ub824\ubc1b\uae30","almost1":"\uac70\uc758 \ub2e4 \uc654\uc2b5\ub2c8\ub2e4. \ud2c0\ub9b0 \uc74c 1\uac1c. \ucc98\uc74c\ubd80\ud130 \ub2e4\uc2dc.","almostN":"\uac70\uc758 \ub2e4 \uc654\uc2b5\ub2c8\ub2e4. \ud2c0\ub9b0 \uc74c {n}\uac1c. \ucc98\uc74c\ubd80\ud130 \ub2e4\uc2dc.","tonLevel":"\uc870\uc131","tonC":"\ub2e4\uc7a5\uc870\ub9cc","tonN":"\uc784\uc2dc\ud45c {n}","rescueBit":"\uc774 \ubd80\ubd84, {n}\uc74c.","theNote":"\uc774 \uc74c\uc785\ub2c8\ub2e4.","best":"\ucd5c\uace0 {v}","newBest":"\ucd5c\uace0 \uae30\ub85d {v}.","insGo":"\uc2dc\uc791","bestRow":"\ucd5c\uace0","worth":"\uac00\uce58","insHi":"\uc0ac\uc6a9\ubc95","insS1":"\uc571\uc774 \uba5c\ub85c\ub514\ub97c \ub4e4\ub824\uc90d\ub2c8\ub2e4.","insS2":"\uba38\ub9bf\uc18d\uc73c\ub85c \ub178\ub798\ud558\uace0 \uac74\ubc18 \uc704\uc5d0 \uadf8\ub824\ubcf4\uc138\uc694.","insS3":"\ub2e4\uc2dc \uc5f0\uc8fc\ud558\uc138\uc694. \ub05d\uae4c\uc9c0, \uc2e4\uc218 \uc5c6\uc774, \ud55c \ubc88\uc5d0.","insWays":"\uc5f0\uc8fc\ud558\ub294 \uc138 \uac00\uc9c0 \ubc29\ubc95","insW1":"MIDI \uac74\ubc18","insW2":"\ub9c8\uc6b0\uc2a4","insW3":"\ucef4\ud4e8\ud130 \uc790\ud310","insTip":"\ubb34\uc791\uc815 \ucc3e\uc9c0 \ub9c8\uc138\uc694. \ucc3e\uae30 \uc804\uc5d0 \ub5a0\uc62c\ub9ac\ub294 \uac83\uc774 \uc2e4\ub825\uc744 \ub298\ub9bd\ub2c8\ub2e4.","insDo":"\uba3c\uc800 \uae30\uc900\uc74c \ub3c4\uac00 \ub4e4\ub9bd\ub2c8\ub2e4. \uc571\uc744 \uc5f4 \ub54c\ub9c8\ub2e4 \ub4e4\ub824\ub4dc\ub9bd\ub2c8\ub2e4."},"zh":{"weakest":"\u9700\u8981\u7ec3\u4e60\u7684\u97f3\u7a0b","difficulty":"\u96be\u5ea6","warmup":"\u70ed\u8eab","warmupN":"\u70ed\u8eab \u00b7 {n} \u4e2a\u97f3","levelN":"\u7b2c {n} \u7ea7 \u00b7 {name}","beforeL1":"\u7b2c 1 \u7ea7\u4e4b\u524d","ceiling":"\u4e0a\u9650 {v}%","melody":"\u65cb\u5f8b","notes":"\u97f3\u6570","played":"\u5df2\u5f39","listens":"\u8bd5\u542c","starts":"\u91cd\u6765","listen":"\u542c","listenAgain":"\u518d\u542c\u4e00\u6b21","refDo":"\u57fa\u51c6\u97f3 C","skip":"\u8df3\u8fc7","reveal":"\u663e\u793a\u7b54\u6848","msgStart":"\u63a5\u4e0a MIDI \u952e\u76d8\uff0c\u7136\u540e\u6309\u300c\u542c\u300d\u3002","msgClick":"\u70b9\u51fb\u4efb\u610f\u4f4d\u7f6e\u5f00\u59cb\u672c\u6b21\u7ec3\u4e60\u3002","msgThisIsC":"\u8fd9\u662f C\u3002","msgKeepIt":"\u672c\u6b21\u7ec3\u4e60\u4e0d\u4f1a\u518d\u54cd\u8d77\uff0c\u8bf7\u8bb0\u4f4f\u5b83\u3002","msgNew":"\u65b0\u65cb\u5f8b\uff0c{n} \u4e2a\u97f3\u3002\u542c\u5b8c\u540e\u4e00\u53e3\u6c14\u5f39\u51fa\u6765\u3002","msgYourTurn":"\u5230\u4f60\u4e86\u3002\u5b8c\u6574\u3001\u65e0\u9519\u3001\u4e00\u6b21\u5f39\u5b8c\u3002","v1":"\u4e00\u6b21\u5f39\u5b8c\uff0c\u7b2c\u4e00\u6b21\u5c31\u5bf9\u3002","v2":"\u7b2c\u4e8c\u6b21\u5c1d\u8bd5\u6210\u529f\u3002","vN":"\u91cd\u6765 {n} \u6b21\u540e\u6210\u529f\u3002","easeDiff":"\u4ece\u5bb9\u5ea6 {e}% \u00b7 \u96be\u5ea6 {d} \u70b9","revealed":"\u7b54\u6848\u5728\u6b64\u3002","skipped":"\u5df2\u8df3\u8fc7\u3002","warmFound":"{n} \u4e2a\u97f3\u5c31\u627e\u5230\u4e86 \u00b7 \u4ece\u5bb9\u5ea6 {e}%","warmProg":"\u65e0\u9519 {k} / {t}","warmProgFail":"\u65e0\u9519\uff1a\u4ecd\u662f {k} / {t}","warmDone":"\u70ed\u8eab\u5b8c\u6210\u3002","warmDone2":"\u8fdb\u5165\u6b63\u5f0f\u66f2\u76ee\u3002","drillOk":"{iv} \u5df2\u638c\u63e1\u3002","drillOk2":"\u56de\u5230\u65cb\u5f8b\u3002","drillRight":"\u6b63\u786e\u3002","drillWrong":"\u9519\u4e86\uff0c\u518d\u6765\u3002","drillCount":"{k} / {t} \u00b7 \u8fd9\u4e9b\u7ec3\u4e60\u4e0d\u8ba1\u5165\u6210\u7ee9","midiIn":"MIDI \u8f93\u5165","searching":"\u641c\u7d22\u4e2d\u2026","noDevice":"\u6ca1\u6709\u8bbe\u5907","notAvail":"\u4e0d\u53ef\u7528","denied":"\u88ab\u62d2\u7edd","connected":"\u5df2\u8fde\u63a5\uff1a{name}","midiNone":"\u672a\u68c0\u6d4b\u5230\u952e\u76d8\u3002\u63a5\u4e0a\u540e\u91cd\u65b0\u52a0\u8f7d\uff0c\u6216\u7528\u7535\u8111\u952e\u76d8\u5f39\u594f\u3002","midiNoApi":"\u6b64\u5904\u65e0\u6cd5\u4f7f\u7528 Web MIDI\u3002\u8bf7\u5728 Chrome \u4e2d\u6253\u5f00\u6587\u4ef6\uff0c\u6216\u7528\u9f20\u6807\u5f39\u594f\u3002","midiDenied":"\u672c\u9875\u9762\u7684 MIDI \u8bbf\u95ee\u88ab\u62d2\u7edd\u6216\u963b\u6b62\u3002","midiWait":"\u6b63\u5728\u7b49\u5f85\u6d4f\u89c8\u5668\u6388\u4e88 MIDI \u6743\u9650\u3002","soundOn":"\u5f39\u594f\u65f6\u53d1\u58f0","session":"\u672c\u6b21\u7ec3\u4e60","doneN":"\u5b8c\u6210\u7684\u65cb\u5f8b","avgEase":"\u5e73\u5747\u4ece\u5bb9\u5ea6","progress":"\u8fdb\u5c55","levelReached":"\u65cb\u5f8b\u6c34\u5e73","sparkNote":"\u6bcf\u6839\u67f1\u5b50\u4ee3\u8868\u4e00\u6761\u65cb\u5f8b\u7684\u4ece\u5bb9\u5ea6\uff1a\u65cb\u5f8b\u97f3\u6570\u9664\u4ee5\u4f60\u5f39\u7684\u97f3\u6570\u3002","reset":"\u6e05\u9664\u6211\u7684\u8fdb\u5ea6","kbHint":"\u7535\u8111\u952e\u76d8\uff1a{w} \u767d\u952e\uff0c{b} \u9ed1\u952e\uff0c\u2190 \u2192 \u516b\u5ea6","newIv":"\u65b0\u97f3\u7a0b","up":"\u4e0a\u884c","down":"\u4e0b\u884c","after":"\u5728{iv}\u4e4b\u540e","afterDown":"\u5728{iv}\u4e4b\u540e\uff0c\u4e0b\u884c","alone":"\u5355\u72ec\uff0c{dir}","theC":"C","warmTitle":"\u70ed\u8eab\uff0c{n} \u4e2a\u97f3","levels":["\u7ea7\u8fdb\uff0c\u5f88\u77ed","\u7ea7\u8fdb\uff0c\u77ed","\u521d\u6b21\u8df3\u8fdb\uff0c\u77ed","\u7ea7\u8fdb\uff0c\u5b8c\u6574\u4e50\u53e5","\u5c0f\u8df3\u8fdb\uff0c\u5b8c\u6574\u4e50\u53e5","\u4e0d\u8d85\u8fc7\u516d\u5ea6\u7684\u8df3\u8fdb","\u7ea7\u8fdb\uff0c\u957f\u4e50\u53e5","\u4e2d\u7b49\u8df3\u8fdb\uff0c\u957f\u4e50\u53e5","\u5927\u8df3\u8fdb\uff0c\u77ed","\u5f88\u957f\u7684\u4e50\u53e5","\u5927\u8df3\u8fdb\uff0c\u957f\u4e50\u53e5","\u8df3\u8fdb\u6781\u591a"],"ivs":{"2":"\u4e8c\u5ea6","3":"\u5c0f\u4e09\u5ea6","4":"\u5927\u4e09\u5ea6","5":"\u56db\u5ea6","6":"\u4e09\u5168\u97f3","7":"\u4e94\u5ea6","8":"\u5c0f\u516d\u5ea6","9":"\u5927\u516d\u5ea6","10":"\u5c0f\u4e03\u5ea6","11":"\u5927\u4e03\u5ea6","12":"\u516b\u5ea6"},"calibQ":"\u4f60\u5df2\u7ecf\u80fd\u9760\u8033\u6735\u6252\u51fa\u65cb\u5f8b\u4e86\u5417\uff1f","calib1":"\u5b8c\u5168\u4e0d\u80fd\uff0c\u521a\u5f00\u59cb","calib2":"\u6709\u4e00\u70b9\uff0c\u5076\u5c14\u4f1a\u6252\u8c31","calib3":"\u53ef\u4ee5\uff0c\u6211\u53d7\u8fc7\u8bad\u7ec3","calibNote":"\u53ea\u662f\u7528\u6765\u9009\u62e9\u8d77\u70b9\u3002\u51e0\u6761\u65cb\u5f8b\u4e4b\u540e\u5e94\u7528\u4f1a\u81ea\u884c\u6821\u51c6\u3002","rescue":"\u6211\u4eec\u5206\u6bb5\u6765\u3002","rescueN":"\u524d {n} \u4e2a\u97f3\u3002","rescueOk":"\u5bf9\u4e86\u3002","rescueAll":"\u73b0\u5728\u6574\u53e5\u3002","rescueDone":"\u5728\u5e2e\u52a9\u4e0b\u901a\u8fc7\u4e86\u3002","genTitle":"\u81ea\u7531\u65cb\u5f8b","beyond":"\u8d85\u51fa\u66f2\u5e93","aim":"\u76ee\u6807 {v} %","anchor":"\u8fd9\u5c31\u662f\u7b2c\u4e00\u4e2a\u97f3\u3002","almost":"\u5dee\u4e00\u70b9\u3002\u4ece\u5934\u518d\u6765\u4e00\u6b21\uff0c\u4e0d\u8981\u51fa\u9519\u3002","dlLog":"\u4e0b\u8f7d\u65e5\u5fd7","almost1":"\u5dee\u4e00\u70b9\u3002\u4e00\u4e2a\u9519\u97f3\u3002\u4ece\u5934\u518d\u6765\u4e00\u6b21\u3002","almostN":"\u5dee\u4e00\u70b9\u3002{n} \u4e2a\u9519\u97f3\u3002\u4ece\u5934\u518d\u6765\u4e00\u6b21\u3002","tonLevel":"\u8c03\u6027","tonC":"\u4ec5 C \u8c03","tonN":"{n} \u4e2a\u5347\u964d\u53f7","rescueBit":"\u8fd9\u4e00\u6bb5\uff0c{n} \u4e2a\u97f3\u3002","theNote":"\u5c31\u662f\u8fd9\u4e2a\u97f3\u3002","best":"\u7eaa\u5f55 {v}","newBest":"\u65b0\u7eaa\u5f55\uff1a{v}\u3002","insGo":"\u5f00\u59cb","bestRow":"\u7eaa\u5f55","worth":"\u5206\u503c","insHi":"\u600e\u4e48\u73a9","insS1":"\u5e94\u7528\u4f1a\u5f39\u4e00\u6bb5\u65cb\u5f8b\u3002","insS2":"\u5728\u5fc3\u91cc\u5531\u51fa\u6765\uff0c\u628a\u5b83\u653e\u5230\u952e\u76d8\u4e0a\u3002","insS3":"\u628a\u5b83\u5f39\u56de\u6765\uff1a\u5b8c\u6574\u3001\u65e0\u9519\u3001\u4e00\u6c14\u5475\u6210\u3002","insWays":"\u4e09\u79cd\u5f39\u594f\u65b9\u5f0f","insW1":"MIDI \u952e\u76d8","insW2":"\u9f20\u6807","insW3":"\u7535\u8111\u952e\u76d8","insTip":"\u4e0d\u8981\u76f2\u76ee\u4e71\u627e\u3002\u5148\u5728\u8111\u4e2d\u60f3\u597d\u518d\u53bb\u627e\uff0c\u624d\u4f1a\u771f\u6b63\u8fdb\u6b65\u3002","insDo":"\u4f60\u4f1a\u5148\u542c\u5230\u4e00\u4e2a\u4f5c\u4e3a\u53c2\u7167\u7684 C\u3002\u6bcf\u6b21\u6253\u5f00\u5e94\u7528\u90fd\u4f1a\u64ad\u653e\u3002"},"cs":{"weakest":"Interval k procvi\u010den\u00ed","difficulty":"Obt\u00ed\u017enost","warmup":"Rozehr\u00e1n\u00ed","warmupN":"Rozehr\u00e1n\u00ed \u00b7 {n} t\u00f3n\u016f","levelN":"\u00darove\u0148 {n} \u00b7 {name}","beforeL1":"p\u0159ed \u00farovn\u00ed 1","ceiling":"strop {v} %","melody":"Melodie","notes":"T\u00f3n\u016f","played":"Zahr\u00e1no","listens":"P\u0159ehr\u00e1n\u00ed","starts":"Restart\u016f","listen":"Poslech","listenAgain":"Poslechnout znovu","refDo":"Referen\u010dn\u00ed C","skip":"P\u0159esko\u010dit","reveal":"Uk\u00e1zat","msgStart":"P\u0159ipoj MIDI kl\u00e1vesy a stiskni Poslech.","msgClick":"Klikni kamkoli a sezen\u00ed za\u010dne.","msgThisIsC":"Toto je C.","msgKeepIt":"V tomto sezen\u00ed ho u\u017e neusly\u0161\u00ed\u0161 \u2014 zapamatuj si ho.","msgNew":"Nov\u00e1 melodie, {n} t\u00f3n\u016f. Poslechni si ji a zahraj ji vcelku.","msgYourTurn":"Te\u010f ty. Celou, bez chyby, na jeden z\u00e1tah.","v1":"Na jeden z\u00e1tah, hned napoprv\u00e9.","v2":"Poda\u0159ilo se na druh\u00fd pokus.","vN":"Poda\u0159ilo se po {n} restartech.","easeDiff":"Lehkost {e} % \u00b7 obt\u00ed\u017enost {d} b","revealed":"Tady je.","skipped":"P\u0159esko\u010deno.","warmFound":"Nalezena za {n} t\u00f3n\u016f \u00b7 lehkost {e} %","warmProg":"{k} z {t} bez chyby","warmProgFail":"bez chyby: st\u00e1le {k} z {t}","warmDone":"Rozehr\u00e1n\u00ed hotovo.","warmDone2":"Jdeme na skute\u010dn\u00fd reperto\u00e1r.","drillOk":"{iv} je zvl\u00e1dnuta.","drillOk2":"Zp\u011bt k melodi\u00edm.","drillRight":"Spr\u00e1vn\u011b.","drillWrong":"Chyba, znovu.","drillCount":"{k} z {t} \u00b7 tato cvi\u010den\u00ed se nepo\u010d\u00edtaj\u00ed","midiIn":"MIDI vstup","searching":"Hled\u00e1m\u2026","noDevice":"\u017d\u00e1dn\u00e9 za\u0159\u00edzen\u00ed","notAvail":"Nedostupn\u00e9","denied":"Odm\u00edtnuto","connected":"P\u0159ipojeno: {name}","midiNone":"Kl\u00e1vesy nenalezeny. P\u0159ipoj je a na\u010dti str\u00e1nku znovu, nebo hraj na po\u010d\u00edta\u010dov\u00e9 kl\u00e1vesnici.","midiNoApi":"Web MIDI zde nen\u00ed dostupn\u00e9. Otev\u0159i soubor v Chrome, nebo hraj my\u0161\u00ed.","midiDenied":"P\u0159\u00edstup k MIDI byl na t\u00e9to str\u00e1nce odm\u00edtnut nebo blokov\u00e1n.","midiWait":"\u010cek\u00e1m na povolen\u00ed MIDI od prohl\u00ed\u017ee\u010de.","soundOn":"Zvuk p\u0159i hran\u00ed","session":"Sezen\u00ed","doneN":"Zvl\u00e1dnut\u00e9 melodie","avgEase":"Pr\u016fm\u011brn\u00e1 lehkost","progress":"Postup","levelReached":"Melodick\u00e1 \u00farove\u0148","sparkNote":"Ka\u017ed\u00fd sloupec je lehkost jedn\u00e9 melodie: po\u010det t\u00f3n\u016f melodie d\u011blen\u00fd po\u010dtem zahran\u00fdch t\u00f3n\u016f.","reset":"Smazat m\u016fj postup","kbHint":"Po\u010d\u00edta\u010dov\u00e1 kl\u00e1vesnice: {w} b\u00edl\u00e9, {b} \u010dern\u00e9, \u2190 \u2192 okt\u00e1va","newIv":"Nov\u00fd interval","up":"vzestupn\u011b","down":"sestupn\u011b","after":"po {iv}","afterDown":"po {iv}, dol\u016f","alone":"samostatn\u011b, {dir}","theC":"C","warmTitle":"Rozehr\u00e1n\u00ed, {n} t\u00f3n\u016f","levels":["Po stupn\u00edch, velmi kr\u00e1tk\u00e9","Po stupn\u00edch, kr\u00e1tk\u00e9","Prvn\u00ed skoky, kr\u00e1tk\u00e9","Po stupn\u00edch, cel\u00e1 fr\u00e1ze","Mal\u00e9 skoky, cel\u00e1 fr\u00e1ze","Skoky do sexty","Po stupn\u00edch, dlouh\u00e1 fr\u00e1ze","St\u0159edn\u00ed skoky, dlouh\u00e1 fr\u00e1ze","\u0160irok\u00e9 skoky, kr\u00e1tk\u00e9","Velmi dlouh\u00e9 fr\u00e1ze","\u0160irok\u00e9 skoky, dlouh\u00e1 fr\u00e1ze","Velmi nesouvisl\u00e9"],"ivs":{"2":"sekunda","3":"mal\u00e1 tercie","4":"velk\u00e1 tercie","5":"kvarta","6":"tritonus","7":"kvinta","8":"mal\u00e1 sexta","9":"velk\u00e1 sexta","10":"mal\u00e1 septima","11":"velk\u00e1 septima","12":"okt\u00e1va"},"calibQ":"Um\u00ed\u0161 u\u017e melodie odposlouchat sluchem?","calib1":"V\u016fbec ne, za\u010d\u00edn\u00e1m","calib2":"Trochu, ob\u010das hraju podle sluchu","calib3":"Ano, m\u00e1m vzd\u011bl\u00e1n\u00ed","calibNote":"Jen pro volbu v\u00fdchoz\u00edho bodu. Aplikace se sama dolad\u00ed b\u011bhem n\u011bkolika melodi\u00ed.","rescue":"Vezmeme to po \u010d\u00e1stech.","rescueN":"Prvn\u00edch {n} t\u00f3n\u016f.","rescueOk":"Tak.","rescueAll":"Te\u010f cel\u00e1 fr\u00e1ze.","rescueDone":"Pro\u0161lo to, s pomoc\u00ed.","genTitle":"Voln\u00e1 linka","beyond":"Za reperto\u00e1rem","aim":"c\u00edl {v} %","anchor":"Tady je, tv\u016fj prvn\u00ed t\u00f3n.","almost":"Skoro. Zahraj ji znovu od za\u010d\u00e1tku, bez chyby.","dlLog":"St\u00e1hnout z\u00e1znam","almost1":"Skoro. Jeden chybn\u00fd t\u00f3n. Zahraj ji znovu od za\u010d\u00e1tku.","almostN":"Skoro. {n} chybn\u00e9 t\u00f3ny. Zahraj ji znovu od za\u010d\u00e1tku.","tonLevel":"T\u00f3nina","tonC":"jen C","tonN":"{n} p\u0159edznamen\u00e1n\u00ed","rescueBit":"Tento \u00fasek, {n} t\u00f3n\u016f.","theNote":"Tady je ten t\u00f3n.","best":"rekord {v}","newBest":"Nov\u00fd rekord: {v}.","insGo":"Za\u010d\u00edt","bestRow":"Rekord","worth":"Hodnota","insHi":"Jak to funguje","insS1":"Aplikace ti zahraje melodii.","insS2":"Zazp\u00edvej si ji v hlav\u011b a um\u00edsti ji na klaviaturu.","insS3":"Zahraj ji zp\u011bt: celou, bez chyby, jedn\u00edm tahem.","insWays":"T\u0159i zp\u016fsoby hran\u00ed","insW1":"MIDI klaviatura","insW2":"My\u0161","insW3":"Tvoje kl\u00e1vesnice","insTip":"Nehledej n\u00e1hodn\u011b. Pokrok p\u0159ijde, kdy\u017e si melodii p\u0159edstav\u00ed\u0161 d\u0159\u00edv, ne\u017e ji za\u010dne\u0161 hledat.","insDo":"Nejd\u0159\u00edv usly\u0161\u00ed\u0161 referen\u010dn\u00ed C. Zazn\u00ed p\u0159i ka\u017ed\u00e9m otev\u0159en\u00ed aplikace."},"hu":{"weakest":"Gyakorland\u00f3 hangk\u00f6z","difficulty":"Neh\u00e9zs\u00e9g","warmup":"Bemeleg\u00edt\u00e9s","warmupN":"Bemeleg\u00edt\u00e9s \u00b7 {n} hang","levelN":"{n}. szint \u00b7 {name}","beforeL1":"az 1. szint el\u0151tt","ceiling":"plafon {v} %","melody":"Dallam","notes":"Hangok","played":"Lej\u00e1tszva","listens":"Meghallgat\u00e1s","starts":"\u00dajrakezd\u00e9s","listen":"Meghallgat\u00e1s","listenAgain":"\u00dajra meghallgatom","refDo":"Referencia C","skip":"Kihagy\u00e1s","reveal":"Megmutat","msgStart":"Csatlakoztasd a MIDI-billenty\u0171zetet, majd nyomd meg a Meghallgat\u00e1s gombot.","msgClick":"Kattints b\u00e1rhov\u00e1 az ind\u00edt\u00e1shoz.","msgThisIsC":"Ez egy C.","msgKeepIt":"Ebben a menetben t\u00f6bb\u00e9 nem hallod \u2014 tartsd fejben.","msgNew":"\u00daj dallam, {n} hang. Hallgasd meg, majd j\u00e1tszd le egy menetben.","msgYourTurn":"Te j\u00f6ssz. V\u00e9gig, hib\u00e1tlanul, egyetlen menetben.","v1":"Egy menetben, els\u0151re.","v2":"M\u00e1sodszorra siker\u00fclt.","vN":"{n} \u00fajrakezd\u00e9s ut\u00e1n siker\u00fclt.","easeDiff":"K\u00f6nnyeds\u00e9g {e} % \u00b7 neh\u00e9zs\u00e9g {d} pt","revealed":"\u00cdme.","skipped":"Kihagyva.","warmFound":"{n} hangb\u00f3l megvan \u00b7 k\u00f6nnyeds\u00e9g {e} %","warmProg":"{k} / {t} hib\u00e1tlan","warmProgFail":"hib\u00e1tlan: m\u00e9g mindig {k} / {t}","warmDone":"Bemeleg\u00edt\u00e9s k\u00e9sz.","warmDone2":"J\u00f6het az igazi reperto\u00e1r.","drillOk":"{iv} megvan.","drillOk2":"Vissza a dallamokhoz.","drillRight":"Helyes.","drillWrong":"Hiba, \u00fajra.","drillCount":"{k} / {t} \u00b7 ezek nem sz\u00e1m\u00edtanak a pontsz\u00e1mba","midiIn":"MIDI bemenet","searching":"Keres\u00e9s\u2026","noDevice":"Nincs eszk\u00f6z","notAvail":"Nem el\u00e9rhet\u0151","denied":"Elutas\u00edtva","connected":"Csatlakoztatva: {name}","midiNone":"Nem tal\u00e1lhat\u00f3 billenty\u0171zet. Csatlakoztasd \u00e9s t\u00f6lts \u00fajra, vagy j\u00e1tssz a sz\u00e1m\u00edt\u00f3g\u00e9p billenty\u0171zet\u00e9n.","midiNoApi":"A Web MIDI itt nem \u00e9rhet\u0151 el. Nyisd meg a f\u00e1jlt Chrome-ban, vagy j\u00e1tssz eg\u00e9rrel.","midiDenied":"A MIDI-hozz\u00e1f\u00e9r\u00e9s ezen az oldalon elutas\u00edtva vagy letiltva.","midiWait":"V\u00e1rakoz\u00e1s a b\u00f6ng\u00e9sz\u0151 MIDI-enged\u00e9ly\u00e9re.","soundOn":"Hang j\u00e1t\u00e9k k\u00f6zben","session":"Menet","doneN":"Megoldott dallamok","avgEase":"\u00c1tlagos k\u00f6nnyeds\u00e9g","progress":"Halad\u00e1s","levelReached":"Dallamszint","sparkNote":"Minden oszlop egy dallam k\u00f6nnyeds\u00e9ge: a dallam hangjainak sz\u00e1ma osztva a lej\u00e1tszott hangokkal.","reset":"Halad\u00e1s t\u00f6rl\u00e9se","kbHint":"Sz\u00e1m\u00edt\u00f3g\u00e9p-billenty\u0171zet: {w} feh\u00e9r, {b} fekete, \u2190 \u2192 okt\u00e1v","newIv":"\u00daj hangk\u00f6z","up":"felfel\u00e9","down":"lefel\u00e9","after":"{iv} ut\u00e1n","afterDown":"{iv} ut\u00e1n, lefel\u00e9","alone":"\u00f6nmag\u00e1ban, {dir}","theC":"A C","warmTitle":"Bemeleg\u00edt\u00e9s, {n} hang","levels":["L\u00e9p\u00e9senk\u00e9nt, nagyon r\u00f6vid","L\u00e9p\u00e9senk\u00e9nt, r\u00f6vid","Els\u0151 ugr\u00e1sok, r\u00f6vid","L\u00e9p\u00e9senk\u00e9nt, teljes fr\u00e1zis","Kis ugr\u00e1sok, teljes fr\u00e1zis","Ugr\u00e1sok szextig","L\u00e9p\u00e9senk\u00e9nt, hossz\u00fa fr\u00e1zis","K\u00f6zepes ugr\u00e1sok, hossz\u00fa fr\u00e1zis","Nagy ugr\u00e1sok, r\u00f6vid","Nagyon hossz\u00fa fr\u00e1zisok","Nagy ugr\u00e1sok, hossz\u00fa fr\u00e1zis","Er\u0151sen ugr\u00e1l\u00f3"],"ivs":{"2":"a szekund","3":"a kis terc","4":"a nagy terc","5":"a kvart","6":"a tritonusz","7":"a kvint","8":"a kis szext","9":"a nagy szext","10":"a kis szeptim","11":"a nagy szeptim","12":"az okt\u00e1v"},"calibQ":"M\u00e1r magabiztosan kihallod a dallamokat?","calib1":"Egy\u00e1ltal\u00e1n nem, most kezdem","calib2":"Egy kicsit, n\u00e9ha j\u00e1tszom f\u00fclre","calib3":"Igen, van k\u00e9pzetts\u00e9gem","calibNote":"Csak a kiindul\u00f3pont miatt. Az app n\u00e9h\u00e1ny dallam alatt mag\u00e1t\u00f3l be\u00e1ll.","rescue":"Vegy\u00fck darabokban.","rescueN":"Az els\u0151 {n} hang.","rescueOk":"\u00cdgy.","rescueAll":"Most a teljes fr\u00e1zis.","rescueDone":"Seg\u00edts\u00e9ggel megvan.","genTitle":"Szabad dallam","beyond":"A reperto\u00e1ron t\u00fal","aim":"c\u00e9l {v} %","anchor":"Itt van, az els\u0151 hang.","almost":"Majdnem. J\u00e1tszd el \u00fajra el\u00f6lr\u0151l, hib\u00e1tlanul.","dlLog":"Napl\u00f3 let\u00f6lt\u00e9se","almost1":"Majdnem. Egy hib\u00e1s hang. J\u00e1tszd el \u00fajra el\u00f6lr\u0151l.","almostN":"Majdnem. {n} hib\u00e1s hang. J\u00e1tszd el \u00fajra el\u00f6lr\u0151l.","tonLevel":"Hangnem","tonC":"csak C","tonN":"{n} m\u00f3dos\u00edt\u00f3jel","rescueBit":"Ez a r\u00e9szlet, {n} hang.","theNote":"Itt a hang.","best":"rekord {v}","newBest":"\u00daj rekord: {v}.","insGo":"Ind\u00edt\u00e1s","bestRow":"Rekord","worth":"\u00c9rt\u00e9k","insHi":"\u00cdgy m\u0171k\u00f6dik","insS1":"Az app lej\u00e1tszik egy dallamot.","insS2":"\u00c9nekeld el fejben, \u00e9s helyezd el a billenty\u0171zeten.","insS3":"J\u00e1tszd vissza: v\u00e9gig, hib\u00e1tlanul, egy l\u00e9legzetre.","insWays":"H\u00e1rom m\u00f3don j\u00e1tszhatod","insW1":"MIDI-billenty\u0171zet","insW2":"Az eg\u00e9r","insW3":"A billenty\u0171zeted","insTip":"Ne tal\u00e1lomra keress. Akkor fejl\u0151dsz, ha el\u0151bb elk\u00e9pzeled a dallamot.","insDo":"El\u0151sz\u00f6r egy referencia C-t hallasz. Az app minden megnyit\u00e1sakor megsz\u00f3lal."},"ro":{"weakest":"Interval de exersat","difficulty":"Dificultate","warmup":"\u00cenc\u0103lzire","warmupN":"\u00cenc\u0103lzire \u00b7 {n} note","levelN":"Nivelul {n} \u00b7 {name}","beforeL1":"\u00eenainte de nivelul 1","ceiling":"plafon {v} %","melody":"Melodie","notes":"Note","played":"C\u00e2ntate","listens":"Ascult\u0103ri","starts":"Relu\u0103ri","listen":"Ascult\u0103","listenAgain":"Ascult\u0103 din nou","refDo":"Do de referin\u021b\u0103","skip":"Sari peste","reveal":"Arat\u0103","msgStart":"Conecteaz\u0103 claviatura MIDI \u0219i apas\u0103 Ascult\u0103.","msgClick":"D\u0103 clic oriunde pentru a \u00eencepe sesiunea.","msgThisIsC":"Acesta este un do.","msgKeepIt":"Nu \u00eel vei mai auzi \u00een aceast\u0103 sesiune \u2014 \u021bine-l minte.","msgNew":"Melodie nou\u0103, {n} note. Ascult-o, apoi c\u00e2nt-o dintr-o suflare.","msgYourTurn":"E r\u00e2ndul t\u0103u. \u00centreag\u0103, f\u0103r\u0103 gre\u0219eal\u0103, dintr-o suflare.","v1":"Dintr-o suflare, din prima.","v2":"Reu\u0219it\u0103 la a doua \u00eencercare.","vN":"Reu\u0219it\u0103 dup\u0103 {n} relu\u0103ri.","easeDiff":"U\u0219urin\u021b\u0103 {e} % \u00b7 dificultate {d} pt","revealed":"Iat-o.","skipped":"S\u0103rit\u0103.","warmFound":"G\u0103sit\u0103 \u00een {n} note \u00b7 u\u0219urin\u021b\u0103 {e} %","warmProg":"{k} din {t} f\u0103r\u0103 gre\u0219eal\u0103","warmProgFail":"f\u0103r\u0103 gre\u0219eal\u0103: tot {k} din {t}","warmDone":"\u00cenc\u0103lzire terminat\u0103.","warmDone2":"Trecem la repertoriul propriu-zis.","drillOk":"{iv} este \u00eensu\u0219it\u0103.","drillOk2":"\u00cenapoi la melodii.","drillRight":"Corect.","drillWrong":"Gre\u0219it, o lu\u0103m de la cap\u0103t.","drillCount":"{k} din {t} \u00b7 aceste exerci\u021bii nu conteaz\u0103 la punctaj","midiIn":"Intrare MIDI","searching":"Se caut\u0103\u2026","noDevice":"Niciun dispozitiv","notAvail":"Indisponibil","denied":"Refuzat","connected":"Conectat: {name}","midiNone":"Nicio claviatur\u0103 detectat\u0103. Conecteaz\u0103 una \u0219i re\u00eencarc\u0103, sau c\u00e2nt\u0103 de la tastatur\u0103.","midiNoApi":"Web MIDI nu este disponibil aici. Deschide fi\u0219ierul \u00een Chrome sau c\u00e2nt\u0103 cu mouse-ul.","midiDenied":"Accesul MIDI a fost refuzat sau blocat pe aceast\u0103 pagin\u0103.","midiWait":"Se a\u0219teapt\u0103 permisiunea MIDI a browserului.","soundOn":"Sunet c\u00e2nd c\u00e2nt","session":"Sesiune","doneN":"Melodii rezolvate","avgEase":"U\u0219urin\u021b\u0103 medie","progress":"Progres","levelReached":"Nivel melodic","sparkNote":"Fiecare bar\u0103 este u\u0219urin\u021ba unei melodii: num\u0103rul de note \u00eemp\u0103r\u021bit la notele c\u00e2ntate.","reset":"\u0218terge progresul","kbHint":"Tastatura calculatorului: {w} albe, {b} negre, \u2190 \u2192 octav\u0103","newIv":"Interval nou","up":"ascendent","down":"descendent","after":"dup\u0103 {iv}","afterDown":"dup\u0103 {iv}, \u00een jos","alone":"singur, {dir}","theC":"Do-ul","warmTitle":"\u00cenc\u0103lzire, {n} note","levels":["Prin trepte, foarte scurt\u0103","Prin trepte, scurt\u0103","Primele salturi, scurt\u0103","Prin trepte, fraz\u0103 \u00eentreag\u0103","Salturi mici, fraz\u0103 \u00eentreag\u0103","Salturi p\u00e2n\u0103 la sext\u0103","Prin trepte, fraz\u0103 lung\u0103","Salturi medii, fraz\u0103 lung\u0103","Salturi mari, scurt\u0103","Fraze foarte lungi","Salturi mari, fraz\u0103 lung\u0103","Foarte disjunct\u0103"],"ivs":{"2":"secunda","3":"ter\u021ba mic\u0103","4":"ter\u021ba mare","5":"cvarta","6":"tritonul","7":"cvinta","8":"sexta mic\u0103","9":"sexta mare","10":"septima mic\u0103","11":"septima mare","12":"octava"},"calibQ":"Reu\u0219e\u0219ti deja s\u0103 sco\u021bi melodii dup\u0103 ureche?","calib1":"Deloc, abia \u00eencep","calib2":"Pu\u021bin, uneori c\u00e2nt dup\u0103 ureche","calib3":"Da, am preg\u0103tire","calibNote":"Doar pentru a alege punctul de pornire. Aplica\u021bia se recalibreaz\u0103 singur\u0103 \u00een c\u00e2teva melodii.","rescue":"O lu\u0103m pe buc\u0103\u021bi.","rescueN":"Primele {n} note.","rescueOk":"A\u0219a.","rescueAll":"Acum fraza \u00eentreag\u0103.","rescueDone":"A ie\u0219it, cu ajutor.","genTitle":"Linie liber\u0103","beyond":"Dincolo de repertoriu","aim":"\u021bint\u0103 {v} %","anchor":"Iat-o, prima ta not\u0103.","almost":"Aproape. C\u00e2nt-o din nou de la \u00eenceput, f\u0103r\u0103 gre\u0219eli.","dlLog":"Descarc\u0103 jurnalul","almost1":"Aproape. O not\u0103 gre\u0219it\u0103. C\u00e2nt-o din nou de la \u00eenceput.","almostN":"Aproape. {n} note gre\u0219ite. C\u00e2nt-o din nou de la \u00eenceput.","tonLevel":"Tonalitate","tonC":"doar do","tonN":"{n} altera\u021bii","rescueBit":"Acest fragment, {n} note.","theNote":"Iat-o, nota.","best":"record {v}","newBest":"Record nou: {v}.","insGo":"\u00cencepe","bestRow":"Record","worth":"Valoare","insHi":"Cum func\u021bioneaz\u0103","insS1":"Aplica\u021bia \u00ee\u021bi c\u00e2nt\u0103 o melodie.","insS2":"C\u00e2nt-o \u00een g\u00e2nd \u0219i a\u0219az-o pe clape.","insS3":"Red-o: \u00eentreag\u0103, f\u0103r\u0103 gre\u0219eli, dintr-o suflare.","insWays":"Trei feluri de a o reda","insW1":"Claviatur\u0103 MIDI","insW2":"Mouse-ul","insW3":"Tastatura ta","insTip":"Nu c\u0103uta la \u00eent\u00e2mplare. Progresezi reprezent\u00e2ndu-\u021bi melodia \u00eenainte de a o c\u0103uta.","insDo":"Vei auzi \u00eent\u00e2i un do de referin\u021b\u0103. Se aude la fiecare deschidere a aplica\u021biei."},"tr":{"weakest":"\u00c7al\u0131\u015f\u0131lacak aral\u0131k","difficulty":"Zorluk","warmup":"Is\u0131nma","warmupN":"Is\u0131nma \u00b7 {n} nota","levelN":"Seviye {n} \u00b7 {name}","beforeL1":"1. seviyeden \u00f6nce","ceiling":"tavan %{v}","melody":"Ezgi","notes":"Nota","played":"\u00c7al\u0131nan","listens":"Dinleme","starts":"Yeniden ba\u015flama","listen":"Dinle","listenAgain":"Tekrar dinle","refDo":"Referans do","skip":"Atla","reveal":"G\u00f6ster","msgStart":"MIDI klavyeni ba\u011fla, sonra Dinle'ye bas.","msgClick":"Oturumu ba\u015flatmak i\u00e7in herhangi bir yere t\u0131kla.","msgThisIsC":"Bu bir do.","msgKeepIt":"Bu oturumda bir daha duymayacaks\u0131n \u2014 akl\u0131nda tut.","msgNew":"Yeni ezgi, {n} nota. Dinle, sonra tek seferde \u00e7al.","msgYourTurn":"S\u0131ra sende. Ba\u015ftan sona, hatas\u0131z, tek seferde.","v1":"Tek seferde, ilk denemede.","v2":"\u0130kinci denemede oldu.","vN":"{n} yeniden ba\u015flamadan sonra oldu.","easeDiff":"Rahatl\u0131k %{e} \u00b7 zorluk {d} p","revealed":"\u0130\u015fte bu.","skipped":"Atland\u0131.","warmFound":"{n} notada bulundu \u00b7 rahatl\u0131k %{e}","warmProg":"{t} taneden {k} hatas\u0131z","warmProgFail":"hatas\u0131z: h\u00e2l\u00e2 {t} taneden {k}","warmDone":"Is\u0131nma tamam.","warmDone2":"As\u0131l da\u011farc\u0131\u011fa ge\u00e7iyoruz.","drillOk":"{iv} \u00f6\u011frenildi.","drillOk2":"Ezgilere d\u00f6n\u00fcyoruz.","drillRight":"Do\u011fru.","drillWrong":"Hata, tekrar.","drillCount":"{t} taneden {k} \u00b7 bu al\u0131\u015ft\u0131rmalar puana kat\u0131lmaz","midiIn":"MIDI giri\u015fi","searching":"Aran\u0131yor\u2026","noDevice":"Cihaz yok","notAvail":"Kullan\u0131lam\u0131yor","denied":"Reddedildi","connected":"Ba\u011fland\u0131: {name}","midiNone":"Klavye bulunamad\u0131. Ba\u011flay\u0131p sayfay\u0131 yenile ya da bilgisayar klavyesiyle \u00e7al.","midiNoApi":"Web MIDI burada kullan\u0131lam\u0131yor. Dosyay\u0131 Chrome'da a\u00e7 veya fareyle \u00e7al.","midiDenied":"Bu sayfada MIDI eri\u015fimi reddedildi veya engellendi.","midiWait":"Taray\u0131c\u0131n\u0131n MIDI iznini bekliyor.","soundOn":"\u00c7alarken ses","session":"Oturum","doneN":"\u00c7\u00f6z\u00fclen ezgiler","avgEase":"Ortalama rahatl\u0131k","progress":"\u0130lerleme","levelReached":"Ezgi seviyesi","sparkNote":"Her \u00e7ubuk bir ezginin rahatl\u0131\u011f\u0131d\u0131r: ezginin nota say\u0131s\u0131 b\u00f6l\u00fc \u00e7ald\u0131\u011f\u0131n nota say\u0131s\u0131.","reset":"\u0130lerlememi sil","kbHint":"Bilgisayar klavyesi: {w} beyaz, {b} siyah, \u2190 \u2192 oktav","newIv":"Yeni aral\u0131k","up":"\u00e7\u0131k\u0131c\u0131","down":"inici","after":"{iv} sonras\u0131","afterDown":"{iv} sonras\u0131, a\u015fa\u011f\u0131","alone":"tek ba\u015f\u0131na, {dir}","theC":"Do","warmTitle":"Is\u0131nma, {n} nota","levels":["Kom\u015fu seslerle, \u00e7ok k\u0131sa","Kom\u015fu seslerle, k\u0131sa","\u0130lk s\u0131\u00e7ramalar, k\u0131sa","Kom\u015fu seslerle, tam c\u00fcmle","K\u00fc\u00e7\u00fck s\u0131\u00e7ramalar, tam c\u00fcmle","Alt\u0131l\u0131ya kadar s\u0131\u00e7rama","Kom\u015fu seslerle, uzun c\u00fcmle","Orta s\u0131\u00e7ramalar, uzun c\u00fcmle","Geni\u015f s\u0131\u00e7ramalar, k\u0131sa","\u00c7ok uzun c\u00fcmleler","Geni\u015f s\u0131\u00e7ramalar, uzun c\u00fcmle","\u00c7ok s\u0131\u00e7ramal\u0131"],"ivs":{"2":"ikili","3":"k\u00fc\u00e7\u00fck \u00fc\u00e7l\u00fc","4":"b\u00fcy\u00fck \u00fc\u00e7l\u00fc","5":"d\u00f6rtl\u00fc","6":"triton","7":"be\u015fli","8":"k\u00fc\u00e7\u00fck alt\u0131l\u0131","9":"b\u00fcy\u00fck alt\u0131l\u0131","10":"k\u00fc\u00e7\u00fck yedili","11":"b\u00fcy\u00fck yedili","12":"oktav"},"calibQ":"Melodileri kulaktan \u00e7\u0131karmaya al\u0131\u015fk\u0131n m\u0131s\u0131n?","calib1":"Hi\u00e7, yeni ba\u015fl\u0131yorum","calib2":"Biraz, bazen kulaktan \u00e7al\u0131yorum","calib3":"Evet, e\u011fitim ald\u0131m","calibNote":"Sadece ba\u015flang\u0131\u00e7 noktas\u0131n\u0131 se\u00e7mek i\u00e7in. Uygulama birka\u00e7 melodide kendini ayarlar.","rescue":"Par\u00e7a par\u00e7a alal\u0131m.","rescueN":"\u0130lk {n} nota.","rescueOk":"\u0130\u015fte.","rescueAll":"\u015eimdi t\u00fcm c\u00fcmle.","rescueDone":"Yard\u0131mla ge\u00e7ti.","genTitle":"Serbest ezgi","beyond":"Da\u011far\u0131n \u00f6tesinde","aim":"hedef {v} %","anchor":"\u0130\u015fte ilk notan.","almost":"Az kald\u0131. Ba\u015ftan tekrar \u00e7al, hatas\u0131z.","dlLog":"G\u00fcnl\u00fc\u011f\u00fc indir","almost1":"Az kald\u0131. Bir yanl\u0131\u015f nota. Ba\u015ftan tekrar \u00e7al.","almostN":"Az kald\u0131. {n} yanl\u0131\u015f nota. Ba\u015ftan tekrar \u00e7al.","tonLevel":"Ton","tonC":"yaln\u0131zca do","tonN":"{n} ar\u0131za","rescueBit":"Bu par\u00e7a, {n} nota.","theNote":"\u0130\u015fte nota.","best":"rekor {v}","newBest":"Yeni rekor: {v}.","insGo":"Ba\u015fla","bestRow":"Rekor","worth":"De\u011fer","insHi":"Nas\u0131l \u00e7al\u0131\u015f\u0131r","insS1":"Uygulama sana bir ezgi \u00e7alar.","insS2":"Kafanda m\u0131r\u0131ldan ve klavyede yerini bul.","insS3":"Geri \u00e7al: ba\u015ftan sona, hatas\u0131z, tek seferde.","insWays":"\u00c7alman\u0131n \u00fc\u00e7 yolu","insW1":"MIDI klavye","insW2":"Fare","insW3":"Kendi klavyen","insTip":"Rastgele arama. Aramadan \u00f6nce ezgiyi canland\u0131rmak seni ilerletir.","insDo":"\u00d6nce bir referans do duyacaks\u0131n. Uygulamay\u0131 her a\u00e7t\u0131\u011f\u0131nda \u00e7al\u0131n\u0131r."}};
 
 let LANG = 'en';
 function t(k, v) {
@@ -336,40 +499,214 @@ const CORPUS = CORPUS_RAW.split('\n').map(function (line) {
     if (dd >= 1 && dd <= 12) mask |= (1 << dd);
   }
   var home = +f[6];
-  return { p: p, d: d, src: f[2], title: f[3], D: parseFloat(f[4]), lvl: +f[5],
-           home: home, date: (f[7] || '').trim(), cut: f[8] === '1', mxIv: mx, ivMask: mask,
+  var cut = f[8] === '1';
+  /* Une melodie coupee s'arrete au milieu d'une phrase : sa derniere note est
+     souvent breve et l'arret est brutal. On lui donne au moins la duree moyenne
+     des precedentes, ce qui suffit a faire entendre une fin. */
+  if (cut && d.length > 1) {
+    var som = 0;
+    for (var z = 0; z < d.length - 1; z++) som += d[z];
+    var moy = som / (d.length - 1);
+    if (d[d.length - 1] < moy) d[d.length - 1] = moy;
+  }
+  /* signature : la suite d'intervalles, independante de la tonalite et du rythme.
+     Deux entrees du corpus qui ont les memes notes avec des rythmes differents
+     partagent la meme signature. Cette diversite rythmique est utile, on evite
+     seulement de les servir coup sur coup. */
+  var sg = '';
+  for (var z2 = 1; z2 < p.length; z2++) sg += (p[z2] - p[z2 - 1]) + ',';
+  return { p: p, d: d, sig: sg, src: f[2], title: f[3], D: parseFloat(f[4]), lvl: +f[5],
+           home: home, date: (f[7] || '').trim(), cut: cut, mxIv: mx, ivMask: mask,
            doStart: (((p[0] - home) % 12) + 12) % 12 === 0 };
 });
 
-/* ---------- state ---------- */
-const START_CEIL = 0.006, MARGIN = 0.035;
-/* En bas d'échelle la marge pleine collerait la cible à zéro pendant une dizaine
-   d'exercices. On la rend proportionnelle pour que ça décolle dès la première réussite. */
-function margin(c) { return Math.min(MARGIN, c * 0.5); }
-const S = {
-  ceiling: START_CEIL, done: 0, eases: [], recent: [],
-  warm: 1, warmHold: 0, warmClean: 0, known: 2, ivEase: {}, ivN: {}, drillIv: 0, drillOk: 0, aside: [], queue: [], queueAfter: [], corpusDone: 0, pending: 0, since: 99, drillLastDown: false, lastNote: 60, cur: null, cursor: 0, played: 0, plays: 0, runs: 0, phase: 'idle', startCeil: START_CEIL
+/* ---------- journal de séance ----------
+   Tout ce que le joueur fait et tout ce que l'algorithme décide, horodaté, dans
+   un seul fichier téléchargeable. Sert à analyser après coup pourquoi l'app a
+   réagi comme elle l'a fait ; rien n'est envoyé nulle part, le fichier reste sur
+   la machine. Il survit aux rechargements via localStorage, tant qu'il y tient. */
+const LOG_KEY = 'byear.journal.v1';
+const LOG_MAX = 40000;
+let LOG = null, logN = 0, logMirror = true;
+function logInit() {
+  try {
+    const j = JSON.parse(localStorage.getItem(LOG_KEY) || 'null');
+    if (j && j.events) LOG = j;
+  } catch (e) { /* illisible : on repart d'un journal vide */ }
+  if (!LOG) LOG = { app: 'byEar', version: 1, sessions: [], events: [] };
+  LOG.sessions.push({ ouvert: new Date().toISOString(), agent: navigator.userAgent,
+                      ecran: window.innerWidth + 'x' + window.innerHeight });
+  if (LOG.sessions.length > 40) LOG.sessions.shift();
+}
+function logSave(force) {
+  if (!logMirror) return;
+  if (!force && ++logN < 25) return;
+  logN = 0;
+  try { localStorage.setItem(LOG_KEY, JSON.stringify(LOG)); }
+  catch (e) { logMirror = false; }   /* plein : on garde tout en memoire */
+}
+function LG(k, d) {
+  if (!LOG) return;
+  const e = { ms: Date.now(), k: k };
+  if (d) for (const q in d) e[q] = d[q];
+  LOG.events.push(e);
+  if (LOG.events.length > LOG_MAX) LOG.events.shift();
+  logSave();
+  const b = $('bLogN');
+  if (b) b.textContent = LOG.events.length;
+}
+function logDownload() {
+  logSave(true);
+  const nom = 'byear-journal-' + new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-') + '.json';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(LOG)], {type: 'application/json'}));
+  a.download = nom;
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+}
+window.byEarLog = function () { return LOG; };
+window.byEarLogClear = function () {
+  LOG = { app: 'byEar', version: 1, sessions: [], events: [] };
+  logMirror = true; logInit(); logSave(true);
+  const b = $('bLogN'); if (b) b.textContent = '0';
+  return 'journal vide';
 };
+
+/* ---------- moteur de difficulté ----------
+   Escalier pondéré (Kaernbach 1991). Après chaque phrase on obtient une note o
+   entre 0 et 1 ; θ bouge de K·(o − P_CIBLE). Le point fixe est donc exactement
+   celui où la note moyenne vaut P_CIBLE : convergence garantie, symétrique, sans
+   modèle à ajuster. K est grand tant que l'app connaît mal le joueur (sg proche
+   de 1) et se resserre ensuite ; sg est regonflée dès que les observations
+   deviennent unilatérales (quatre phrases d'affilée sans faute, ou deux
+   sauvetages), signe que l'estimation est franchement fausse.
+
+   Par-dessus θ, une pression : +1 cran à chaque phrase passée d'un trait, elle
+   s'effondre au premier accroc. Le joueur oscille juste au-dessus de sa zone de
+   confort au lieu de s'y installer. Et P_CIBLE glisse de 0,88 à 0,80 sur les
+   deux cents premières phrases : on serre la vis avec l'expérience. */
+const TH_MAX = 1.6;                     /* au-delà de 1,0 le corpus est épuisé : on génère */
+const K_MIN = 0.018, K_MAX = 0.220, SG_DECAY = 0.90;
+const PRESS_UP = 0.035, PRESS_DN = 0.35, PRESS_MAX = 0.14, PRESS_INTO_TH = 0.05;
+const P_HI = 0.86, P_LO = 0.80, P_SPAN = 200;
+/* Deux écoutes valent une : réécouter une fois puis jouer la phrase sans faute
+   ne doit pas faire reculer. C'est à partir de la troisième que ça se paie. */
+const LISTEN_SCORE = [0, 1.0, 1.0, 0.72, 0.52, 0.38, 0.28];
+const RUN_COST = 0.45;                  /* le prix d'un décrochage à la première note */
+const RUN_FLOOR = 0.15;                 /* … et son prix minimal, tout au bout de la phrase */
+const PROBE_COST = 0.06;                /* le prix d'un tâtonnement au-delà du quota */
+const FLAIL = 4;                        /* filet : au-delà de 4× la longueur + 12 notes jouées */
+const ANCHOR_AT = 4, ANCHOR_COST = 0.10;   /* au 4e tâtonnement, on donne la première note */
+const GEL_MS = 1500;                    /* clavier gelé le temps que la note donnée sonne */
+const DEAF_AT = 4;                      /* notes égarées d'affilée : il n'a pas entendu sa faute */
+const SG_MEM = 4;                       /* on ne resert pas la même suite de notes avant 4 phrases */
+const SEG_AT = 4;                       /* fautes sur un morceau avant de le couper en deux */
+const DEAF_MALUS = 0.6;                 /* ne pas s'entendre coûte plus que s'entendre */
+const RESC_MAX = 0.45;                  /* note maximale d'une phrase passée au rattrapage */
+const GEN_FROM = 0.98;                  /* au-dessus, mélodies générées */
+const START_TH = [0.02, 0.24, 0.55];    /* les trois réponses à la question d'entrée */
+const START_KNOWN = [2, 5, 12];
+
+/* ---------- second axe : la tonalité ----------
+   Retrouver une phrase à l'oreille et la retrouver dans une tonalité qui n'est
+   pas do sont deux compétences distinctes. Un seul nombre ne peut pas porter les
+   deux : le plus faible écrase l'autre, et un joueur excellent en diatonique se
+   retrouve classé au niveau de sa transposition.
+
+   θT mesure donc à part la tolérance aux altérations, sur l'échelle du nombre
+   d'altérations à l'armure divisé par 7. À chaque phrase on tire une tonalité
+   autour de θT, puis on COMPENSE sur l'axe mélodique : tonalité facile → phrase
+   plus longue et plus sautante ; tonalité difficile → phrase plus simple. La
+   difficulté totale reste constante, seule sa répartition change.
+
+   Le signal qui sépare les deux : une fausse note sur une touche noire est une
+   erreur de tonalité, une fausse note sur une blanche est une erreur mélodique.
+   Chaque axe est mis à jour avec sa propre note. */
+const ACC = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 6, 7];   /* altérations, dans l'ordre de FIFTHS */
+const TON_MAX = 7;
+const ECHANGE = 0.55;                   /* taux de change entre les deux axes */
+const K_TON = 0.09;                     /* pas de l'escalier tonal */
+const START_TON = [0, 0.10, 0.20];
+const NOIRES = {1: 1, 3: 1, 6: 1, 8: 1, 10: 1};
+const S = {
+  theta: 0, thT: 0, best: 0, sigs: [], sg: 1, press: 0, streak: 0, bad: 0, calib: -1, startTh: 0, tonCible: 0, tonJoue: 0,
+  done: 0, eases: [], recent: [],
+  warm: 1, warmHold: 0, warmClean: 0, known: 2, ivEase: {}, ivN: {}, drillIv: 0, drillOk: 0, aside: [], queue: [], queueAfter: [], corpusDone: 0, pending: 0, since: 99, drillLastDown: false, lastNote: 60, cur: null, cursor: 0, cand: [], played: 0, plays: 0, runs: 0, dec: 0, grace: false, breaks: [], win: null, deaf: false, probes: 0, anchored: false, anchorGiven: false, phase: 'idle'
+};
+/* valeur d'une phrase : sa difficulte melodique plus le poids de sa tonalite */
+function valeur(D, ton) { return D + ECHANGE * ton; }
+function pts(v) { return Math.round(v * 1000); }
+function pCible() { return P_HI - (P_HI - P_LO) * Math.min(1, S.done / P_SPAN); }
+function cibleD() { return Math.min(TH_MAX, Math.max(0, S.theta + S.press)); }
+/* tonalité tirée pour la phrase à venir : de do jusqu'à un cran au-dessus du
+   niveau tonal, pour qu'il voie régulièrement les deux extrêmes */
+function tirerTon() {
+  const haut = Math.min(TON_MAX, Math.floor(S.thT * TON_MAX) + 1);
+  return Math.floor(Math.random() * (haut + 1)) / TON_MAX;
+}
+/* compensation : ce qui est gagné sur un axe est rendu sur l'autre */
+function cibleMel(t) {
+  return clamp(cibleD() + ECHANGE * (S.thT - t), 0, TH_MAX);
+}
+/* la transposition dont l'armure est la plus proche du coût tonal visé */
+function decalageTon(t) {
+  const vise = Math.round(t * TON_MAX);
+  let best = 0, bd = 99, tie = [];
+  for (let i = 0; i < FIFTHS.length; i++) {
+    const d = Math.abs(ACC[i] - vise);
+    if (d < bd) { bd = d; tie = [i]; }
+    else if (d === bd) tie.push(i);
+  }
+  best = tie[Math.floor(Math.random() * tie.length)];
+  return { sh: FIFTHS[best], acc: ACC[best] };
+}
+/* une fausse note sur touche noire est une erreur de tonalité, sur blanche une
+   erreur mélodique. C'est la séparation qui alimente les deux escaliers. */
+function partage(breaks, pitches) {
+  const mel = [], ton = [];
+  for (let i = 0; i < breaks.length; i++) {
+    const k = breaks[i];
+    const att = pitches[Math.min(k, pitches.length - 1)];
+    (NOIRES[((att % 12) + 12) % 12] ? ton : mel).push(k);
+  }
+  return { mel: mel, ton: ton };
+}
+const KEY = 'depiquage.monde.v8';
+function reprise(j) {
+  S.done = j.done || 0; S.eases = j.eases || [];
+  S.warm = (typeof j.warm === 'number') ? j.warm : (j.done ? 0 : 1);
+  S.warmHold = j.warmHold || 0; S.warmClean = j.warmClean || 0;
+  S.known = j.known || 2; S.ivEase = j.ivEase || {}; S.ivN = j.ivN || {};
+}
 function load() {
   try {
-    const j = JSON.parse(localStorage.getItem('depiquage.monde.v7') || 'null');
-    if (j && typeof j.ceiling === 'number') {
-      S.ceiling = Math.min(1, Math.max(START_CEIL, j.ceiling));
-      S.done = j.done || 0; S.eases = j.eases || []; S.startCeil = j.startCeil || START_CEIL;
-      S.warm = (typeof j.warm === 'number') ? j.warm : (j.done ? 0 : 1);
-      S.warmHold = j.warmHold || 0;
-      S.warmClean = j.warmClean || 0;
-      S.known = j.known || 2;
-      S.ivEase = j.ivEase || {};
-      S.ivN = j.ivN || {};
+    const j = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (j && typeof j.theta === 'number') {
+      S.theta = Math.min(TH_MAX, Math.max(0, j.theta));
+      S.thT = (typeof j.thT === 'number') ? j.thT : 0;
+      S.best = j.best || 0;
+      S.sg = (typeof j.sg === 'number') ? j.sg : 1;
+      S.press = j.press || 0;
+      S.calib = (typeof j.calib === 'number') ? j.calib : 1;
+      S.startTh = j.startTh || S.theta;
+      reprise(j);
+      return;
+    }
+    /* reprise d'une sauvegarde v7 : l'ancien plafond se convertit en θ, moins la
+       marge qu'il portait. On repart avec de l'incertitude, l'escalier recalera. */
+    const v7 = JSON.parse(localStorage.getItem('depiquage.monde.v7') || 'null');
+    if (v7 && typeof v7.ceiling === 'number') {
+      S.theta = Math.min(TH_MAX, Math.max(0, v7.ceiling - 0.12));
+      S.sg = 1; S.press = 0; S.calib = 1; S.startTh = S.theta;
+      reprise(v7);
     }
   } catch (e) { /* stockage indisponible */ }
 }
 function save() {
   try {
-    localStorage.setItem('depiquage.monde.v7', JSON.stringify(
-      { ceiling: S.ceiling, done: S.done, eases: S.eases.slice(-40),
-        startCeil: S.startCeil, warm: S.warm, warmHold: S.warmHold,
+    localStorage.setItem(KEY, JSON.stringify(
+      { theta: S.theta, thT: S.thT, best: S.best, sg: S.sg, press: S.press, calib: S.calib, startTh: S.startTh,
+        done: S.done, eases: S.eases.slice(-40), warm: S.warm, warmHold: S.warmHold,
         warmClean: S.warmClean, known: S.known, ivEase: S.ivEase, ivN: S.ivN }));
   } catch (e) { /* ignore */ }
 }
@@ -401,6 +738,7 @@ function tone(midi, when, dur, gain) {
 const $ = function (id) { return document.getElementById(id); };
 function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
 function levelAt(d) {
+  d = Math.min(0.9999, Math.max(0, d));
   let lo = 0, hi = CORPUS.length - 1;
   while (lo < hi) { const m = (lo + hi) >> 1; if (CORPUS[m].D < d) lo = m + 1; else hi = m; }
   return CORPUS[lo].lvl;
@@ -540,14 +878,53 @@ function drillMelody(iv, step) {
            pitches: p, durs: d };
 }
 
+/* ---------- au-dela du corpus : lignes generees ----------
+   Le corpus s'arrete a D = 1. Au-dessus on fabrique la phrase : monodique, mais
+   longue, chromatique et a sauts larges. La difficulte n'a donc plus de plafond,
+   ce qui compte pour un joueur tres avance qui, sinon, epuiserait l'app. */
+const DIAT = [0, 2, 4, 5, 7, 9, 11];
+function genMelody(D) {
+  const x = clamp((D - GEN_FROM) / 0.62, 0, 1);
+  const n = Math.round(9 + 13 * x);              /* 9 … 22 notes */
+  const ivMax = Math.round(4 + 12 * x);          /* tierce … 16 demi-tons */
+  const chrom = 0.20 + 0.70 * x;                 /* proportion hors gamme */
+  const GD = [0.5, 0.5, 0.75, 1.0, 1.0, 1.5];
+  let p = [60 + [0, 2, 4, 5, 7][Math.floor(Math.random() * 5)]], d = [GD[Math.floor(Math.random() * GD.length)]];
+  for (let i = 1; i < n; i++) {
+    let best = null;
+    for (let k = 0; k < 24; k++) {
+      const iv = 1 + Math.floor(Math.random() * ivMax);
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      const c = p[i - 1] + dir * iv;
+      if (c < 48 || c > 83) continue;
+      const dia = DIAT.indexOf(((c % 12) + 12) % 12) >= 0;
+      if (dia && Math.random() < chrom) continue;      /* on pousse vers le chromatique */
+      if (!dia && Math.random() > chrom) continue;
+      best = c; break;
+    }
+    if (best === null) best = clamp(p[i - 1] + (Math.random() < 0.5 ? -2 : 2), 48, 83);
+    p.push(best); d.push(GD[Math.floor(Math.random() * GD.length)]);
+  }
+  let mx = 0, mask = 0;
+  for (let q = 1; q < p.length; q++) {
+    const dd = Math.abs(p[q] - p[q - 1]);
+    mx = Math.max(mx, dd);
+    if (dd >= 1 && dd <= 12) mask |= (1 << dd);
+  }
+  return { ref: { title: t('genTitle'), src: 'g', D: Math.min(1, D), lvl: 12, d: d,
+                  date: '', home: 0, mxIv: mx, ivMask: mask, cut: false, gen: true },
+           pitches: p, durs: d };
+}
+
 /* ---------- selection ---------- */
 function fenetre() {
-  const target = clamp(S.ceiling - margin(S.ceiling), 0, 1);
+  const target = clamp(cibleMel(S.tonCible), 0, 0.999);
   const lo = target - 0.022, hi = target + 0.010;
   let pool = [];
   for (let w = 0; w < 6 && pool.length < 8; w++) {
     pool = CORPUS.filter(function (m) {
-      return m.D >= lo - w * 0.02 && m.D <= hi + w * 0.02 && S.recent.indexOf(m) < 0;
+      return m.D >= lo - w * 0.02 && m.D <= hi + w * 0.02 && S.recent.indexOf(m) < 0
+             && S.sigs.indexOf(m.sig) < 0;
     });
   }
   if (!pool.length) pool = CORPUS.slice(0, 40);
@@ -560,21 +937,22 @@ function fenetre() {
    tirage : on retombe plus souvent sur ce qui résiste. */
 const IV_NEUTRE = 0.80, IV_POIDS = 4.0, IV_MIN_OBS = 6;
 
-function majIvEase(pitches, ease) {
-  const cnt = {};
-  let tot = 0;
+/* On sait exactement a quelle position la phrase a lache, donc exactement quel
+   intervalle a resiste. Plus besoin d'etaler une aisance moyenne sur tous les
+   intervalles de la melodie : chaque intervalle recoit ce qu'il a merite. Celui
+   qui a fait decrocher est note bas, les autres recoivent la note d'ensemble.
+   C'est ce qui rend "intervalle a travailler" reellement exploitable. */
+function majIvEase(pitches, base, breaks) {
+  const rate = {};
+  (breaks || []).forEach(function (k) { if (k >= 1 && k < pitches.length) rate[k] = (rate[k] || 0) + 1; });
   for (let i = 1; i < pitches.length; i++) {
     const d = Math.abs(pitches[i] - pitches[i - 1]);
     if (d < 1 || d > 12) continue;
-    cnt[d] = (cnt[d] || 0) + 1; tot++;
-  }
-  if (!tot) return;
-  for (const k in cnt) {
-    const part = cnt[k] / tot;
-    const a = 0.15 + 0.25 * part;                 /* l'intervalle dominant pèse plus */
-    const av = (S.ivEase[k] === undefined) ? IV_NEUTRE : S.ivEase[k];
-    S.ivEase[k] = Math.round((av + a * (ease - av)) * 1000) / 1000;
-    S.ivN[k] = (S.ivN[k] || 0) + 1;
+    const nf = rate[i] || 0;
+    const val = nf ? clamp(0.25 / nf, 0, 1) : base;
+    const av = (S.ivEase[d] === undefined) ? IV_NEUTRE : S.ivEase[d];
+    S.ivEase[d] = Math.round((av + 0.18 * (val - av)) * 1000) / 1000;
+    S.ivN[d] = (S.ivN[d] || 0) + 1;
   }
 }
 /* Référence : l'aisance moyenne du joueur. Un intervalle présent dans presque
@@ -676,13 +1054,15 @@ let pendingIv = 0, pendingMels = [];
 
 function besoinPresentation() {
   if (S.queue.length) return 0;
-  if (S.since < ECART_MIN) return 0;
+  /* la cadence des paliers suit la performance, pas le compteur d'exercices :
+     sur une série sans faute on ouvre les intervalles tous les deux exercices. */
+  if (S.since < (S.streak >= 5 ? 2 : ECART_MIN)) return 0;
   purgeAside();
   /* le déclencheur : deux mélodies au moins mises de côté */
   if (S.aside.length < PENDING_NEEDED) return 0;
   /* le choix : le plus petit intervalle non présenté pour lequel il existe au moins
      deux mélodies jouables juste après, c'est-à-dire n'ayant que lui d'inconnu. */
-  const tg = clamp(S.ceiling - margin(S.ceiling), 0, 1);
+  const tg = clamp(cibleD(), 0, 1);
   for (let x = 0; x < LADDER.length; x++) {
     const X = LADDER[x];
     if (X <= S.known) continue;
@@ -711,13 +1091,8 @@ function besoinPresentation() {
    majeur et la relative majeure en mineur, si bien qu'une phrase mineure atterrit
    en la mineur — même armure, que des touches blanches. */
 const FIFTHS = [0, 7, 5, 2, 10, 9, 3, 4, 8, 11, 6, 1];  // do, sol, fa, ré, sib, la…
-function keyChoices(D) {
-  if (D < 0.30) return FIFTHS.slice(0, 1);   // do majeur / la mineur, rien d'autre
-  if (D < 0.50) return FIFTHS.slice(0, 3);   // + sol et fa
-  if (D < 0.68) return FIFTHS.slice(0, 5);   // + ré et si bémol
-  if (D < 0.85) return FIFTHS.slice(0, 8);
-  return FIFTHS;
-}
+/* La tonalité ne dépend plus de la difficulté mélodique : c'est un axe à part,
+   tiré avant la mélodie, et c'est la mélodie qui s'adapte à lui. */
 function register(D) {
   /* [cible, plancher, plafond] : la cible est le centre visé de la phrase */
   if (D < 0.30) return [61, 53, 72];         // collé au do de départ
@@ -727,10 +1102,9 @@ function register(D) {
 function transpose(mel) {
   let p = mel.p.slice();
   let sh = (12 - ((mel.home || 0) % 12)) % 12;
-  {
-    const opts = keyChoices(mel.D);
-    sh += opts[Math.floor(Math.random() * opts.length)];
-  }
+  const kt = decalageTon(S.tonCible);
+  S.tonJoue = kt.acc / TON_MAX;
+  sh += kt.sh;
   p = p.map(function (x) { return x + sh; });
   /* on recentre par octaves : la tonalité ne bouge pas */
   const reg = register(mel.D);
@@ -852,29 +1226,52 @@ function renderMeter() {
     $('mMark').style.left = (f * 100 * 1.6) + '%';
     $('dLabel').textContent = t('warmup');
     $('lvlName').textContent = t('warmup');
-    $('ceilLabel').textContent = t('beforeL1');
+    $('ceilLabel').textContent = '';
     $('stLvl').textContent = '—';
     $('stWeak').textContent = '—';
     return;
   }
-  const target = clamp(S.ceiling - margin(S.ceiling), 0, 1);
-  $('mCeil').style.width = (S.ceiling * 100).toFixed(2) + '%';
-  $('mTgt').style.width = (target * 100).toFixed(2) + '%';
-  $('mMark').style.left = (S.ceiling * 100).toFixed(2) + '%';
+  const target = cibleD();
+  const vue = Math.min(1, target);
+  $('mCeil').style.width = Math.min(100, (target + 0.05) * 100).toFixed(2) + '%';
+  $('mTgt').style.width = (vue * 100).toFixed(2) + '%';
+  $('mMark').style.left = (vue * 100).toFixed(2) + '%';
   $('dLabel').textContent = (target * 100).toFixed(1) + ' %';
-  const lv = levelAt(target);
-  $('lvlName').textContent = t('levelN', {n: lv, name: t('levels')[lv - 1]});
-  $('ceilLabel').textContent = t('ceiling', {v: (S.ceiling * 100).toFixed(1)});
-  $('stLvl').textContent = lv;
+  const lv = levelAt(vue);
+  $('lvlName').textContent = target > 1 ? t('beyond')
+    : t('levelN', {n: lv, name: t('levels')[lv - 1]});
+  $('ceilLabel').textContent = '';
+  $('stLvl').textContent = target > 1 ? '12+' : lv;
   const fb = ivFaible();
   $('stWeak').textContent = fb ? (t('ivs')[fb] || fb) : '—';
+  const el = $('stTon');
+  if (el) {
+    const a = S.thT * TON_MAX;
+    el.textContent = a < 0.5 ? t('tonC') : t('tonN', {n: a.toFixed(1)});
+  }
+  renderRecord();
+}
+/* La valeur de la phrase en cours face au record. Quand elle vaut plus, la
+   pastille s'allume et affiche ce qu'il y a a gagner : c'est le seul moment ou
+   le chiffre a une raison d'attirer l'oeil. */
+function renderRecord() {
+  const box = $('rec');
+  if (!box) return;
+  const vivant = S.cur && S.warm <= 0 && !S.drillIv && !RESC;
+  const v = vivant ? valeur((S.cur.ref.D || 0), S.tonJoue) : 0;
+  if (S.best <= 0 && !vivant) { box.hidden = true; return; }
+  box.hidden = false;
+  $('recVal').textContent = pts(S.best);
+  const chaud = vivant && v > S.best + 1e-9;
+  box.classList.toggle('hot', !!chaud);
+  $('recNow').textContent = vivant ? (chaud ? '\u2197 ' : '') + pts(v) : '\u2014';
 }
 function renderStats() {
   $('stDone').textContent = S.done;
   const last = S.eases.slice(-12);
   $('stEase').textContent = last.length
     ? Math.round(100 * last.reduce(function (a, b) { return a + b; }, 0) / last.length) + ' %' : '—';
-  const g = S.ceiling - S.startCeil;
+  const g = S.theta - S.startTh;
   $('stGain').textContent = (g >= 0 ? '+' : '') + (g * 100).toFixed(1) + ' pts';
   const sp = $('spark'); sp.innerHTML = '';
   S.eases.slice(-24).forEach(function (e) {
@@ -947,8 +1344,27 @@ function flashKey(m, ms) {
 /* ---------- melody playback ---------- */
 function playMelody() {
   if (!S.cur || S.phase === 'listening') return;
+  if (refPending) return;               /* le do sonne : la melodie suit toute seule */
   audio();
+  /* Il appuie sur Ecouter avant d'avoir entendu le do de repere : on le lui
+     donne d'abord, on laisse le silence, puis la melodie enchaine. */
+  if (!refDone) { doPuisMelodie(); return; }
+  /* On rejoue la phrase entiere, depuis le debut : le passage en cours repart
+     donc du debut lui aussi. Sans ca le curseur restait bloque la ou il en etait
+     et la note suivante, quelle qu'elle soit, comptait comme une faute. Les
+     fautes deja commises restent comptees, elles ne sont pas effacees. */
+  const reprise = (S.cursor > 0 || S.win) ? S.cursor : -1;
+  if (reprise >= 0) {
+    S.cursor = 0; S.win = null; S.cand = candNeuf();
+    /* On repart des conditions de depart, pas seulement de la position : retrouver
+       la premiere note fait partie du redemarrage. Le compteur de tatonnements
+       n'est PAS remis a zero, le quota reste celui de la phrase, donc ce n'est pas
+       un blanc-seing. Sans ca, la note jouee juste apres une reecoute comptait
+       comme une faute a la position 0, au tarif maximum. */
+    if (!S.anchorGiven) S.anchored = false;
+  }
   S.plays++; $('sPlays').textContent = S.plays;
+  LG('ecoute', { num: S.plays, curseur: reprise >= 0 ? reprise : 0, remisAuDebut: reprise >= 0 });
   S.phase = 'listening';
   $('bPlay').disabled = true;
   let tm = 0.25;
@@ -958,10 +1374,20 @@ function playMelody() {
     tone(p, tm, Math.max(0.16, dur * 0.92));
     tm += dur;   /* pas d'affichage au clavier : ce serait donner la réponse */
   });
+  /* Le clavier est neutralise pendant que la phrase sonne : on ne joue pas
+     par-dessus, ni au MIDI, ni a la souris, ni au clavier d'ordinateur. */
+  gele((tm + 0.15) * 1000);
   setTimeout(function () {
     S.phase = 'playing'; $('bPlay').disabled = false;
     $('bPlay').textContent = t('listenAgain');
-    if (!S.played) setMsgL(function () { return t('msgYourTurn'); });
+    if (!S.played) setMsgL(function () {
+      if (RESC) {
+        const s = segCourant(), k = S.cur.pitches.length;
+        if (s && s.a === 0 && s.b === RESC.n) return t('rescueAll');
+        return (s && s.a === 0) ? t('rescueN', {n: k}) : t('rescueBit', {n: k});
+      }
+      return t('msgYourTurn');
+    });
   }, (tm + 0.15) * 1000);
 }
 let msgFn = null;
@@ -987,8 +1413,210 @@ function announceDo(force) {
   return true;
 }
 
+/* ---------- tatonnement pour trouver la premiere note ----------
+   Sans oreille absolue, poser le depart demande de chercher. Ce n'est pas la
+   meme chose que decrocher au milieu d'une phrase : l'un est de la localisation,
+   l'autre de la memoire melodique. Tant que la phrase n'a jamais demarre, les
+   fausses notes sont donc comptees a part, elles ne declenchent jamais le
+   decoupage, et les premieres sont gratuites. Le quota se resserre avec le
+   niveau : trois en bas de l'echelle, une seule en haut. */
+function freeProbes() {
+  const d = cibleD();
+  return d < 0.35 ? 3 : d < 0.70 ? 2 : 1;
+}
+
+/* ---------- carillon de reussite ----------
+   La derniere note jouee sonne 0,45 s plus son extinction : on laisse la place
+   avant d'enchainer, sinon l'accord se superpose a la note du joueur. */
+const CHIME_WAIT = 0.42;
+function chime() {
+  const c = audio(); if (!c) return;
+  [0, 0.09, 0.18].forEach(function (t, i) { tone([60, 64, 67][i] + 12, CHIME_WAIT + t, 0.3, 0.12); });
+}
+
+/* ---------- note de la phrase et mise a jour de theta ---------- */
+/* Prix d'un décrochage, pondéré par l'endroit où il arrive.
+   Se tromper à la douzième note d'une phrase de douze, ce n'est pas la même
+   chose que se tromper à la deuxième : dans un cas onze notes ont été
+   démontrées, dans l'autre aucune. Le coût est donc proportionnel à ce qui
+   restait à prouver, avec un plancher pour qu'une faute ne soit jamais gratuite.
+   Rejouer les notes déjà sues pour repartir ne coûte rien : elles ne sont pas
+   une information nouvelle. */
+function runCost(breaks, n) {
+  let c = 0;
+  for (let i = 0; i < breaks.length; i++) {
+    c += RUN_COST * Math.max(RUN_FLOOR, 1 - breaks[i] / n);
+  }
+  return c;
+}
+function note(plays, breaks, n, probes, anchor) {
+  const i = Math.min(Math.max(plays, 1), LISTEN_SCORE.length - 1);
+  const rc = runCost(breaks || [], n);
+  /* Coup de pouce donné : forfait unique, identique à tous les niveaux, et les
+     tâtonnements qui l'ont déclenché ne sont plus facturés en plus — ils ont
+     déjà servi à ça. Une phrase jouée proprement derrière rapporte 0,91, donc
+     au-dessus de la cible : on avance quand même, juste moins vite. */
+  if (anchor) return clamp(LISTEN_SCORE[i] / (1 + rc + ANCHOR_COST), 0, 1);
+  const sup = Math.max(0, (probes || 0) - freeProbes());
+  return clamp(LISTEN_SCORE[i] / (1 + rc + PROBE_COST * sup), 0, 1);
+}
+function applyOutcome(o, brut) {
+  const avant = S.theta, avantT = S.thT;
+  const p = (S.cur && S.cur.pitches) ? S.cur.pitches : [];
+  const n = p.length || 1;
+  /* Les fautes sont partagees entre les deux axes et chacun recoit sa propre
+     note : l'axe melodique ne voit que les fautes sur touches blanches, l'axe
+     tonal que celles sur touches noires. Une phrase entierement diatonique
+     n'apprend rien sur la tonalite : θT ne bouge pas. */
+  const part = partage(S.breaks, p);
+  let testeTon = false;
+  for (let i = 0; i < p.length; i++) if (NOIRES[((p[i] % 12) + 12) % 12]) { testeTon = true; break; }
+  const oM = brut ? o : note(S.plays, part.mel, n, S.probes, S.anchorGiven);
+  const oT = brut ? o : note(S.plays, part.ton, n, S.probes, S.anchorGiven);
+  LG('resultat', { note: +o.toFixed(4), noteMel: +oM.toFixed(4), noteTon: +oT.toFixed(4),
+    cible: +pCible().toFixed(3), ecoutes: S.plays,
+    fautes: S.runs, positions: S.breaks.slice(),
+    fautesMel: part.mel.slice(), fautesTon: part.ton.slice(),
+    tonJoue: +S.tonJoue.toFixed(3), alterations: Math.round(S.tonJoue * TON_MAX),
+    testeTon: testeTon, tatonnements: S.probes,
+    coupDePouce: S.anchorGiven, egare: S.deaf, jouees: S.played, n: p.length });
+  const K = K_MIN + (K_MAX - K_MIN) * S.sg;
+  S.theta = clamp(S.theta + K * (oM - pCible()), 0, TH_MAX);
+  if (testeTon) S.thT = clamp(S.thT + K_TON * (oT - pCible()), 0, 1);
+  const net = o >= 0.999;                       /* d'un trait, a la premiere ecoute */
+  S.streak = net ? S.streak + 1 : 0;
+  S.bad = (o < 0.30) ? S.bad + 1 : 0;
+  /* sg mesure a quel point le dossier est unilateral. Des resultats qui alternent
+     veulent dire qu'on est deja a la bonne hauteur : petits pas. Des resultats
+     tous du meme cote veulent dire que l'estimation est fausse : grands pas.
+     C'est ce qui permet de descendre vite un debutant mal place et de faire
+     monter vite quelqu'un qu'on a sous-estime, sans rendre l'app instable pour
+     celui qui est correctement situe. */
+  S.sg = Math.max(0.06, S.sg * SG_DECAY);
+  if (S.streak >= 4) S.sg = 1;                      /* manifestement trop facile */
+  else if (S.bad >= 2) S.sg = 1;                    /* manifestement trop dur */
+  else if (!net) S.sg = Math.min(S.sg, 0.30);       /* dossier mele : on y est */
+  if (net) {
+    S.press = Math.min(PRESS_MAX, S.press + PRESS_UP);
+    /* pression au plafond et toujours rien qui accroche : neuf phrases d'affilée
+       sans faute et sans réécoute, l'estimation est fausse et pas qu'un peu. La
+       pression se transvase alors dans θ, un cran par phrase, tant que ça dure.
+       Un joueur correctement situé n'y arrive jamais ; celui qu'on a placé trop
+       bas remonte de quarante points en une vingtaine de phrases. */
+    if (S.press >= PRESS_MAX - 1e-9) S.theta = clamp(S.theta + PRESS_INTO_TH, 0, TH_MAX);
+  } else S.press *= PRESS_DN;
+  S.done++; S.eases.push(o); if (S.eases.length > 60) S.eases.shift();
+  LG('theta', { avant: +avant.toFixed(4), apres: +S.theta.toFixed(4),
+    delta: +(S.theta - avant).toFixed(4), press: +S.press.toFixed(4), sg: +S.sg.toFixed(3),
+    thTavant: +avantT.toFixed(4), thT: +S.thT.toFixed(4),
+    deltaTon: +(S.thT - avantT).toFixed(4), altTolerees: +(S.thT * TON_MAX).toFixed(2),
+    serie: S.streak, mauvaises: S.bad, cible: +cibleD().toFixed(4), faites: S.done });
+  logSave(true);
+  save(); renderSlots(true); renderMeter(); renderStats();
+  if ($('sRuns')) $('sRuns').textContent = S.runs + 1;
+  return S.theta - avant;
+}
+
+/* ---------- rattrapage par decoupage ----------
+   Trois departs rates et on arrete de laisser le joueur s'acharner : la phrase
+   est reprise par morceaux croissants, comme le ferait un prof. Elle finit par
+   passer, mais elle compte comme ratee : theta descend, la suivante sera plus
+   facile. C'est ce qui manquait pour qu'un debutant ne reste pas bloque. */
+const RESCUE_AT = 3;
+let RESC = null;
+/* Le decoupage vise l'obstacle. Si la phrase lache tot, on reprend depuis le
+   debut par paliers. Si elle lache tard, decouper par le debut ne sert a rien :
+   on refait le chemin jusqu'a la derniere note sue, on ajoute celle qui resiste,
+   puis on elargit. */
+/* Le decoupage procede par dichotomie. On coupe la phrase en deux, on fait
+   passer la premiere moitie, puis la seconde, puis la phrase entiere. Si un
+   morceau resiste — quatre fautes dessus — on le coupe en deux a son tour, et
+   ainsi de suite jusqu'a la note seule. Chaque coupe reinsere le morceau parent
+   apres ses deux moities, si bien qu'on remonte toujours vers la phrase entiere. */
+function coupeEnDeux(s) {
+  const m = s.a + Math.floor((s.b - s.a) / 2);
+  return [{ a: s.a, b: m }, { a: m, b: s.b }, { a: s.a, b: s.b }];
+}
+function segCourant() { return RESC ? RESC.file[0] : null; }
+function enterRescue() {
+  let deep = 0;
+  S.breaks.forEach(function (k) { if (k > deep) deep = k; });
+  const n = S.cur.pitches.length;
+  RESC = { p: S.cur.pitches.slice(), d: S.cur.durs.slice(), ref: S.cur.ref,
+           file: coupeEnDeux({ a: 0, b: n }), tours: 0,
+           deep: deep, n: n, deaf: S.deaf };
+  LG('decoupage', { raison: S.deaf ? 'egare' : (S.dec >= RESCUE_AT ? 'fautes' : 'filet'),
+    fautes: S.runs, positions: S.breaks.slice(), plusLoin: deep,
+    morceaux: RESC.file.map(function (s) { return s.a + '-' + s.b; }),
+    tatonnements: S.probes, jouees: S.played, ecoutes: S.plays });
+  S.phase = 'done';
+  setMsg('<span class="reveal">' + t('rescue') + '</span>');
+  setTimeout(presentChunk, 1100);
+}
+/* Un morceau resiste : on le coupe en deux a son tour. Une note seule qu'il ne
+   trouve toujours pas, on la lui joue et on passe. */
+function coupeEncore() {
+  const s = RESC.file[0];
+  if (s.b - s.a > 1) {
+    RESC.file = coupeEnDeux(s).concat(RESC.file.slice(1));
+    LG('recoupe', { morceau: s.a + '-' + s.b,
+                    file: RESC.file.map(function (x) { return x.a + '-' + x.b; }) });
+    S.phase = 'done';
+    setMsg('<span class="reveal">' + t('rescue') + '</span>');
+    setTimeout(presentChunk, 1000);
+  } else {
+    LG('noteDonnee', { position: s.a });
+    S.phase = 'done';
+    gele(GEL_MS);
+    tone(RESC.p[s.a], 0.30, 1.1, 0.22);
+    setMsg('<span class="reveal">' + t('theNote') + '</span>');
+    RESC.file.shift();
+    setTimeout(RESC.file.length ? presentChunk : finishChunk, GEL_MS + 400);
+  }
+}
+function presentChunk() {
+  const s = RESC.file[0];
+  const k = s.b - s.a;
+  const entier = (s.a === 0 && s.b === RESC.n);
+  if (entier) RESC.tours++;
+  LG('morceau', { de: s.a, a: s.b, taille: k, sur: RESC.n, entier: entier,
+                  restants: RESC.file.length, tours: RESC.tours });
+  S.cur = { ref: RESC.ref, pitches: RESC.p.slice(s.a, s.b), durs: RESC.d.slice(s.a, s.b) };
+  S.cursor = 0; S.cand = candNeuf(); S.played = 0; S.plays = 0; S.runs = 0; S.dec = 0; S.grace = false; S.breaks = []; S.win = null; S.probes = 0; S.anchored = false; S.anchorGiven = false; S.phase = 'ready';
+  $('bPlay').textContent = t('listen'); $('bPlay').disabled = false;
+  renderSlots(false);
+  setMsg(entier ? t('rescueAll') : (s.a === 0 ? t('rescueN', {n: k}) : t('rescueBit', {n: k})));
+  setTimeout(playMelody, 620);
+}
+function finishChunk() {
+  renderSlots(true);
+  if (RESC.file.length) RESC.file.shift();
+  if (RESC.file.length) {
+    setMsg('<span class="reveal">' + t('rescueOk') + '</span>');
+    setTimeout(presentChunk, 1200);
+    return;
+  }
+  const ref = RESC.ref, p = RESC.p, d = RESC.d;
+  /* Une phrase passée au rattrapage ne vaut plus zéro d'office : elle vaut
+     d'autant plus qu'on était allé loin avant de caler. Toujours sous la cible,
+     donc toujours perdant, mais proportionné. Ne pas s'être entendu coûte en
+     plus : c'est précisément l'oreille qu'on travaille. */
+  const o = clamp(RESC_MAX * (RESC.deep / Math.max(1, RESC.n)) * (RESC.deaf ? DEAF_MALUS : 1), 0, RESC_MAX);
+  RESC = null;
+  S.cur = { ref: ref, pitches: p, durs: d };
+  S.since++; S.corpusDone++;
+  const dl = applyOutcome(o, true);
+  setMsg('<span class="reveal">' + t('rescueDone') + '</span> ' +
+    t('easeDiff', {e: Math.round(o * 100), d: (dl >= 0 ? '+' : '') + (dl * 100).toFixed(2)}));
+  setTimeout(nextMelody, 2000);
+}
+
 /* ---------- game loop ---------- */
 function nextMelody(silent) {
+  /* La tonalite se tire AVANT la melodie, puisque c'est la melodie qui s'adapte
+     a elle : tonalite facile -> phrase plus difficile, et reciproquement. */
+  S.tonCible = (S.warm > 0 || S.drillIv) ? 0 : tirerTon();
+  S.tonJoue = 0;
   if (S.warm > 0) {
     S.cur = warmMelody(Math.min(WARM_MAX, S.warm));
   } else if (S.drillIv) {
@@ -1000,22 +1628,41 @@ function nextMelody(silent) {
          présentation, mais on joue quand même les mélodies qui devaient suivre */
       /* l'oreille suit sans qu'on lui explique : acquis sans présentation,
          mais on joue quand même les mélodies qui l'avaient déclenchée */
-      S.known = Math.max(S.known, suivant);
+      let up = suivant;
+      if (S.streak >= 6) { const n2 = nextIv(up); if (n2) up = n2; }   /* deux crans d'un coup */
+      S.known = Math.max(S.known, up);
       S.queue = pendingMels.slice();
       purgeAside();
       S.pending = 0; S.since = 0;
       const mel0 = pick();
+      servi(mel0);
       S.cur = { ref: mel0, pitches: transpose(mel0), durs: mel0.d };
     } else if (suivant) {
       S.drillIv = suivant; S.drillOk = 0; S.pending = 0; S.since = 0;
       S.queueAfter = pendingMels.slice();
       S.cur = drillMelody(S.drillIv, 0);
     } else {
-      const mel = pick();
-      S.cur = { ref: mel, pitches: transpose(mel), durs: mel.d };
+      const tg = cibleD();
+      const pGen = clamp((tg - GEN_FROM) / 0.06, 0, 1);
+      if (pGen > 0 && Math.random() < pGen) {
+        S.cur = genMelody(tg);
+      } else {
+        const mel = pick();
+        servi(mel);
+        S.cur = { ref: mel, pitches: transpose(mel), durs: mel.d };
+      }
     }
   }
-  S.cursor = 0; S.played = 0; S.plays = 0; S.runs = 0; S.phase = 'ready';
+  S.cursor = 0; S.cand = candNeuf(); S.played = 0; S.plays = 0; S.runs = 0; S.dec = 0; S.grace = false; S.breaks = []; S.win = null; S.deaf = false; S.probes = 0; S.anchored = false; S.anchorGiven = false; S.phase = 'ready';
+  LG('melodie', { i: S.done + 1, titre: (S.cur.ref.title || ''), src: S.cur.ref.src || '',
+    D: +(S.cur.ref.D || 0).toFixed(4), n: S.cur.pitches.length, notes: S.cur.pitches.slice(),
+    durees: S.cur.durs.slice(), cible: +cibleD().toFixed(4),
+    cibleMel: +cibleMel(S.tonCible).toFixed(4), tonCible: +S.tonCible.toFixed(3),
+    tonJoue: +S.tonJoue.toFixed(3), alterations: Math.round(S.tonJoue * TON_MAX),
+    thT: +S.thT.toFixed(4), theta: +S.theta.toFixed(4),
+    press: +S.press.toFixed(4), sg: +S.sg.toFixed(3), pCible: +pCible().toFixed(3),
+    known: S.known, amorce: S.warm, palier: S.drillIv, genere: !!S.cur.ref.gen,
+    quotaTatonnement: freeProbes() });
   $('sCount').textContent = S.done + 1;
   $('mTitle').textContent = S.cur.ref.title || 'sans titre';
   /* pas de provenance affichée : la date, ou rien */
@@ -1028,54 +1675,254 @@ function nextMelody(silent) {
   if (!silent) setTimeout(playMelody, 380);
 }
 function match(midi, i) { return midi === S.cur.pitches[i]; }
+/* filet de securite : quelqu'un qui bat la campagne, quelle qu'en soit la
+   raison, finit par se voir proposer le decoupage. Regler FLAIL a 0 le desactive. */
+/* Aide a l'ancrage : au 4e tatonnement, l'app joue la premiere note toute seule.
+   Elle ne decoupe rien : le probleme etait de se situer, pas de se souvenir. Le
+   coup de pouce coute un peu, mais si la phrase passe proprement ensuite la note
+   reste au-dessus de la cible et le joueur gagne quand meme du terrain. */
+/* Le clavier est gele pendant que la note sonne : sans ca une touche enfoncee
+   en meme temps est comptee, et comme elle tombe en position 0 elle coute le
+   tarif maximum. Et la note qui suit le degel beneficie d'un sas : elle est
+   facturee normalement, mais elle ne compte pas pour le decoupage. */
+let GEL = false, gelT = null;
+function gele(ms) {
+  GEL = true;
+  const kb = $('kb'); if (kb) kb.classList.add('gel');
+  clearTimeout(gelT);                   /* un gel plus recent remplace le precedent */
+  gelT = setTimeout(function () {
+    GEL = false;
+    const k2 = $('kb'); if (k2) k2.classList.remove('gel');
+  }, ms);
+}
+function giveAnchor() {
+  LG('coupDePouce', { note: S.cur.pitches[0], apresTatonnements: S.probes, gelMs: GEL_MS });
+  S.anchorGiven = true;
+  S.grace = true;
+  gele(GEL_MS);
+  tone(S.cur.pitches[0], 0.30, 1.1, 0.22);
+  setMsg('<span class="reveal">' + t('anchor') + '</span>');
+}
+/* Il n'a pas entendu sa propre faute : il s'est égaré au lieu de reprendre. C'est
+   le défaut que l'exercice vise à corriger, et le moment où découper sert le plus.
+   On découpe donc tout de suite, sans rien annoncer de ce qui a été détecté. */
+/* Il n'a pas entendu sa propre faute : il s'est egare au lieu de reprendre. C'est
+   le defaut que l'exercice vise a corriger, et le moment ou decouper sert le plus.
+   On decoupe donc tout de suite, sans rien annoncer de ce qui a ete detecte. */
+function sourd() {
+  LG('egare', { position: S.win ? S.win.at : -1, notesEgarees: S.win ? S.win.seen : 0 });
+  S.deaf = true;
+  S.win = null;
+  S.cursor = 0;
+  S.cand = candNeuf();
+  if (!RESC && S.warm <= 0 && !S.drillIv && S.cur.pitches.length > 4) return enterRescue();
+}
+/* filet de securite : quelqu'un qui bat la campagne, quelle qu'en soit la
+   raison, finit par se voir proposer le decoupage. Regler FLAIL a 0 le desactive. */
+function filet() {
+  if (RESC || S.warm > 0 || S.drillIv || !FLAIL) return;
+  if (S.cur.pitches.length <= 4) return;
+  if (S.played > FLAIL * S.cur.pitches.length + 12) enterRescue();
+}
+/* Arriver au bout ne suffit pas : la phrase n'est acquise que jouee d'un trait,
+   sans faute. Si le passage a comporte une fausse note, on le dit — "presque" —
+   et on repart du debut. Les fautes deja commises restent comptees : elles ne
+   sont pas effacees par le nouveau passage, et a la troisieme on decoupe. */
+/* ---------- ou en est le joueur : plusieurs lectures a la fois ----------
+   Une note peut se lire de plusieurs facons : la note ratee qu'il retrouve, la
+   premiere note s'il repart du debut, la deuxieme d'un doublon. L'app ne tranche
+   plus arbitrairement — elle garde toutes les lectures compatibles et laisse la
+   suite decider. Sans ca, une note redoublee la desynchronisait d'un cran, et
+   les notes justes qui suivaient devenaient fausses en cascade : c'est ce qui
+   produisait 31 % de decoupages sur les melodies a note redoublee contre 9 %
+   sur les autres.
+
+   Une hypothese, c'est { c: nombre de notes deja produites, net: le passage
+   correspondant est-il sans faute }. Repartir du debut cree toujours une
+   hypothese neuve et propre : c'est ce qui permet de valider une phrase reprise
+   proprement apres une faute. */
+const CAND_MAX = 8;
+function candNeuf() { return [{ c: 0, net: true }]; }
+/* memoire courte des suites de notes servies : les doublons du corpus apportent
+   une diversite rythmique utile, mais deux d'affilee donnent l'impression de
+   radoter. Huit phrases de decalage suffisent. */
+function servi(mel) {
+  if (!mel || !mel.sig) return;
+  S.sigs.push(mel.sig);
+  if (S.sigs.length > SG_MEM) S.sigs.shift();
+}
+function prof() {
+  let m = 0;
+  for (let i = 0; i < S.cand.length; i++) if (S.cand[i].c > m) m = S.cand[i].c;
+  return m;
+}
+function avance(m) {
+  const p = S.cur.pitches, out = [];
+  const add = function (c, net) {
+    for (let i = 0; i < out.length; i++) {
+      if (out[i].c === c) { if (net) out[i].net = true; return; }
+    }
+    out.push({ c: c, net: net });
+  };
+  for (let i = 0; i < S.cand.length; i++) {
+    const q = S.cand[i];
+    if (q.c < p.length && p[q.c] === m) add(q.c + 1, q.net);
+  }
+  if (m === p[0]) add(1, true);        /* repartir du debut est toujours lisible */
+  out.sort(function (a, b) { return b.c - a.c; });
+  return out.slice(0, CAND_MAX);
+}
+
+function presque() {
+  LG('presque', { fautes: S.runs, positions: S.breaks.slice(), ecoutes: S.plays });
+  S.win = null;
+  S.cursor = 0;
+  S.cand = candNeuf();
+  setMsg('<span class="reveal">' +
+    (S.runs <= 1 ? t('almost1') : t('almostN', {n: S.runs})) + '</span>');
+}
+/* Arrive au bout. La phrase n'est acquise que si la lecture qui a atteint la fin
+   etait propre, c'est-a-dire un passage entier sans faute. Sinon : "presque". */
+function arrive(net) {
+  if (S.warm > 0 || S.drillIv) return finish();           /* amorce et paliers */
+  if (RESC) {
+    /* Les morceaux intermediaires passent tels quels : ils sont la pour etre
+       franchis. Mais le dernier morceau EST la phrase entiere, et rien ne
+       justifie qu'elle soit acceptee a des conditions plus douces qu'une phrase
+       ordinaire. Elle doit se jouer d'un trait, sans faute, elle aussi. */
+    const s = segCourant();
+    const entier = s && s.a === 0 && s.b === RESC.n;
+    /* seul le morceau qui EST la phrase entiere exige un passage sans faute,
+       et on n'insiste pas au-dela de trois tours */
+    if (!entier || net || RESC.tours >= 3) return finish();
+    return presque();
+  }
+  if (net) return finish();
+  return presque();
+}
 function hit(midi) {
-  if (!S.cur || S.phase === 'listening' || S.phase === 'done') return;
+  if (!S.cur) return;
+  /* Le gel passe avant le test de phase, pour que les touches enfoncees pendant
+     que ca sonne soient tracees : savoir si les gens jouent par-dessus la
+     melodie est une information utile. */
+  if (GEL) { LG('touche', { note: midi, res: 'gelee', phase: S.phase }); return; }
+  if (S.phase === 'listening' || S.phase === 'done') return;
   if ($('optSound').checked) tone(midi, 0, 0.45, 0.18);
   S.played++;
   $('sPlayed').textContent = S.played;
-  if (match(midi, S.cursor)) {
-    S.cursor++;
-    if (S.cursor >= S.cur.pitches.length) return finish();
+  const p = S.cur.pitches;
+  const av = prof();                    /* l'hypothese la plus avancee avant ce coup */
+  const sas = S.grace; S.grace = false; /* le sas ne vaut que pour une seule note */
+
+  /* La note colle-t-elle a au moins une lecture possible ? Si oui, toutes les
+     lectures compatibles avancent ensemble et on ne tranche pas entre elles. */
+  const suite = avance(midi);
+  if (suite.length) {
+    S.cand = suite;
+    S.cursor = prof();
+    S.anchored = true;                  /* le depart est pose : on est dans la phrase */
+    S.win = null;                       /* il a retrouve le fil */
+    LG('touche', { note: midi, attendu: midi, curseur: av, res: 'juste',
+                   lectures: suite.length, position: S.cursor });
+    let fini = null;
+    for (let i = 0; i < suite.length; i++) {
+      if (suite[i].c >= p.length && (fini === null || suite[i].net)) fini = suite[i].net;
+    }
+    if (fini !== null) return arrive(fini);
     return;
   }
-  /* fausse note : le parcours repart de zero, sans rien dire.
-     la note jouee peut malgre tout amorcer un nouveau depart. */
+
+  /* Avant que la phrase ait demarre et avant tout coup de pouce, une fausse note
+     est un tatonnement : on cherche ou se pose le depart, ce n'est pas un
+     decrochage. Ca ne compte jamais comme faute et ca ne decoupe jamais. */
+  if (!S.anchored && !S.anchorGiven) {
+    S.probes++;
+    LG('touche', { note: midi, attendu: p[0], curseur: 0, res: 'tatonnement',
+                   ecart: midi - p[0], num: S.probes, quota: freeProbes() });
+    S.cand = candNeuf(); S.cursor = 0;
+    if (S.probes >= ANCHOR_AT) giveAnchor();
+    return filet();
+  }
+
+  /* Fenetre ouverte juste apres un decrochage : il cherche par ou reprendre.
+     Toute note qui colle a une lecture l'a deja fait sortir plus haut ; ici il
+     s'egare, et au bout de DEAF_AT notes on decoupe. Ces notes-la ne comptent
+     pas comme de nouveaux decrochages : la faute a deja ete facturee une fois. */
+  if (S.win) {
+    S.win.seen++;
+    LG('touche', { note: midi, attendu: p[S.win.at], curseur: S.win.at, res: 'cherche',
+                   ecart: midi - p[S.win.at], cherchees: S.win.seen });
+    if (S.win.seen >= DEAF_AT) return sourd();
+    return filet();
+  }
+
+  /* decrochage : une faute, une seule, comptee a l'hypothese la plus avancee */
   S.runs++;
-  S.cursor = match(midi, 0) ? 1 : 0;
-  if (S.cursor >= S.cur.pitches.length) return finish();
+  if (!sas) S.dec++;                    /* la note qui suit le coup de pouce ne compte pas ici */
+  LG('touche', { note: midi, attendu: p[av], curseur: av, res: 'faute',
+                 ecart: midi - p[av], numFaute: S.runs, pourDecoupage: S.dec,
+                 sas: sas, sur: p.length });
+  S.breaks.push(av);                    /* elle est bien facturee dans la note */
+  if (!RESC && S.warm <= 0 && !S.drillIv && S.dec >= RESCUE_AT && p.length > 4)
+    return enterRescue();
+  if (RESC && S.dec >= SEG_AT) return coupeEncore();   /* ce morceau resiste : on le coupe */
+  /* Les lectures en cours sont conservees, mais salies : retrouver la note ratee
+     permet de reprendre le fil, sans que le passage puisse encore etre "d'un
+     seul trait". Repartir du debut reste toujours possible et, lui, repart net.
+     Et on ajoute la lecture "il s'est trompe sur cette note et il a poursuivi" :
+     jouer la suite juste apres une fausse note n'est pas s'egarer, c'est ne pas
+     s'etre entendu. Ca coute la faute et ca oblige a tout rejouer, mais ca ne
+     decoupe plus la phrase. */
+  const garde = [];
+  for (let i = 0; i < S.cand.length; i++) garde.push({ c: S.cand[i].c, net: false });
+  if (av + 1 < p.length) garde.push({ c: av + 1, net: false });
+  S.cand = garde.length ? garde : candNeuf();
+  S.win = { at: av, seen: 0 };
+  S.cursor = av;
+  return filet();
 }
 function finish() {
   S.phase = 'done';
   const n = S.cur.pitches.length;
   S.lastNote = S.cur.pitches[n - 1];
-  const ease = clamp(n / Math.max(n, S.played), 0, 1);
+  const ease = clamp(n / Math.max(n, S.played - S.probes), 0, 1);
+  if (RESC) return finishChunk();
   if (S.warm > 0) return finishWarm(ease, n);
   if (S.drillIv) return finishDrill();
-  /* les deux premières écoutes sont gratuites, et la pénalité suivante est légère */
   S.since++; S.corpusDone++;
-  majIvEase(S.cur.pitches, ease);
-  const effort = ease / (1 + 0.07 * Math.max(0, S.plays - 2));
-  let delta;
-  const brake = 1 - 0.5 * S.ceiling;            /* on avance plus finement en haut de l'échelle */
-  const PIVOT = 0.35;
-  const perfect = S.runs === 0 && S.plays <= 1;  /* d'un trait, sans réécoute : on saute plus loin */
-  if (effort >= PIVOT) delta = (0.0015 + 0.0075 * Math.min(1, (effort - PIVOT) / (1 - PIVOT)))
-      * brake * (perfect ? 2.4 : 1);
-  else if (S.runs === 0) delta = 0;      /* sortie d'un trait : on ne recule jamais */
-  else delta = -0.0035 * (PIVOT - effort) / PIVOT;
-  S.ceiling = clamp(S.ceiling + delta, START_CEIL, 1);
-  S.done++; S.eases.push(ease); if (S.eases.length > 60) S.eases.shift();
-  save(); renderSlots(true); renderMeter(); renderStats();
-  if ($('sRuns')) $('sRuns').textContent = S.runs + 1;
-  const mel = S.cur.ref;
+  /* base : la securite generale de la phrase, reecoutes comprises, mais sans les
+     decrochages — ceux-ci sont imputes a l'intervalle precis qui a lache */
+  majIvEase(S.cur.pitches, LISTEN_SCORE[Math.min(Math.max(S.plays, 1), LISTEN_SCORE.length - 1)], S.breaks);
+  /* la note : premiere ecoute et zero faux depart valent 1, chaque reecoute et
+     chaque reprise coutent. C'est cette note, et elle seule, qui deplace theta. */
+  const o = note(S.plays, S.breaks, n, S.probes, S.anchorGiven);
+  /* Le record : la phrase la plus difficile passee sans aucune faute. La valeur
+     compte les deux axes, pour qu'une phrase courte dans une tonalite chargee
+     vaille autant qu'une longue phrase en do. */
+  let record = false;
+  if (S.runs === 0 && !S.deaf) {
+    const v = valeur(S.cur.ref.D || 0, S.tonJoue);
+    if (v > S.best + 1e-9) {
+      S.best = v; record = true;
+      LG('record', { valeur: +v.toFixed(4), points: pts(v) });
+      const box = $('rec');
+      if (box) {
+        box.classList.remove('win');
+        void box.offsetWidth;                 /* on relance l'animation */
+        box.classList.add('win');
+        setTimeout(function () { box.classList.remove('win'); }, 900);
+      }
+    }
+  }
+  const delta = applyOutcome(o);
   const verdict = S.runs === 0 ? t('v1') : S.runs === 1 ? t('v2')
     : t('vN', {n: S.runs + 1});
   setMsg('<span class="reveal">' + verdict + '</span> ' +
-    t('easeDiff', {e: Math.round(ease * 100),
+    (record ? '<span class="reveal">' + t('newBest', {v: pts(S.best)}) + '</span> ' : '') +
+    t('easeDiff', {e: Math.round(o * 100),
                    d: (delta >= 0 ? '+' : '') + (delta * 100).toFixed(2)}));
-  const c = audio();
-  if (c) { [0, 0.09, 0.18].forEach(function (t, i) { tone([60, 64, 67][i] + 12, t, 0.3, 0.12); }); }
-  setTimeout(nextMelody, 1900);
+  chime();
+  setTimeout(nextMelody, 2100);
 }
 const WARM_CLEAN_NEEDED = 5;      /* l'amorce s'arrête après 5 mélodies sans faute */
 function finishDrill() {
@@ -1096,9 +1943,8 @@ function finishDrill() {
     ? '<span class="reveal">' + t('drillOk', {iv: t('ivs')[iv] || iv}) + '</span> ' + t('drillOk2')
     : (clean ? t('drillRight') : t('drillWrong')) + ' ' +
       t('drillCount', {k: Math.min(S.drillOk + 1, DRILL_NEEDED), t: DRILL_NEEDED}));
-  const c = audio();
-  if (c) [0, 0.09, 0.18].forEach(function (t, i) { tone([60, 64, 67][i] + 12, t, 0.3, 0.12); });
-  setTimeout(nextMelody, passe ? 1900 : 1300);
+  chime();
+  setTimeout(nextMelody, passe ? 2100 : 1550);
 }
 function finishWarm(ease, n) {
   const clean = S.runs === 0;
@@ -1118,18 +1964,27 @@ function finishWarm(ease, n) {
   if ($('sEase')) $('sEase').textContent = Math.round(ease * 100) + ' %';
   setMsg(over ? t('warmDone') + ' <span class="reveal">' + t('warmDone2') + '</span>'
               : t('warmFound', {n: S.played, e: Math.round(ease * 100)}) + ' · ' + step);
-  const c = audio();
-  if (c) [0, 0.09, 0.18].forEach(function (t, i) { tone([60, 64, 67][i] + 12, t, 0.3, 0.12); });
-  setTimeout(nextMelody, over ? 2200 : 1500);
+  chime();
+  setTimeout(nextMelody, over ? 2400 : 1750);
 }
 function giveUp(reveal) {
   if (!S.cur || S.phase === 'done') return;
+  LG(reveal ? 'montre' : 'passe', { curseur: S.cursor, fautes: S.runs, ecoutes: S.plays });
   S.phase = 'done';
-  if (S.warm > 0) { S.warmHold = 0; if (S.warm > 1) S.warm--; }
-  else if (S.drillIv) { S.drillOk = 0; }
-  else S.ceiling = clamp(S.ceiling - 0.005, START_CEIL, 1);
-  S.eases.push(0); if (S.eases.length > 60) S.eases.shift();
-  save(); renderSlots(true); renderMeter(); renderStats();
+  if (RESC) {
+    const ref = RESC.ref, p = RESC.p, d = RESC.d; RESC = null;
+    S.cur = { ref: ref, pitches: p, durs: d };
+    applyOutcome(0, true);
+  } else if (S.warm > 0) {
+    S.warmHold = 0; if (S.warm > 1) S.warm--;
+    S.eases.push(0); if (S.eases.length > 60) S.eases.shift();
+    save(); renderSlots(true); renderMeter(); renderStats();
+  } else if (S.drillIv) {
+    S.drillOk = 0;
+    save(); renderSlots(true); renderMeter(); renderStats();
+  } else {
+    applyOutcome(0, true);
+  }
   setMsg(reveal ? t('revealed') : t('skipped'));
   setTimeout(nextMelody, reveal ? 2600 : 1200);
 }
@@ -1259,24 +2114,95 @@ $('bPlay').addEventListener('click', playMelody);
 if ($('bSkip')) $('bSkip').addEventListener('click', function () { giveUp(false); });
 $('bReveal').addEventListener('click', function () { giveUp(true); });
 $('langSel').addEventListener('change', function (e) { setLang(e.target.value); });
-$('bRef').addEventListener('click', function () { audio(); playRef(0); });
+$('bRef').addEventListener('click', function () {
+  audio(); playRef(0);
+  /* passé un certain niveau le do de repère est une béquille : il coûte une réécoute */
+  LG('doRepere', { curseur: S.cursor });
+  if (S.warm <= 0 && !S.drillIv && S.theta > 0.55 && S.phase !== 'done') {
+    S.plays++; $('sPlays').textContent = S.plays;
+  }
+});
 $('midiSel').addEventListener('change', function (e) { bindInput(e.target.value); });
+$('bLog').addEventListener('click', logDownload);
 $('bReset').addEventListener('click', function () {
-  S.ceiling = START_CEIL; S.startCeil = START_CEIL; S.done = 0; S.eases = []; S.recent = [];
-  S.warm = 1; S.warmHold = 0; S.warmClean = 0; S.known = 2; S.ivEase = {}; S.ivN = {}; S.drillIv = 0; S.drillOk = 0; S.aside = []; S.queue = []; S.queueAfter = []; S.corpusDone = 0; S.pending = 0; S.since = 99; S.lastNote = 60; refDone = false; warmLast = null; warmPrev = '';
-  save(); doAnnounced = false; startSession();
+  S.theta = 0; S.thT = 0; S.best = 0; S.sigs = []; S.startTh = 0; S.sg = 1; S.press = 0; S.streak = 0; S.bad = 0; S.calib = -1;
+  S.done = 0; S.eases = []; S.recent = [];
+  S.warm = 1; S.warmHold = 0; S.warmClean = 0; S.known = 2; S.ivEase = {}; S.ivN = {}; S.drillIv = 0; S.drillOk = 0; S.aside = []; S.queue = []; S.queueAfter = []; S.corpusDone = 0; S.pending = 0; S.since = 99; S.lastNote = 60; refDone = false; warmLast = null; warmPrev = ''; RESC = null;
+  save(); doAnnounced = false;
+  setPanels(false);
+  showCalib();
 });
 
-function startSession() {
+/* ---------- question d'entree ----------
+   Une seule question, trois reponses. Elle ne sert qu'a choisir ou poser theta :
+   l'escalier corrige ensuite tout seul, en huit a douze phrases, meme si la
+   reponse etait fausse. Les deux niveaux superieurs sautent l'amorce et
+   ouvrent d'emblee les intervalles, pour ne pas faire perdre dix minutes a
+   quelqu'un qui n'en a pas besoin. */
+function showCalib() {
+  const box = $('calib');
+  if (!box) { setCalib(0); return; }
+  box.hidden = false;
+  box.querySelectorAll('.calib-opt').forEach(function (b) {
+    b.addEventListener('click', function () { setCalib(+b.getAttribute('data-lvl')); });
+  });
+}
+function setCalib(l) {
+  const box = $('calib'); if (box) box.hidden = true;
+  LG('calibration', { reponse: l + 1, theta: START_TH[l], known: START_KNOWN[l] });
+  S.calib = l;
+  S.theta = START_TH[l]; S.startTh = S.theta;
+  S.thT = START_TON[l];
+  S.known = START_KNOWN[l];
+  S.warm = (l === 0) ? 1 : 0;
+  S.sg = 1; S.press = 0; S.streak = 0; S.bad = 0;
+  save();
+  renderMeter(); renderStats();
+  montreInstructions();
+}
+/* Les consignes, une seule fois, juste apres la question d'entree. Le clic sur
+   Commencer est aussi le geste dont le navigateur a besoin pour autoriser le
+   son : c'est lui qui declenche le do de repere. */
+function montreInstructions() {
+  const box = $('instr');
+  if (!box) { startSession(); return; }
+  box.hidden = false;
+  const go = $('bGo');
+  if (go) go.addEventListener('click', function () {
+    box.hidden = true;
+    LG('instructionsLues');
+    startSession(true);
+  }, {once: true});
+}
+
+/* Le do de repere, puis un silence, puis la melodie. Un seul chemin pour tous
+   les declencheurs — le bouton Commencer, le repli "clique n'importe ou", et
+   Ecouter presse avant que le do ait sonne. Le drapeau empeche le telescopage :
+   sans lui, un clic sur Ecouter declenchait a la fois le repli (qui joue le do)
+   et le bouton (qui lancait la melodie aussitot), et les deux se superposaient. */
+const REF_TOTAL = 2500;                 /* du do a la melodie, sonnerie comprise */
+let refPending = false;
+function doPuisMelodie() {
+  if (refPending) return;
+  refPending = true;
+  announceDo(true);
+  gele(REF_TOTAL);                      /* rien ne doit etre joue pendant le do */
+  setTimeout(function () { refPending = false; playMelody(); }, REF_TOTAL);
+}
+function startSession(geste) {
   nextMelody(true);
+  /* Appele depuis le bouton Commencer : on est dans un geste utilisateur, le
+     navigateur autorise le son, on enchaine directement. Le repli ci-dessous ne
+     sert plus qu'au rechargement d'une seance en cours, ou aucun geste n'a
+     encore eu lieu. */
+  if (geste) { doPuisMelodie(); return; }
   const go = function () {
     document.removeEventListener('pointerdown', go);
     document.removeEventListener('keydown', go);
-    announceDo(true);
-    setTimeout(playMelody, 2600);
+    doPuisMelodie();
   };
-  if (announceDo()) {
-    setTimeout(playMelody, 2400);
+  if (audio() && audio().state === 'running') {
+    doPuisMelodie();
   } else {
     setMsgL(function () { return t('msgClick'); });
     document.addEventListener('pointerdown', go);
@@ -1314,7 +2240,10 @@ PANELS.forEach(function (d) {
   });
 });
 
-initLang(); load(); buildKB(); updOct(); applyLang(); renderMeter(); renderStats(); initMIDI(); startSession();
+initLang(); logInit(); load(); buildKB(); updOct(); applyLang(); renderMeter(); renderStats(); initMIDI();
+if ($('bLogN')) $('bLogN').textContent = LOG.events.length;
+LG('ouverture', { theta: +S.theta.toFixed(4), faites: S.done, calib: S.calib, langue: LANG });
+if (S.calib < 0) showCalib(); else startSession();
 
 </script>
 
