@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Còdas Cevenòlas — Base de données de chants traditionnels cévenols</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FAF7F2;
+            --bg-warm: #F3EDE4;
+            --text: #2C2416;
+            --text-light: #6B5D4D;
+            --accent: #8B6914;
+            --accent-hover: #A07A1A;
+            --accent-soft: #D4B86A;
+            --border: #D9CFC0;
+            --card-bg: #FFFFFF;
+            --shadow: rgba(44, 36, 22, 0.08);
+            --green: #4A7C59;
+            --green-soft: #E8F0EA;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .page.fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============ PAGE 1: ACCUEIL ============ */
+        .home {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .home::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4b86a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .home-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .home h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.02em;
+        }
+
+        .home h1 span {
+            color: var(--accent);
+        }
+
+        .home .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 0.5rem;
+            box-shadow: 0 4px 24px var(--shadow), 0 1px 3px var(--shadow);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent-soft);
+            box-shadow: 0 4px 24px var(--shadow), 0 0 0 4px rgba(139, 105, 20, 0.08);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            padding: 0.8rem 1rem;
+            background: transparent;
+            color: var(--text);
+        }
+
+        .search-box input::placeholder {
+            color: #B0A694;
+        }
+
+        .search-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.85rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+        }
+
+        .search-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        .search-hint {
+            margin-top: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .search-hint em {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        .home-footer {
+            position: absolute;
+            bottom: 2rem;
+            z-index: 1;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* ============ HEADER (pages 2 & 3) ============ */
+        .header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .header-logo span { color: var(--accent); }
+
+        .header-search {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.3rem 0.5rem;
+        }
+
+        .header-search input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            padding: 0.5rem 0.6rem;
+            background: transparent;
+            color: var(--text);
+        }
+
+        .header-search-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ============ PAGE 2: RESULTATS ============ */
+        .results-page {
+            padding-bottom: 3rem;
+        }
+
+        .results-info {
+            max-width: 900px;
+            margin: 2rem auto 1rem;
+            padding: 0 2rem;
+        }
+
+        .results-info h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .results-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .semantic-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+
+        .semantic-tag {
+            background: var(--green-soft);
+            color: var(--green);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+        }
+
+        .results-list {
+            max-width: 900px;
+            margin: 1.5rem auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.4rem 1.6rem;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+        }
+
+        .result-card:hover {
+            border-color: var(--accent-soft);
+            box-shadow: 0 4px 16px var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .result-relevance {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .result-info { flex: 1; }
+
+        .result-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .result-meta {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-excerpt {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .result-excerpt mark {
+            background: rgba(212, 184, 106, 0.25);
+            color: var(--text);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .result-tags {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .result-tag {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            background: var(--bg-warm);
+            color: var(--text-light);
+        }
+
+        /* ============ PAGE 3: CHANSON ============ */
+        .song-page {
+            padding-bottom: 4rem;
+        }
+
+        .song-hero {
+            background: linear-gradient(135deg, #3D3222 0%, #2C2416 100%);
+            color: white;
+            padding: 3rem 2rem 2.5rem;
+        }
+
+        .song-hero-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .song-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--accent-soft);
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            border: none;
+            background: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .song-back:hover { color: white; }
+
+        .song-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .song-hero .song-origin {
+            color: var(--accent-soft);
+            font-size: 1rem;
+        }
+
+        .song-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .song-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            .song-grid { grid-template-columns: 1fr; }
+        }
+
+        .song-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+        }
+
+        .song-section.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .song-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .song-section h3 .icon {
+            font-size: 1.1rem;
+        }
+
+        .audio-player {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .audio-player:last-child { margin-bottom: 0; }
+
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .play-btn:hover { background: var(--accent-hover); }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.15rem;
+        }
+
+        .audio-detail {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .audio-wave {
+            width: 100%;
+            height: 32px;
+            background: linear-gradient(90deg, var(--accent-soft) 0%, var(--border) 100%);
+            border-radius: 4px;
+            margin-top: 0.4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .audio-wave::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 35%;
+            background: var(--accent);
+            border-radius: 4px;
+            opacity: 0.3;
+        }
+
+        .audio-duration {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+
+        .lyrics-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            .lyrics-columns { grid-template-columns: 1fr; }
+        }
+
+        .lyrics-col h4 {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .lyrics-col p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .meta-item {
+            padding: 0.6rem 0;
+        }
+
+        .meta-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-size: 0.95rem;
+        }
+
+        .context-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 180px;
+            background: var(--bg-warm);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            border: 1px dashed var(--border);
+            margin-top: 1rem;
+        }
+
+        .relevance-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: var(--green-soft);
+            color: var(--green);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            margin-top: 0.5rem;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(250, 247, 242, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .loading-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+            margin-left: 0.5rem;
+        }
+
+        .typing-indicator span {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: typing 1.2s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+            30% { opacity: 1; transform: translateY(-3px); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ LOADING OVERLAY ============ -->
+<div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Recherche sémantique en cours<span class="typing-indicator"><span></span><span></span><span></span></span></div>
+</div>
+
+<!-- ============ PAGE 1: ACCUEIL ============ -->
+<div class="page active fade-in" id="page-home">
+    <div class="home">
+        <div class="home-content">
+            <span class="logo-icon">&#127926;</span>
+            <h1>Còdas <span>Cevenòlas</span></h1>
+            <p class="subtitle">Base de données sémantique des chants traditionnels cévenols</p>
+
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Rechercher un chant, un thème, une époque..." autocomplete="off">
+                <button class="search-btn" onclick="doSearch()">Rechercher</button>
+            </div>
+
+            <p class="search-hint">Essayez : <em>chants de bergers</em>, <em>complaintes d'amour</em>, <em>chansons de moisson</em></p>
+        </div>
+        <div class="home-footer">
+            Projet de numérisation du patrimoine oral cévenol — Parc national des Cévennes / Guilhem Marion
+        </div>
+    </div>
+</div>
+
+<!-- ============ PAGE 2: RESULTATS ============ -->
+<div class="page" id="page-results">
+    <div class="results-page">
+        <div class="header">
+            <div class="header-logo" onclick="goHome()">&#127926; Còdas <span>Cevenòlas</span></div>
+            <div class="header-search">
+                <input type="text" value="chants de bergers" id="header-search-input" readonly>
+                <button class="header-search-btn" onclick="doSearch()">Rechercher</button>
+            </div>
+        </div>
+
+        <div class="results-info">
+            <h2>7 résultats pour « chants de bergers »</h2>
+            <p>La recherche sémantique a analysé 342 chants et identifié les correspondances suivantes en recoupant paroles, thématiques et métadonnées de collectage.</p>
+            <div class="semantic-tags">
+                <span class="semantic-tag">&#10003; pastoralisme</span>
+                <span class="semantic-tag">&#10003; berger / pastòr</span>
+                <span class="semantic-tag">&#10003; transhumance</span>
+                <span class="semantic-tag">&#10003; troupeau / fedas</span>
+                <span class="semantic-tag">&#10003; montagne</span>
+                <span class="semantic-tag">&#10003; solitude</span>
+            </div>
+        </div>
+
+        <div class="results-list">
+
+            <div class="result-card" onclick="goToSong()">
+                <div class="result-relevance">97%</div>
+                <div class="result-info">
+                    <div class="result-title">Tard tard se levèt lo pastre <span style="font-size:0.75rem;color:var(--text-light);font-weight:400">n°241</span></div>
+                    <div class="result-meta">Gabriac-Rousses &middot; Collecté en 1997 &middot; Occitan (cévenol)</div>
+                    <div class="result-excerpt"><mark>Polka</mark> grivoise à connotation burlesque. Le <mark>berger</mark> Martin se lève tard, on le retrouve endormi avec la chambrière. Attestation unique.</div>
+                    <div class="result-tags">
+                        <span class="result-tag">polka</span>
+                        <span class="result-tag">pastòr</span>
+                        <span class="result-tag">Massif central</span>
+                        <span class="result-tag">veillée</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" onclick="goToSong()">
+                <div class="result-relevance">93%</div>
+                <div class="result-info">
+                    <div class="result-title">Bonjour belle bergère <span style="font-size:0.75rem;color:var(--text-light);font-weight:400">n°220</span></div>
+                    <div class="result-meta">Saint-Julien-du-Tournel &middot; Collecté en 1979 &middot; Français / occitan mêlé</div>
+                    <div class="result-excerpt">Pastourelle dialoguée entre un gentilhomme et une <mark>bergère</mark>. La <mark>bergère</mark> résiste avec esprit aux avances du monsieur, invoquant ses <mark>moutons</mark> et son chien.</div>
+                    <div class="result-tags">
+                        <span class="result-tag">pastourelle</span>
+                        <span class="result-tag">bergère</span>
+                        <span class="result-tag">dialogue</span>
+                        <span class="result-tag">Mont Lozère</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" onclick="goToSong()">
+                <div class="result-relevance">89%</div>
+                <div class="result-info">
+                    <div class="result-title">Adieu ma bergère <span style="font-size:0.75rem;color:var(--text-light);font-weight:400">n°218</span></div>
+                    <div class="result-meta">Anduze &middot; Collecté en 1975 &middot; Français / occitan mêlé</div>
+                    <div class="result-excerpt">Pastourelle où le monsieur tente de séduire la <mark>bergère</mark> dans le bois obscur. Elle file sa quenouille, garde ses <mark>moutons</mark>, l'orne de cent mille fleurs.</div>
+                    <div class="result-tags">
+                        <span class="result-tag">pastourelle</span>
+                        <span class="result-tag">séduction</span>
+                        <span class="result-tag">Anduze</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" onclick="goToSong()">
+                <div class="result-relevance">85%</div>
+                <div class="result-info">
+                    <div class="result-title">La Pastoreleta <span style="font-size:0.75rem;color:var(--text-light);font-weight:400">n°219</span></div>
+                    <div class="result-meta">Le Pontil &middot; Collecté en 1975 &middot; Occitan (cévenol)</div>
+                    <div class="result-excerpt">Pastourelle en occitan. La <mark>bergère</mark> répond avec vivacité aux offres du monsieur : elle préfère son <mark>troupeau</mark> et sa vie dans les champs au château du seigneur.</div>
+                    <div class="result-tags">
+                        <span class="result-tag">pastourelle</span>
+                        <span class="result-tag">occitan</span>
+                        <span class="result-tag">transmission féminine</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" onclick="goToSong()">
+                <div class="result-relevance">81%</div>
+                <div class="result-info">
+                    <div class="result-title">Quand dabalère de montanha <span style="font-size:0.75rem;color:var(--text-light);font-weight:400">n°221</span></div>
+                    <div class="result-meta">Anduze &middot; Collecté en 1975 &middot; Occitan (cévenol)</div>
+                    <div class="result-excerpt">Descendant de la <mark>montagne</mark>, le berger croise les filles qui l'interpellent. Chant scané, espiègle, rapide. Rapporté depuis la vallée Longue comme évoquant la loga des domestiques.</div>
+                    <div class="result-tags">
+                        <span class="result-tag">montagne</span>
+                        <span class="result-tag">facétieux</span>
+                        <span class="result-tag">loga</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" onclick="goToSong()">
+                <div class="result-relevance">76%</div>
+                <div class="result-info">
+                    <div class="result-title">Teisson tira l'araire <span style="font-size:0.75rem;color:var(--text-light);font-weight:400">n°240</span></div>
+                    <div class="result-meta">Castell-Coulomb &middot; Collecté en 1982 &middot; Occitan (cévenol)</div>
+                    <div class="result-excerpt"><mark>Polka</mark> très populaire sur tout le Massif central. Teisson, diminutif affectueux d'un bœuf, tire la charrue. Souvent entremêlée avec la polka n°241.</div>
+                    <div class="result-tags">
+                        <span class="result-tag">polka</span>
+                        <span class="result-tag">bœuf</span>
+                        <span class="result-tag">Massif central</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" onclick="goToSong()">
+                <div class="result-relevance">71%</div>
+                <div class="result-info">
+                    <div class="result-title">Al nord la Losèra <span style="font-size:0.75rem;color:var(--text-light);font-weight:400">n°226</span></div>
+                    <div class="result-meta">Castell-Coulomb &middot; Collecté en 1982 &middot; Occitan (cévenol)</div>
+                    <div class="result-excerpt">Chant de <mark>pastoralisme</mark> et d'identité territoriale. Le <mark>berger</mark> évoque la Lozère au nord, la vie dans les pâturages, les saisons.</div>
+                    <div class="result-tags">
+                        <span class="result-tag">Lozère</span>
+                        <span class="result-tag">territoire</span>
+                        <span class="result-tag">identité</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ============ PAGE 3: CHANSON ============ -->
+<div class="page" id="page-song">
+    <div class="song-page">
+        <div class="header">
+            <div class="header-logo" onclick="goHome()">&#127926; Còdas <span>Cevenòlas</span></div>
+            <div class="header-search">
+                <input type="text" value="chants de bergers" readonly>
+                <button class="header-search-btn" onclick="doSearch()">Rechercher</button>
+            </div>
+        </div>
+
+        <div class="song-hero">
+            <div class="song-hero-inner">
+                <button class="song-back" onclick="goResults()">&larr; Retour aux résultats</button>
+                <h1>Tard tard se levèt lo pastre</h1>
+                <div class="song-origin">Gabriac-Rousses, Lozère &middot; Collecté en 1997</div>
+                <div class="relevance-badge">&#10003; Pertinence 97% pour « chants de bergers »</div>
+            </div>
+        </div>
+
+        <div class="song-content">
+
+            <!-- AUDIO -->
+            <div class="song-grid">
+                <div class="song-section">
+                    <h3>Enregistrement de collectage</h3>
+                    <div class="audio-player" style="flex-direction:column;align-items:flex-start;gap:0.5rem;">
+                        <div class="audio-info" style="width:100%">
+                            <div class="audio-label">Collectage original — Edouard Agulhon</div>
+                            <div class="audio-detail">Enregistré à Gabriac-Rousses, septembre 1997</div>
+                        </div>
+                        <audio id="main-audio" controls style="width:100%;margin-top:0.3rem;border-radius:8px;accent-color:var(--accent)">
+                            <source src="tard tard se levet lo pastre.wav" type="audio/wav">
+                            Votre navigateur ne supporte pas la lecture audio.
+                        </audio>
+                    </div>
+                    <div style="margin-top:0.8rem;display:flex;align-items:center;gap:0.8rem;background:var(--bg);border-radius:10px;padding:0.8rem 1rem;">
+                        <img src="agulhon.jpeg" alt="Edouard Agulhon" style="width:70px;height:70px;object-fit:cover;border-radius:8px;flex-shrink:0;filter:grayscale(30%);">
+                        <div>
+                            <div class="audio-label">Edouard Agulhon</div>
+                            <div class="audio-detail" style="line-height:1.4;">Berger à Gabriac-Rousses (Lozère). Témoin unique de ce chant. Collectage P. Laurence, septembre 1997.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="song-section">
+                    <h3>Réinterprétations</h3>
+                    <div class="audio-player">
+                        <button class="play-btn" onclick="togglePlay(this)">&#9654;</button>
+                        <div class="audio-info">
+                            <div class="audio-label">Lo Còr de la Valbona (polyphonie cévenole)</div>
+                            <div class="audio-detail">Album <em>Dansar en Cevenas</em>, 2019 — arrangement choral</div>
+                            <div class="audio-wave"></div>
+                        </div>
+                        <div class="audio-duration">2:47</div>
+                    </div>
+                    <div class="audio-player">
+                        <button class="play-btn" onclick="togglePlay(this)">&#9654;</button>
+                        <div class="audio-info">
+                            <div class="audio-label">Las Trabucaires (accordéon diatonique)</div>
+                            <div class="audio-detail">Bal folk — Veillée de Florac, 2022</div>
+                            <div class="audio-wave"></div>
+                        </div>
+                        <div class="audio-duration">3:15</div>
+                    </div>
+                    <div class="audio-player">
+                        <button class="play-btn" onclick="togglePlay(this)">&#9654;</button>
+                        <div class="audio-info">
+                            <div class="audio-label">Guilhem Marion (guitare, voix solo)</div>
+                            <div class="audio-detail">Enregistrement de démonstration, 2024</div>
+                            <div class="audio-wave"></div>
+                        </div>
+                        <div class="audio-duration">1:58</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTITION -->
+            <div class="song-section full-width" style="margin-bottom: 1.5rem;">
+                <h3>Partition transcrite</h3>
+                <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:0.8rem;">Polka en ré mineur, mesure 4/4. Transcription d'après le collectage de Gabriac-Rousses (1997). Source : <em>Conter, Chanter, Raconter — La tradition orale en Cévennes</em>, n°241.</p>
+                <img src="partition.png" alt="Partition de Tard tard se levèt lo pastre" style="width:100%;border-radius:10px;border:1px solid var(--border);">
+            </div>
+
+            <!-- PAROLES -->
+            <div class="song-section full-width" style="margin-bottom: 1.5rem;">
+                <h3>Paroles</h3>
+                <div class="lyrics-columns">
+                    <div class="lyrics-col">
+                        <h4>Occitan (cévenol)</h4>
+                        <p>Tard tard se levèt lo pastre
+Tard tard se levèt Martin
+Lo trobèron embe la chambrieira
+Lo trobèron tot endormit</p>
+                    </div>
+                    <div class="lyrics-col">
+                        <h4>Traduction fran&ccedil;aise</h4>
+                        <p>Tard tard se leva le berger
+Tard tard se leva Martin
+Ils le trouvèrent avec la chambrière
+Ils le trouvèrent tout endormi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- METADONNEES & CONTEXTE -->
+            <div class="song-grid">
+                <div class="song-section">
+                    <h3>Informations de collectage</h3>
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-label">Lieu de collectage</div>
+                            <div class="meta-value">Gabriac-Rousses (Lozère)</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Année de collectage</div>
+                            <div class="meta-value">Septembre 1997</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Collecteur</div>
+                            <div class="meta-value">P. Laurence</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Témoin</div>
+                            <div class="meta-value">Edouard Agulhon, berger à Gabriac-Rousses</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Langue</div>
+                            <div class="meta-value">Occitan (dialecte cévenol)</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Genre</div>
+                            <div class="meta-value">Polka grivoise — veillée de danse</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Référence</div>
+                            <div class="meta-value">n°241 — t. II : 674</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Attestation</div>
+                            <div class="meta-value">Unique (Massif central)</div>
+                        </div>
+                    </div>
+                    <iframe
+                        src="https://www.openstreetmap.org/export/embed.html?bbox=3.3933%2C44.1533%2C3.4733%2C44.2133&layer=mapnik&marker=44.1833%2C3.4333"
+                        style="width:100%;height:180px;border-radius:10px;border:1px solid var(--border);margin-top:1rem;"
+                        title="Gabriac-Rousses — lieu de collectage"
+                        loading="lazy">
+                    </iframe>
+                    <div style="font-size:0.72rem;color:var(--text-light);margin-top:0.3rem;">📍 Le Pompidou — 44.1833° N, 3.4333° E · <a href="https://www.openstreetmap.org/?mlat=44.1833&mlon=3.4333#map=13/44.1833/3.4333" target="_blank" style="color:var(--accent);">Ouvrir dans OSM</a></div>
+                </div>
+
+                <div class="song-section">
+                    <h3>Contexte historique</h3>
+                    <p class="context-text">
+                        Cette polka appartient à un répertoire de <strong>chansons de veillée</strong> pratiqué dans les Cévennes protestantes, où les bals publics étaient rares. La jeunesse se réunissait dans les hameaux pour des veillées de danse <em>au trallala</em> — c'est-à-dire en chantant, faute d'instruments. Les airs de danse servaient à la fois de support musical et d'aide-mémoire.
+                    </p>
+                    <p class="context-text" style="margin-top: 0.8rem;">
+                        La polka <em>Tard tard se levèt lo pastre</em> est souvent entremêlée à la <em>Teisson tira l'araire</em> (n°240), polka très populaire sur presque tout le Massif central. Ces deux chants formaient fréquemment un seul couplet lors des veillées. La connotation grivoise du texte (le berger retrouvé endormi avec la chambrière) est typique du répertoire facétieux qui animait ces rassemblements.
+                    </p>
+                    <p class="context-text" style="margin-top: 0.8rem;">
+                        Edouard Agulhon, berger à Gabriac-Rousses, est l'unique témoin de cet air en Cévennes. Le collectage, réalisé en septembre 1997 par P. Laurence, constitue un témoignage exceptionnel d'une pratique vocale en voie de disparition.
+                    </p>
+                    <p class="context-text" style="margin-top: 0.8rem;font-size:0.82rem;color:var(--text-light);">
+                        Source : <em>Conter, Chanter, Raconter — La tradition orale en Cévennes</em>, Castell-Coulomb &amp; Laurence, 2016, t. II : 674. Recueilli auprès d'Edouard Agulhon.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const pages = {
+        home: document.getElementById('page-home'),
+        results: document.getElementById('page-results'),
+        song: document.getElementById('page-song')
+    };
+    const loading = document.getElementById('loading');
+
+    function showPage(name) {
+        Object.values(pages).forEach(p => {
+            p.classList.remove('active', 'fade-in');
+        });
+        const page = pages[name];
+        page.classList.add('active');
+        requestAnimationFrame(() => page.classList.add('fade-in'));
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function doSearch() {
+        loading.classList.add('visible');
+        setTimeout(() => {
+            loading.classList.remove('visible');
+            showPage('results');
+        }, 1800);
+    }
+
+    function goToSong() {
+        showPage('song');
+    }
+
+    function goResults() {
+        showPage('results');
+    }
+
+    function goHome() {
+        showPage('home');
+    }
+
+    function togglePlay(btn) {
+        if (btn.textContent.trim() === '▶') {
+            document.querySelectorAll('.play-btn').forEach(b => b.textContent = '▶');
+            btn.textContent = '⏸';
+        } else {
+            btn.textContent = '▶';
+        }
+    }
+
+    // Prefill et auto-focus
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') doSearch();
+    });
+
+    // Typing effect on load
+    setTimeout(() => {
+        searchInput.focus();
+        const text = 'chants de bergers';
+        let i = 0;
+        const typeInterval = setInterval(() => {
+            searchInput.value = text.slice(0, i + 1);
+            i++;
+            if (i >= text.length) clearInterval(typeInterval);
+        }, 80);
+    }, 800);
+</script>
+
+</body>
+</html>
